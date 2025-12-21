@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(where:*)",
+      "Bash(dir \"C:\\\\Program Files\\\\Unity Hub\")",
+      "Bash(dir:*)",
+      "Bash(reg query \"HKEY_CURRENT_USER\\\\Software\\\\Unity Technologies\")",
+      "Bash(reg query:*)",
+      "Bash(curl:*)",
+      "Bash(powershell:*)",
+      "WebFetch(domain:kenney.nl)",
+      "WebFetch(domain:itch.io)",
+      "WebFetch(domain:opengameart.org)",
+      "Bash(\"C:\\\\Program Files\\\\Unity Hub\\\\Unity Hub.exe\" -- --headless help)",
+      "Bash(findstr:*)",
+      "WebFetch(domain:assetstore.unity.com)",
+      "WebFetch(domain:syntystore.com)",
+      "WebFetch(domain:www.beffio.com)",
+      "Bash(git --version:*)",
+      "Bash(gh:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit - Project setup\n\n- Game design documents \\(map, nations, assets\\)\n- Folder structure for Unity client, backend, admin\n- .gitignore for Unity projects\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}
