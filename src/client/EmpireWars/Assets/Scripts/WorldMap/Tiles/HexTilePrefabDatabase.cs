@@ -33,6 +33,9 @@ namespace EmpireWars.WorldMap.Tiles
         [Tooltip("Bataklik hex tile prefab")]
         public GameObject swampTile;
 
+        [Tooltip("Tepe hex tile prefab (hex_grass_sloped kullanilabilir)")]
+        public GameObject hillTile;
+
         [Tooltip("Duz arazi hex tile prefab")]
         public GameObject plainsTile;
 
@@ -67,7 +70,7 @@ namespace EmpireWars.WorldMap.Tiles
                 TerrainType.Desert => desertTile ?? fallback,      // KayKit'te yok, grass kullan
                 TerrainType.Snow => snowTile ?? fallback,          // KayKit'te yok, grass kullan
                 TerrainType.Swamp => swampTile ?? fallback,
-                TerrainType.Hill => plainsTile ?? fallback,
+                TerrainType.Hill => hillTile ?? plainsTile ?? fallback,
                 TerrainType.Road => fallback,
                 TerrainType.Coast => coastTiles != null && coastTiles.Length > 0 ? coastTiles[0] : (waterTile ?? fallback),
                 _ => fallback

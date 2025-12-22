@@ -23,11 +23,11 @@ namespace EmpireWars.CameraSystem
         [SerializeField] private float keyboardPanSpeed = 20f;
 
         [Header("Zoom Ayarlari")]
-        [SerializeField] private float zoomSpeed = 5f;
+        [SerializeField] private float zoomSpeed = 30f;  // Hizli zoom
         [SerializeField] private float minZoom = 5f;
         [SerializeField] private float maxZoom = 50f;
-        [SerializeField] private float zoomSmoothing = 8f;
-        [SerializeField] private float pinchZoomSpeed = 0.02f;
+        [SerializeField] private float zoomSmoothing = 12f;
+        [SerializeField] private float pinchZoomSpeed = 0.05f;
 
         [Header("Sinirlar")]
         [SerializeField] private bool useBounds = true;
@@ -41,7 +41,7 @@ namespace EmpireWars.CameraSystem
         private float targetZoom;
         private bool isDragging = false;
         private float totalDragDistance = 0f;
-        private bool leftButtonDown = false;
+        private bool rightButtonDown = false;
         private Vector2 dragStartScreenPos;
 
         // World plane drag
@@ -53,7 +53,7 @@ namespace EmpireWars.CameraSystem
 
         // Input actions
         private InputAction pointerPositionAction;
-        private InputAction leftClickAction;
+        private InputAction rightClickAction;
         private InputAction scrollAction;
         private InputAction moveAction;
 
@@ -119,7 +119,7 @@ namespace EmpireWars.CameraSystem
         private void SetupInputActions()
         {
             pointerPositionAction = new InputAction("PointerPosition", binding: "<Pointer>/position");
-            leftClickAction = new InputAction("LeftClick", binding: "<Mouse>/leftButton");
+            rightClickAction = new InputAction("RightClick", binding: "<Mouse>/rightButton");
             scrollAction = new InputAction("Scroll", binding: "<Mouse>/scroll/y");
             moveAction = new InputAction("Move", binding: "<Gamepad>/leftStick");
 
@@ -140,27 +140,27 @@ namespace EmpireWars.CameraSystem
         private void EnableInputActions()
         {
             pointerPositionAction?.Enable();
-            leftClickAction?.Enable();
+            rightClickAction?.Enable();
             scrollAction?.Enable();
             moveAction?.Enable();
 
-            if (leftClickAction != null)
+            if (rightClickAction != null)
             {
-                leftClickAction.started += OnLeftButtonDown;
-                leftClickAction.canceled += OnLeftButtonUp;
+                rightClickAction.started += OnRightButtonDown;
+                rightClickAction.canceled += OnRightButtonUp;
             }
         }
 
         private void DisableInputActions()
         {
-            if (leftClickAction != null)
+            if (rightClickAction != null)
             {
-                leftClickAction.started -= OnLeftButtonDown;
-                leftClickAction.canceled -= OnLeftButtonUp;
+                rightClickAction.started -= OnRightButtonDown;
+                rightClickAction.canceled -= OnRightButtonUp;
             }
 
             pointerPositionAction?.Disable();
-            leftClickAction?.Disable();
+            rightClickAction?.Disable();
             scrollAction?.Disable();
             moveAction?.Disable();
         }
@@ -169,9 +169,9 @@ namespace EmpireWars.CameraSystem
 
         #region Input Handlers
 
-        private void OnLeftButtonDown(InputAction.CallbackContext ctx)
+        private void OnRightButtonDown(InputAction.CallbackContext ctx)
         {
-            leftButtonDown = true;
+            rightButtonDown = true;
             Vector2 screenPos = pointerPositionAction.ReadValue<Vector2>();
             dragStartScreenPos = screenPos;
             totalDragDistance = 0f;
@@ -181,10 +181,10 @@ namespace EmpireWars.CameraSystem
             dragStartWorldPos = GetWorldPositionOnPlane(screenPos);
         }
 
-        private void OnLeftButtonUp(InputAction.CallbackContext ctx)
+        private void OnRightButtonUp(InputAction.CallbackContext ctx)
         {
-            leftButtonDown = false;
-            // isDragging bir frame daha korunuyor (tile selection icin)
+            rightButtonDown = false;
+            isDragging = false;
         }
 
         /// <summary>
@@ -212,8 +212,8 @@ namespace EmpireWars.CameraSystem
                 return;
             }
 
-            // Sol tik surukleme - World plane raycasting
-            if (leftButtonDown)
+            // Sag tik surukleme - World plane raycasting
+            if (rightButtonDown)
             {
                 Vector2 currentScreenPos = pointerPositionAction.ReadValue<Vector2>();
                 totalDragDistance += Vector2.Distance(currentScreenPos, dragStartScreenPos);

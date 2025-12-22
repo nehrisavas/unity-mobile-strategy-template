@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "sceneName": "WorldMap",
-  "exportTimestamp": "2025-12-22 02:55:49",
+  "exportTimestamp": "2025-12-22 03:06:12",
   "gameObjects": [
     {
       "name": "Directional Light",
@@ -80,12 +80,12 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_0_Fallback",
-      "path": "HexGrid/Hex_5_0_Fallback",
+      "name": "Hex_5_0_Snow",
+      "path": "HexGrid/Hex_5_0_Snow",
       "active": true,
       "position": [8,660, 0,004, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -180,12 +180,12 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_1_Fallback",
-      "path": "HexGrid/Hex_5_1_Fallback",
+      "name": "Hex_5_1_Mountain",
+      "path": "HexGrid/Hex_5_1_Mountain",
       "active": true,
       "position": [9,526, 0,005, 1,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -440,12 +440,12 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_1_4_Fallback",
-      "path": "HexGrid/Hex_1_4_Fallback",
+      "name": "Hex_1_4_Mountain",
+      "path": "HexGrid/Hex_1_4_Mountain",
       "active": true,
       "position": [1,732, 0,006, 6,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -470,22 +470,22 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_4_4_Fallback",
-      "path": "HexGrid/Hex_4_4_Fallback",
+      "name": "Hex_4_4_Mountain",
+      "path": "HexGrid/Hex_4_4_Mountain",
       "active": true,
       "position": [6,928, 0,008, 6,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_4_Fallback",
-      "path": "HexGrid/Hex_5_4_Fallback",
+      "name": "Hex_5_4_Mountain",
+      "path": "HexGrid/Hex_5_4_Mountain",
       "active": true,
       "position": [8,660, 0,009, 6,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -530,22 +530,22 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_0_5_Fallback",
-      "path": "HexGrid/Hex_0_5_Fallback",
+      "name": "Hex_0_5_Snow",
+      "path": "HexGrid/Hex_0_5_Snow",
       "active": true,
       "position": [0,866, 0,007, 7,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
     {
-      "name": "Hex_1_5_Fallback",
-      "path": "HexGrid/Hex_1_5_Fallback",
+      "name": "Hex_1_5_Mountain",
+      "path": "HexGrid/Hex_1_5_Mountain",
       "active": true,
       "position": [2,598, 0,007, 7,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -570,22 +570,22 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_4_5_Fallback",
-      "path": "HexGrid/Hex_4_5_Fallback",
+      "name": "Hex_4_5_Mountain",
+      "path": "HexGrid/Hex_4_5_Mountain",
       "active": true,
       "position": [7,794, 0,009, 7,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_5_Fallback",
-      "path": "HexGrid/Hex_5_5_Fallback",
+      "name": "Hex_5_5_Snow",
+      "path": "HexGrid/Hex_5_5_Snow",
       "active": true,
       "position": [9,526, 0,000, 7,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -670,32 +670,32 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_4_6_Fallback",
-      "path": "HexGrid/Hex_4_6_Fallback",
+      "name": "Hex_4_6_Mountain",
+      "path": "HexGrid/Hex_4_6_Mountain",
       "active": true,
       "position": [6,928, 0,001, 9,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_6_Fallback",
-      "path": "HexGrid/Hex_5_6_Fallback",
+      "name": "Hex_5_6_Snow",
+      "path": "HexGrid/Hex_5_6_Snow",
       "active": true,
       "position": [8,660, 0,001, 9,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
     {
-      "name": "Hex_6_6_Fallback",
-      "path": "HexGrid/Hex_6_6_Fallback",
+      "name": "Hex_6_6_Mountain",
+      "path": "HexGrid/Hex_6_6_Mountain",
       "active": true,
       "position": [10,392, 0,002, 9,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -780,12 +780,12 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_5_7_Fallback",
-      "path": "HexGrid/Hex_5_7_Fallback",
+      "name": "Hex_5_7_Mountain",
+      "path": "HexGrid/Hex_5_7_Mountain",
       "active": true,
       "position": [9,526, 0,003, 10,500],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },
@@ -870,12 +870,12 @@
         "HexTile"
       ]    },
     {
-      "name": "Hex_4_8_Fallback",
-      "path": "HexGrid/Hex_4_8_Fallback",
+      "name": "Hex_4_8_Mountain",
+      "path": "HexGrid/Hex_4_8_Mountain",
       "active": true,
       "position": [6,928, 0,003, 12,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [1,645, 0,100, 1,645],
+      "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTile"
       ]    },

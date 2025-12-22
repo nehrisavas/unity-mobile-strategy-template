@@ -31,7 +31,10 @@
       "Bash(./claude-compile-check.sh:*)",
       "Bash(echo:*)",
       "WebFetch(domain:onewheelstudio.com)",
-      "WebFetch(domain:www.ronja-tutorials.com)"
+      "WebFetch(domain:www.ronja-tutorials.com)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Professional camera and tile systems\n\nCamera System:\n- World plane raycasting for proper drag-to-pan\n- Only left click for camera pan \\(Rise of Kingdoms style\\)\n- Smooth movement with proper lerp\n- Screen-based movement scaling\n\nTile Highlight System:\n- Separate overlay objects for highlight/selection\n- No more material instance leaks\n- MaterialPropertyBlock for fog of war only\n- Blue overlay for hover, yellow for selection\n\nBased on professional implementations:\n- https://onewheelstudio.com/blog/2022/1/14/strategy-game-camera\n- https://www.ronja-tutorials.com/post/048-material-property-blocks/\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

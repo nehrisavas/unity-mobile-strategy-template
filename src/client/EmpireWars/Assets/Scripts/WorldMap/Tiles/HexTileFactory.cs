@@ -185,38 +185,103 @@ namespace EmpireWars.WorldMap.Tiles
 
         /// <summary>
         /// Test icin basit bir grid olusturur
+        /// Tum terrain tiplerinden en az 2 tane olur
         /// </summary>
         public void GenerateTestGrid(int width, int height)
         {
             ClearAllTiles();
 
+            // Garantili tile listesi - her tipten en az 2 tane
+            var guaranteedTiles = new System.Collections.Generic.List<(int q, int r, TerrainType type)>
+            {
+                // Grass (4 tane - en yaygin)
+                (0, 0, TerrainType.Grass),
+                (1, 0, TerrainType.Grass),
+                (2, 0, TerrainType.Grass),
+                (3, 0, TerrainType.Grass),
+
+                // Water (2 tane)
+                (0, 1, TerrainType.Water),
+                (1, 1, TerrainType.Water),
+
+                // Forest (2 tane)
+                (2, 1, TerrainType.Forest),
+                (3, 1, TerrainType.Forest),
+
+                // Hill (2 tane)
+                (4, 0, TerrainType.Hill),
+                (4, 1, TerrainType.Hill),
+
+                // Mountain (2 tane)
+                (5, 0, TerrainType.Mountain),
+                (5, 1, TerrainType.Mountain),
+
+                // Desert (2 tane)
+                (6, 0, TerrainType.Desert),
+                (6, 1, TerrainType.Desert),
+
+                // Snow (2 tane)
+                (7, 0, TerrainType.Snow),
+                (7, 1, TerrainType.Snow),
+
+                // Swamp (2 tane)
+                (8, 0, TerrainType.Swamp),
+                (8, 1, TerrainType.Swamp),
+
+                // Road (2 tane)
+                (0, 2, TerrainType.Road),
+                (1, 2, TerrainType.Road),
+
+                // Coast (2 tane)
+                (2, 2, TerrainType.Coast),
+                (3, 2, TerrainType.Coast),
+            };
+
+            // Garantili tile'lari olustur
+            var usedCoords = new System.Collections.Generic.HashSet<(int, int)>();
+            foreach (var tile in guaranteedTiles)
+            {
+                if (tile.q < width && tile.r < height)
+                {
+                    HexCoordinates coords = new HexCoordinates(tile.q, tile.r);
+                    CreateTile(coords, tile.type);
+                    usedCoords.Add((tile.q, tile.r));
+                }
+            }
+
+            // Geri kalan tile'lari rastgele doldur
             for (int r = 0; r < height; r++)
             {
                 for (int q = 0; q < width; q++)
                 {
+                    if (usedCoords.Contains((q, r))) continue;
+
                     HexCoordinates coords = new HexCoordinates(q, r);
-
-                    // Rastgele terrain tipi ata (test icin)
                     TerrainType terrain = GetRandomTerrainForTest(q, r);
-
                     CreateTile(coords, terrain);
                 }
             }
 
-            Debug.Log($"HexTileFactory: {width}x{height} = {width * height} tile olusturuldu.");
+            Debug.Log($"HexTileFactory: {width}x{height} = {width * height} tile olusturuldu. Tum terrain tipleri dahil.");
         }
 
         private TerrainType GetRandomTerrainForTest(int q, int r)
         {
-            // Basit noise benzeri pattern
-            float noise = Mathf.PerlinNoise(q * 0.3f, r * 0.3f);
+            // Perlin noise ile dogal gorunum
+            float noise = Mathf.PerlinNoise(q * 0.25f + 0.5f, r * 0.25f + 0.5f);
+            float noise2 = Mathf.PerlinNoise(q * 0.4f + 10f, r * 0.4f + 10f);
 
-            if (noise < 0.2f) return TerrainType.Water;
-            if (noise < 0.35f) return TerrainType.Hill;
-            if (noise < 0.5f) return TerrainType.Grass;
-            if (noise < 0.65f) return TerrainType.Forest;
-            if (noise < 0.8f) return TerrainType.Mountain;
-            return TerrainType.Snow;
+            // Cogunlukla grass olsun
+            if (noise < 0.15f) return TerrainType.Water;
+            if (noise < 0.25f) return TerrainType.Coast;
+            if (noise < 0.4f) return TerrainType.Forest;
+            if (noise > 0.85f) return TerrainType.Mountain;
+            if (noise > 0.75f) return TerrainType.Hill;
+            if (noise2 > 0.8f) return TerrainType.Desert;
+            if (noise2 < 0.15f) return TerrainType.Swamp;
+            if (noise2 > 0.7f && noise > 0.6f) return TerrainType.Snow;
+
+            return TerrainType.Grass;
         }
     }
 }
