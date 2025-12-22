@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Collections.Generic;
 using EmpireWars.WorldMap.Tiles;
 
 namespace EmpireWars.Editor
@@ -11,7 +12,7 @@ namespace EmpireWars.Editor
     /// </summary>
     public class HexTilePrefabSetup : EditorWindow
     {
-        private const string KayKitPath = "Assets/KayKit_Medieval_Hexagon";
+        private const string KayKitTilesPath = "Assets/KayKit_Medieval_Hexagon/tiles";
         private const string PrefabOutputPath = "Assets/Prefabs/HexTiles";
         private const string DatabasePath = "Assets/ScriptableObjects";
 
@@ -37,61 +38,92 @@ namespace EmpireWars.Editor
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Create Prefab Database"))
+            EditorGUILayout.HelpBox(
+                "1. 'Create Prefab Database' - Database yoksa olustur\n" +
+                "2. 'Auto Setup All' - KayKit FBX'lerden prefab olustur ve database'e ata\n" +
+                "3. 'Create Test Grid' - Sahneye test hexleri ekle",
+                MessageType.Info
+            );
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Create Prefab Database", GUILayout.Height(30)))
             {
                 CreatePrefabDatabase();
             }
 
             GUILayout.Space(5);
 
-            if (GUILayout.Button("Setup Prefabs from KayKit"))
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button("AUTO SETUP ALL (Recommended)", GUILayout.Height(40)))
+            {
+                AutoSetupAll();
+            }
+            GUI.backgroundColor = Color.white;
+
+            GUILayout.Space(20);
+            GUILayout.Label("Manual Steps", EditorStyles.boldLabel);
+
+            if (GUILayout.Button("1. Create Prefabs from KayKit FBX"))
             {
                 SetupPrefabsFromKayKit();
             }
 
-            GUILayout.Space(5);
-
-            if (targetDatabase != null && GUILayout.Button("Auto-Assign Prefabs to Database"))
+            if (targetDatabase != null && GUILayout.Button("2. Auto-Assign Prefabs to Database"))
             {
                 AutoAssignPrefabsToDatabase();
             }
 
             GUILayout.Space(20);
-            GUILayout.Label("Quick Actions", EditorStyles.boldLabel);
+            GUILayout.Label("Scene Actions", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Create Test Hex Grid in Scene"))
+            if (GUILayout.Button("Create Test Hex Grid (10x10)", GUILayout.Height(25)))
             {
                 CreateTestHexGrid();
             }
 
-            if (GUILayout.Button("Clear All Hex Tiles in Scene"))
+            if (GUILayout.Button("Clear All Hex Tiles", GUILayout.Height(25)))
             {
                 ClearHexTiles();
             }
         }
 
-        private void CreatePrefabDatabase()
+        private void AutoSetupAll()
         {
-            // Klasoru olustur
-            if (!AssetDatabase.IsValidFolder(DatabasePath))
+            // 1. Database yoksa olustur
+            if (targetDatabase == null)
             {
-                string[] folders = DatabasePath.Split('/');
-                string currentPath = folders[0];
-                for (int i = 1; i < folders.Length; i++)
-                {
-                    string nextPath = currentPath + "/" + folders[i];
-                    if (!AssetDatabase.IsValidFolder(nextPath))
-                    {
-                        AssetDatabase.CreateFolder(currentPath, folders[i]);
-                    }
-                    currentPath = nextPath;
-                }
+                CreatePrefabDatabase();
             }
 
-            // ScriptableObject olustur
-            HexTilePrefabDatabase database = ScriptableObject.CreateInstance<HexTilePrefabDatabase>();
+            // 2. Prefab'lari olustur
+            SetupPrefabsFromKayKit();
+
+            // 3. Database'e ata
+            AutoAssignPrefabsToDatabase();
+
+            // 4. Test grid olustur
+            CreateTestHexGrid();
+
+            Debug.Log("Tum islemler tamamlandi!");
+        }
+
+        private void CreatePrefabDatabase()
+        {
+            CreateFolderIfNeeded(DatabasePath);
+
             string assetPath = $"{DatabasePath}/HexTilePrefabDatabase.asset";
 
+            // Varsa yukle
+            targetDatabase = AssetDatabase.LoadAssetAtPath<HexTilePrefabDatabase>(assetPath);
+            if (targetDatabase != null)
+            {
+                Debug.Log("Mevcut database yuklendi.");
+                return;
+            }
+
+            // Yoksa olustur
+            HexTilePrefabDatabase database = ScriptableObject.CreateInstance<HexTilePrefabDatabase>();
             AssetDatabase.CreateAsset(database, assetPath);
             AssetDatabase.SaveAssets();
 
@@ -103,23 +135,8 @@ namespace EmpireWars.Editor
 
         private void SetupPrefabsFromKayKit()
         {
-            // Prefab klasorunu olustur
-            if (!AssetDatabase.IsValidFolder(PrefabOutputPath))
-            {
-                string[] folders = PrefabOutputPath.Split('/');
-                string currentPath = folders[0];
-                for (int i = 1; i < folders.Length; i++)
-                {
-                    string nextPath = currentPath + "/" + folders[i];
-                    if (!AssetDatabase.IsValidFolder(nextPath))
-                    {
-                        AssetDatabase.CreateFolder(currentPath, folders[i]);
-                    }
-                    currentPath = nextPath;
-                }
-            }
-
-            // Alt klasorleri olustur
+            // Ana prefab klasorunu olustur
+            CreateFolderIfNeeded(PrefabOutputPath);
             CreateFolderIfNeeded($"{PrefabOutputPath}/Base");
             CreateFolderIfNeeded($"{PrefabOutputPath}/Roads");
             CreateFolderIfNeeded($"{PrefabOutputPath}/Rivers");
@@ -128,24 +145,24 @@ namespace EmpireWars.Editor
             int prefabCount = 0;
 
             // Base tiles
-            prefabCount += CreatePrefabsFromFolder($"{KayKitPath}/tiles/base", $"{PrefabOutputPath}/Base");
+            prefabCount += CreatePrefabsFromFolder($"{KayKitTilesPath}/base", $"{PrefabOutputPath}/Base");
 
             // Road tiles
-            prefabCount += CreatePrefabsFromFolder($"{KayKitPath}/tiles/roads", $"{PrefabOutputPath}/Roads");
+            prefabCount += CreatePrefabsFromFolder($"{KayKitTilesPath}/roads", $"{PrefabOutputPath}/Roads");
 
-            // River tiles
-            prefabCount += CreatePrefabsFromFolder($"{KayKitPath}/tiles/rivers", $"{PrefabOutputPath}/Rivers");
+            // River tiles (waterless dahil degil)
+            prefabCount += CreatePrefabsFromFolder($"{KayKitTilesPath}/rivers", $"{PrefabOutputPath}/Rivers", false);
 
-            // Coast tiles
-            prefabCount += CreatePrefabsFromFolder($"{KayKitPath}/tiles/coast", $"{PrefabOutputPath}/Coast");
+            // Coast tiles (waterless dahil degil)
+            prefabCount += CreatePrefabsFromFolder($"{KayKitTilesPath}/coast", $"{PrefabOutputPath}/Coast", false);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log($"Toplam {prefabCount} prefab olusturuldu.");
+            Debug.Log($"Toplam {prefabCount} prefab olusturuldu/guncellendi.");
         }
 
-        private int CreatePrefabsFromFolder(string sourcePath, string targetPath)
+        private int CreatePrefabsFromFolder(string sourcePath, string targetPath, bool includeSubfolders = true)
         {
             if (!AssetDatabase.IsValidFolder(sourcePath))
             {
@@ -153,41 +170,54 @@ namespace EmpireWars.Editor
                 return 0;
             }
 
-            string[] guids = AssetDatabase.FindAssets("t:Model", new[] { sourcePath });
+            string[] searchFolders = includeSubfolders ? null : new[] { sourcePath };
+            string[] guids = AssetDatabase.FindAssets("t:Model", searchFolders ?? new[] { sourcePath });
             int count = 0;
 
             foreach (string guid in guids)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
 
-                if (model != null)
+                // Sadece dogrudan bu klasorden gelen dosyalari al (subfolder haric)
+                if (!includeSubfolders)
                 {
-                    string prefabName = Path.GetFileNameWithoutExtension(assetPath);
-                    string prefabPath = $"{targetPath}/{prefabName}.prefab";
-
-                    // Prefab zaten varsa atla
-                    if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
-                    {
-                        continue;
-                    }
-
-                    // Model'i instantiate et
-                    GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(model);
-
-                    // Collider ekle (yoksa)
-                    if (instance.GetComponent<Collider>() == null)
-                    {
-                        MeshCollider collider = instance.AddComponent<MeshCollider>();
-                        collider.convex = true;
-                    }
-
-                    // Prefab olarak kaydet
-                    GameObject prefab = PrefabUtility.SaveAsPrefabAsset(instance, prefabPath);
-                    DestroyImmediate(instance);
-
-                    count++;
+                    string directory = Path.GetDirectoryName(assetPath).Replace("\\", "/");
+                    if (directory != sourcePath) continue;
                 }
+
+                // waterless dosyalarini atla
+                if (assetPath.Contains("waterless")) continue;
+
+                GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                if (model == null) continue;
+
+                string prefabName = Path.GetFileNameWithoutExtension(assetPath);
+                string prefabPath = $"{targetPath}/{prefabName}.prefab";
+
+                // Prefab zaten varsa atla
+                if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
+                {
+                    count++;
+                    continue;
+                }
+
+                // Model'i instantiate et
+                GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(model);
+
+                // MeshCollider ekle
+                MeshFilter meshFilter = instance.GetComponentInChildren<MeshFilter>();
+                if (meshFilter != null && instance.GetComponent<Collider>() == null)
+                {
+                    MeshCollider collider = instance.AddComponent<MeshCollider>();
+                    collider.sharedMesh = meshFilter.sharedMesh;
+                    collider.convex = true;
+                }
+
+                // Prefab olarak kaydet
+                PrefabUtility.SaveAsPrefabAsset(instance, prefabPath);
+                DestroyImmediate(instance);
+
+                count++;
             }
 
             return count;
@@ -204,34 +234,49 @@ namespace EmpireWars.Editor
             // Base tiles
             targetDatabase.grassTile = LoadPrefab($"{PrefabOutputPath}/Base/hex_grass.prefab");
             targetDatabase.waterTile = LoadPrefab($"{PrefabOutputPath}/Base/hex_water.prefab");
+            targetDatabase.hillTile = LoadPrefab($"{PrefabOutputPath}/Base/hex_grass_sloped_high.prefab");
             targetDatabase.defaultTile = targetDatabase.grassTile;
 
-            // Forest icin grass kullan (uzerine agac eklenecek)
+            // Diger terrain tipleri icin grass fallback (ustune dekorasyon eklenecek)
             targetDatabase.forestTile = targetDatabase.grassTile;
-            targetDatabase.plainsTile = targetDatabase.grassTile;
+            targetDatabase.mountainTile = targetDatabase.grassTile;
+            targetDatabase.desertTile = targetDatabase.grassTile;
+            targetDatabase.snowTile = targetDatabase.grassTile;
             targetDatabase.swampTile = targetDatabase.grassTile;
+            targetDatabase.plainsTile = targetDatabase.grassTile;
 
-            // Road tiles
-            var roadTiles = new System.Collections.Generic.List<GameObject>();
-            for (char c = 'A'; c <= 'M'; c++)
+            // Road tiles (A-M)
+            var roadTiles = new List<GameObject>();
+            foreach (char c in "ABCDEFGHIJKLM")
             {
                 GameObject road = LoadPrefab($"{PrefabOutputPath}/Roads/hex_road_{c}.prefab");
                 if (road != null) roadTiles.Add(road);
             }
+            // Sloped road tiles da ekle
+            GameObject slopedHigh = LoadPrefab($"{PrefabOutputPath}/Roads/hex_road_A_sloped_high.prefab");
+            GameObject slopedLow = LoadPrefab($"{PrefabOutputPath}/Roads/hex_road_A_sloped_low.prefab");
+            if (slopedHigh != null) roadTiles.Add(slopedHigh);
+            if (slopedLow != null) roadTiles.Add(slopedLow);
             targetDatabase.roadTiles = roadTiles.ToArray();
 
-            // River tiles
-            var riverTiles = new System.Collections.Generic.List<GameObject>();
-            for (char c = 'A'; c <= 'L'; c++)
+            // River tiles (A-L + curvy + crossing)
+            var riverTiles = new List<GameObject>();
+            foreach (char c in "ABCDEFGHIJKL")
             {
                 GameObject river = LoadPrefab($"{PrefabOutputPath}/Rivers/hex_river_{c}.prefab");
                 if (river != null) riverTiles.Add(river);
             }
+            GameObject curvy = LoadPrefab($"{PrefabOutputPath}/Rivers/hex_river_A_curvy.prefab");
+            GameObject crossingA = LoadPrefab($"{PrefabOutputPath}/Rivers/hex_river_crossing_A.prefab");
+            GameObject crossingB = LoadPrefab($"{PrefabOutputPath}/Rivers/hex_river_crossing_B.prefab");
+            if (curvy != null) riverTiles.Add(curvy);
+            if (crossingA != null) riverTiles.Add(crossingA);
+            if (crossingB != null) riverTiles.Add(crossingB);
             targetDatabase.riverTiles = riverTiles.ToArray();
 
-            // Coast tiles
-            var coastTiles = new System.Collections.Generic.List<GameObject>();
-            for (char c = 'A'; c <= 'E'; c++)
+            // Coast tiles (A-E)
+            var coastTiles = new List<GameObject>();
+            foreach (char c in "ABCDE")
             {
                 GameObject coast = LoadPrefab($"{PrefabOutputPath}/Coast/hex_coast_{c}.prefab");
                 if (coast != null) coastTiles.Add(coast);
@@ -241,7 +286,13 @@ namespace EmpireWars.Editor
             EditorUtility.SetDirty(targetDatabase);
             AssetDatabase.SaveAssets();
 
-            Debug.Log("Database prefab'larla dolduruldu!");
+            Debug.Log($"Database guncellendi:\n" +
+                     $"- Grass: {(targetDatabase.grassTile != null ? "OK" : "EKSIK")}\n" +
+                     $"- Water: {(targetDatabase.waterTile != null ? "OK" : "EKSIK")}\n" +
+                     $"- Hill: {(targetDatabase.hillTile != null ? "OK" : "EKSIK")}\n" +
+                     $"- Roads: {roadTiles.Count} adet\n" +
+                     $"- Rivers: {riverTiles.Count} adet\n" +
+                     $"- Coasts: {coastTiles.Count} adet");
         }
 
         private GameObject LoadPrefab(string path)
@@ -251,11 +302,19 @@ namespace EmpireWars.Editor
 
         private void CreateFolderIfNeeded(string path)
         {
-            if (!AssetDatabase.IsValidFolder(path))
+            if (AssetDatabase.IsValidFolder(path)) return;
+
+            string[] parts = path.Split('/');
+            string current = parts[0];
+
+            for (int i = 1; i < parts.Length; i++)
             {
-                string parent = Path.GetDirectoryName(path).Replace("\\", "/");
-                string folderName = Path.GetFileName(path);
-                AssetDatabase.CreateFolder(parent, folderName);
+                string next = current + "/" + parts[i];
+                if (!AssetDatabase.IsValidFolder(next))
+                {
+                    AssetDatabase.CreateFolder(current, parts[i]);
+                }
+                current = next;
             }
         }
 
@@ -276,7 +335,7 @@ namespace EmpireWars.Editor
                 factory = factoryObj.AddComponent<HexTileFactory>();
             }
 
-            // Eger database varsa, factory'ye ata
+            // Database'i factory'ye ata
             if (targetDatabase != null)
             {
                 SerializedObject so = new SerializedObject(factory);
@@ -285,10 +344,10 @@ namespace EmpireWars.Editor
                 so.ApplyModifiedProperties();
             }
 
-            // Test grid olustur
+            // Test grid olustur (10x10)
             factory.GenerateTestGrid(10, 10);
 
-            Debug.Log("10x10 test grid olusturuldu.");
+            Debug.Log("10x10 test grid olusturuldu - tum terrain tipleri dahil.");
         }
 
         private void ClearHexTiles()
