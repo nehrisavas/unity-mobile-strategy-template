@@ -15,10 +15,11 @@ MonoBehaviour:
   grassTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
   waterTile: {fileID: 2974647367989608734, guid: 5858975bd3bb6d94293220168a784290, type: 3}
   forestTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
-  mountainTile: {fileID: 0}
-  desertTile: {fileID: 0}
-  snowTile: {fileID: 0}
+  mountainTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  desertTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  snowTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
   swampTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  hillTile: {fileID: 2456930308188513948, guid: 97c338657a2dce24996c48ee6099f59c, type: 3}
   plainsTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
   roadTiles:
   - {fileID: 6706576718033221646, guid: 6793df535f9f9454bbcc9b261ec5b355, type: 3}
@@ -34,6 +35,8 @@ MonoBehaviour:
   - {fileID: 5764191707561369700, guid: d329fd809a497f242a9134420f083489, type: 3}
   - {fileID: 5929650395784007813, guid: aecaba662918be946a44d40f0a96e520, type: 3}
   - {fileID: 1631033755044383681, guid: 14fb1b3c27fa6fe458d548f82481a154, type: 3}
+  - {fileID: 2496414419684580268, guid: ae3903e4999833441897eaf4a0cb278a, type: 3}
+  - {fileID: 5248965616215181270, guid: 70fc92b34aed95c449a811e5b7c825f4, type: 3}
   riverTiles:
   - {fileID: 3519230379458270766, guid: d725f35acd9fcb843937400e8079f7a2, type: 3}
   - {fileID: 5530284826423746027, guid: e2368f2f7ca1a0d4a8fa66a4f1798227, type: 3}
@@ -47,6 +50,9 @@ MonoBehaviour:
   - {fileID: 5024834962924462617, guid: 64d651db94485b54e9d9fa30d7237718, type: 3}
   - {fileID: 7884581415624083304, guid: 2d9a249ad9429cc4aa81d4a708735647, type: 3}
   - {fileID: 3245113036442872009, guid: 56635ca019bd23143b95e9e8332e5743, type: 3}
+  - {fileID: 5604204431784981087, guid: 456b8cdfe8e0bad40bce216016e4539a, type: 3}
+  - {fileID: 582423457762737768, guid: 936e421c2734b674a82bb89c89382faf, type: 3}
+  - {fileID: 5850464540474320524, guid: c60b26043a42a9a45a29001559c5f72d, type: 3}
   coastTiles:
   - {fileID: 7057568177221965596, guid: 1cc4f8fdae4a36a4a9b81b3a0cc3c3e9, type: 3}
   - {fileID: 1457843315254703173, guid: 7bcf0379f379a5940ab54c673600705a, type: 3}

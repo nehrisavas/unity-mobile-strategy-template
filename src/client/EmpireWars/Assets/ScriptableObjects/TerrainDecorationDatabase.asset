@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4263b96252bcfbb49ac718f17819d3ec, type: 3}
+  m_Name: TerrainDecorationDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.WorldMap.Tiles.TerrainDecorationDatabase
+  forestTrees:
+  - {fileID: 8890221905612371432, guid: 3effcddf56cfe404bb368e4f4a6fdc81, type: 3}
+  - {fileID: 1339924319591732084, guid: b74f3b30bdca81f4cad18c10d6b902f8, type: 3}
+  - {fileID: 6018223111295164928, guid: 0afbe2af5e0bcfc4a8afa56bc6471acb, type: 3}
+  - {fileID: 2528550009453518726, guid: 05e16643b3794e84d9ab9acff0051e01, type: 3}
+  - {fileID: 4942502024013766554, guid: 2a9e5c00853ab0941a0e1aeb34e971be, type: 3}
+  - {fileID: 6381319893297740449, guid: 1cf1fffe6a568094bbba080bc6480619, type: 3}
+  - {fileID: 1667441360811964664, guid: f9e29485748e3ae4386a97548fa305ec, type: 3}
+  - {fileID: 553963814510153882, guid: 3d33f2636ce14d045b9c616358c75595, type: 3}
+  mountainModels:
+  - {fileID: 4498017563586364918, guid: b3f3e78c4d8017043938aaf747c3aad0, type: 3}
+  - {fileID: 1176051976755843685, guid: cd6bb4d3e4d3bfc49b5ce02f360ba9bc, type: 3}
+  - {fileID: 4927410343138381082, guid: d5cc0e3bb4054fb4bae5abc5edfbdd64, type: 3}
+  hillRocks:
+  - {fileID: 1977677579095734554, guid: 6b1f21241177e1844b7f8a9b028a9d6e, type: 3}
+  - {fileID: 7335170298420508220, guid: d5fe6b3bba58095408d41e96a3778370, type: 3}
+  - {fileID: 2622765970245604368, guid: 7ffb916afa4d9d8498132abfb4b33ec8, type: 3}
+  desertDecorations:
+  - {fileID: 5066806234147192293, guid: e5538f8f83ebdd6428c25a37675651c7, type: 3}
+  - {fileID: 8164388298872016662, guid: 48fd9d4108e90f94ba1a33527fed3ca4, type: 3}
+  snowDecorations:
+  - {fileID: 2990186303293034438, guid: ab075350bdeac9f4c8a8310c280de59f, type: 3}
+  - {fileID: 5030961089130718635, guid: 11192f4f2e7af2e48b93fda26e177944, type: 3}
+  swampDecorations:
+  - {fileID: 2479802663255229666, guid: 9442a1aec3289bf4099b0c15604fdd3e, type: 3}
+  - {fileID: 2380352709187336276, guid: 3f2056d4f1082e84ca2ef72d8cea4faa, type: 3}
+  - {fileID: 4394508894512284444, guid: ccbe2f3898c88b04e82062ff51b1f4fc, type: 3}
+  - {fileID: 410363360276956636, guid: 00c49b0a66f26b346939b7c014a2e5f6, type: 3}
+  singleRocks:
+  - {fileID: 5066806234147192293, guid: e5538f8f83ebdd6428c25a37675651c7, type: 3}
+  - {fileID: 8164388298872016662, guid: 48fd9d4108e90f94ba1a33527fed3ca4, type: 3}
+  - {fileID: 2990186303293034438, guid: ab075350bdeac9f4c8a8310c280de59f, type: 3}
+  - {fileID: 5030961089130718635, guid: 11192f4f2e7af2e48b93fda26e177944, type: 3}
+  - {fileID: 8163362790948926503, guid: 97a88d6e2f623b2448c919b5981460cb, type: 3}

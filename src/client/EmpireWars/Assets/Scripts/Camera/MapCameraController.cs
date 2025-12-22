@@ -23,11 +23,11 @@ namespace EmpireWars.CameraSystem
         [SerializeField] private float keyboardPanSpeed = 20f;
 
         [Header("Zoom Ayarlari")]
-        [SerializeField] private float zoomSpeed = 30f;  // Hizli zoom
-        [SerializeField] private float minZoom = 5f;
-        [SerializeField] private float maxZoom = 50f;
-        [SerializeField] private float zoomSmoothing = 12f;
-        [SerializeField] private float pinchZoomSpeed = 0.05f;
+        [SerializeField] private float zoomSpeed = 5f;    // Her scroll icin 5 birim zoom
+        [SerializeField] private float minZoom = 3f;      // Daha yakin zoom
+        [SerializeField] private float maxZoom = 60f;     // Daha uzak zoom
+        [SerializeField] private float zoomSmoothing = 20f; // Hizli gecis
+        [SerializeField] private float pinchZoomSpeed = 0.15f;
 
         [Header("Sinirlar")]
         [SerializeField] private bool useBounds = true;
@@ -284,9 +284,11 @@ namespace EmpireWars.CameraSystem
         private void HandleMouseScroll()
         {
             float scroll = scrollAction.ReadValue<float>();
-            if (Mathf.Abs(scroll) > 0.01f)
+            if (Mathf.Abs(scroll) > 0.1f)
             {
-                targetZoom -= scroll * zoomSpeed * Time.deltaTime;
+                // Scroll degeri anlik - her notch icin zoomSpeed kadar zoom
+                // scroll > 0 = yukari = zoom in (kucult), scroll < 0 = asagi = zoom out (buyut)
+                targetZoom -= Mathf.Sign(scroll) * zoomSpeed;
                 targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
             }
         }

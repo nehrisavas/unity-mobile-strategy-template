@@ -53,9 +53,9 @@ namespace EmpireWars.WorldMap.Tiles
         // Fog of War icin renderer cache
         private Renderer[] renderers;
 
-        // Highlight renkleri
-        private static readonly Color HighlightColor = new Color(0.3f, 0.6f, 1f, 0.4f);
-        private static readonly Color SelectionColor = new Color(1f, 0.8f, 0.2f, 0.5f);
+        // Highlight renkleri - daha parlak ve gorunur
+        private static readonly Color HighlightColor = new Color(0.2f, 0.7f, 1f, 0.6f);   // Mavi hover
+        private static readonly Color SelectionColor = new Color(1f, 0.85f, 0.1f, 0.7f);  // Sari secim
 
         private void Awake()
         {
@@ -76,12 +76,8 @@ namespace EmpireWars.WorldMap.Tiles
 
             CacheRenderers();
 
-            if (highlightOverlay == null || selectionOverlay == null)
-            {
-                CreateOverlays();
-            }
-
-            UpdateOverlays();
+            // Her zaman yeni hexagonal overlay olustur
+            CreateOverlays();
         }
 
         private void CacheRenderers()
@@ -94,60 +90,112 @@ namespace EmpireWars.WorldMap.Tiles
         /// </summary>
         private void CreateOverlays()
         {
-            // Highlight overlay (hover)
-            if (highlightOverlay == null)
+            // Eski overlay'leri temizle (yeni hexagonal olanlar icin)
+            if (highlightOverlay != null)
             {
-                highlightOverlay = CreateOverlayQuad("HighlightOverlay", HighlightColor);
+                DestroyImmediate(highlightOverlay);
+                highlightOverlay = null;
+            }
+            if (selectionOverlay != null)
+            {
+                DestroyImmediate(selectionOverlay);
+                selectionOverlay = null;
             }
 
-            // Selection overlay
-            if (selectionOverlay == null)
-            {
-                selectionOverlay = CreateOverlayQuad("SelectionOverlay", SelectionColor);
-            }
+            // Highlight overlay (hover) - HEXAGONAL
+            highlightOverlay = CreateOverlayQuad("HighlightOverlay", HighlightColor);
+
+            // Selection overlay - HEXAGONAL
+            selectionOverlay = CreateOverlayQuad("SelectionOverlay", SelectionColor);
 
             UpdateOverlays();
         }
 
         private GameObject CreateOverlayQuad(string name, Color color)
         {
-            GameObject overlay = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            overlay.name = name;
+            // Hexagonal mesh olustur (kare degil!)
+            GameObject overlay = new GameObject(name);
             overlay.transform.SetParent(transform);
-            overlay.transform.localPosition = new Vector3(0, 0.05f, 0);
-            overlay.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            overlay.transform.localScale = new Vector3(HexMetrics.InnerRadius * 1.8f, HexMetrics.InnerRadius * 1.8f, 1f);
+            overlay.transform.localPosition = new Vector3(0, 0.1f, 0); // Daha yukarda
+            overlay.transform.localRotation = Quaternion.identity;
 
-            // Collider kaldir (raycast engellemez)
-            Collider col = overlay.GetComponent<Collider>();
-            if (col != null)
+            // Mesh Filter ve Renderer ekle
+            MeshFilter meshFilter = overlay.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = overlay.AddComponent<MeshRenderer>();
+
+            // Hexagonal mesh olustur
+            meshFilter.mesh = CreateHexMesh();
+
+            // Transparent material olustur - Unlit/Color daha guvenilir
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
             {
-                DestroyImmediate(col);
+                shader = Shader.Find("Unlit/Color");
+            }
+            if (shader == null)
+            {
+                shader = Shader.Find("Sprites/Default");
             }
 
-            // Material ayarla
-            Renderer rend = overlay.GetComponent<Renderer>();
-            if (rend != null)
-            {
-                // Transparent material olustur
-                Material mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-                if (mat != null)
-                {
-                    mat.SetFloat("_Surface", 1); // Transparent
-                    mat.SetFloat("_Blend", 0);   // Alpha
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    mat.SetInt("_ZWrite", 0);
-                    mat.renderQueue = 3000;
-                    mat.color = color;
-                }
-                rend.material = mat;
-                rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                rend.receiveShadows = false;
-            }
+            Material mat = new Material(shader);
+            mat.color = color;
+            mat.SetFloat("_Cull", 0); // Cift tarafli (Off)
+            mat.SetFloat("_Surface", 1); // Transparent
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.renderQueue = 3000;
+            mat.EnableKeyword("_ALPHABLEND_ON");
+
+            meshRenderer.material = mat;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.receiveShadows = false;
 
             overlay.SetActive(false);
             return overlay;
+        }
+
+        /// <summary>
+        /// Hexagonal mesh olusturur (flat-top hexagon)
+        /// </summary>
+        private Mesh CreateHexMesh()
+        {
+            Mesh mesh = new Mesh();
+            mesh.name = "HexOverlay";
+
+            float radius = HexMetrics.OuterRadius * 0.98f; // Tile boyutuna yakin
+
+            // 7 vertex: merkez + 6 kose
+            Vector3[] vertices = new Vector3[7];
+            vertices[0] = Vector3.zero; // Merkez
+
+            // 6 kose (flat-top hexagon: 30 derece offset ile basla)
+            for (int i = 0; i < 6; i++)
+            {
+                float angle = 60f * i - 30f; // Flat-top icin -30 derece offset
+                float rad = Mathf.Deg2Rad * angle;
+                vertices[i + 1] = new Vector3(
+                    radius * Mathf.Cos(rad),
+                    0f,
+                    radius * Mathf.Sin(rad)
+                );
+            }
+
+            // 6 ucgen (fan seklinde) - TERS winding order (yukaridan bakinca saat yonunun tersine)
+            int[] triangles = new int[18];
+            for (int i = 0; i < 6; i++)
+            {
+                triangles[i * 3] = 0;                       // Merkez
+                triangles[i * 3 + 1] = (i + 1) % 6 + 1;     // Sonraki kose (TERS)
+                triangles[i * 3 + 2] = i + 1;               // Mevcut kose (TERS)
+            }
+
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return mesh;
         }
 
         /// <summary>

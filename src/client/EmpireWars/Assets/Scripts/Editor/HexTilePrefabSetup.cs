@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using EmpireWars.WorldMap.Tiles;
 
 namespace EmpireWars.Editor
@@ -13,10 +14,13 @@ namespace EmpireWars.Editor
     public class HexTilePrefabSetup : EditorWindow
     {
         private const string KayKitTilesPath = "Assets/KayKit_Medieval_Hexagon/tiles";
+        private const string KayKitDecorationPath = "Assets/KayKit_Medieval_Hexagon/decoration";
         private const string PrefabOutputPath = "Assets/Prefabs/HexTiles";
+        private const string DecorationPrefabPath = "Assets/Prefabs/Decorations";
         private const string DatabasePath = "Assets/ScriptableObjects";
 
         private HexTilePrefabDatabase targetDatabase;
+        private TerrainDecorationDatabase decorationDatabase;
 
         [MenuItem("EmpireWars/Hex Tile Prefab Setup")]
         public static void ShowWindow()
@@ -30,26 +34,35 @@ namespace EmpireWars.Editor
             GUILayout.Space(10);
 
             targetDatabase = (HexTilePrefabDatabase)EditorGUILayout.ObjectField(
-                "Target Database",
+                "Tile Database",
                 targetDatabase,
                 typeof(HexTilePrefabDatabase),
+                false
+            );
+
+            decorationDatabase = (TerrainDecorationDatabase)EditorGUILayout.ObjectField(
+                "Decoration Database",
+                decorationDatabase,
+                typeof(TerrainDecorationDatabase),
                 false
             );
 
             GUILayout.Space(10);
 
             EditorGUILayout.HelpBox(
-                "1. 'Create Prefab Database' - Database yoksa olustur\n" +
+                "1. 'Create Databases' - Tile ve Decoration database olustur\n" +
                 "2. 'Auto Setup All' - KayKit FBX'lerden prefab olustur ve database'e ata\n" +
-                "3. 'Create Test Grid' - Sahneye test hexleri ekle",
+                "3. 'Create Test Grid' - Sahneye SABIT harita olustur (her seferinde ayni)\n\n" +
+                "Terrain tipleri: Grass, Water, Forest, Mountain, Desert, Snow, Swamp, Hill, Road, Coast",
                 MessageType.Info
             );
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Create Prefab Database", GUILayout.Height(30)))
+            if (GUILayout.Button("Create Databases", GUILayout.Height(30)))
             {
                 CreatePrefabDatabase();
+                CreateDecorationDatabase();
             }
 
             GUILayout.Space(5);
@@ -67,17 +80,19 @@ namespace EmpireWars.Editor
             if (GUILayout.Button("1. Create Prefabs from KayKit FBX"))
             {
                 SetupPrefabsFromKayKit();
+                SetupDecorationPrefabs();
             }
 
             if (targetDatabase != null && GUILayout.Button("2. Auto-Assign Prefabs to Database"))
             {
                 AutoAssignPrefabsToDatabase();
+                AutoAssignDecorations();
             }
 
             GUILayout.Space(20);
             GUILayout.Label("Scene Actions", EditorStyles.boldLabel);
 
-            if (GUILayout.Button("Create Test Hex Grid (10x10)", GUILayout.Height(25)))
+            if (GUILayout.Button("Create Fixed Map (10x10)", GUILayout.Height(25)))
             {
                 CreateTestHexGrid();
             }
@@ -90,22 +105,32 @@ namespace EmpireWars.Editor
 
         private void AutoSetupAll()
         {
-            // 1. Database yoksa olustur
+            // 1. Database'ler yoksa olustur
             if (targetDatabase == null)
             {
                 CreatePrefabDatabase();
             }
+            if (decorationDatabase == null)
+            {
+                CreateDecorationDatabase();
+            }
 
-            // 2. Prefab'lari olustur
+            // 2. Tile prefab'larini olustur
             SetupPrefabsFromKayKit();
 
-            // 3. Database'e ata
+            // 3. Dekorasyon prefab'larini olustur
+            SetupDecorationPrefabs();
+
+            // 4. Tile database'e ata
             AutoAssignPrefabsToDatabase();
 
-            // 4. Test grid olustur
+            // 5. Dekorasyon database'e ata
+            AutoAssignDecorations();
+
+            // 6. Sabit harita olustur
             CreateTestHexGrid();
 
-            Debug.Log("Tum islemler tamamlandi!");
+            Debug.Log("Tum islemler tamamlandi! Sabit harita olusturuldu - tum terrain tipleri dahil.");
         }
 
         private void CreatePrefabDatabase()
@@ -131,6 +156,29 @@ namespace EmpireWars.Editor
             Selection.activeObject = database;
 
             Debug.Log($"HexTilePrefabDatabase olusturuldu: {assetPath}");
+        }
+
+        private void CreateDecorationDatabase()
+        {
+            CreateFolderIfNeeded(DatabasePath);
+
+            string assetPath = $"{DatabasePath}/TerrainDecorationDatabase.asset";
+
+            // Varsa yukle
+            decorationDatabase = AssetDatabase.LoadAssetAtPath<TerrainDecorationDatabase>(assetPath);
+            if (decorationDatabase != null)
+            {
+                Debug.Log("Mevcut decoration database yuklendi.");
+                return;
+            }
+
+            // Yoksa olustur
+            TerrainDecorationDatabase database = ScriptableObject.CreateInstance<TerrainDecorationDatabase>();
+            AssetDatabase.CreateAsset(database, assetPath);
+            AssetDatabase.SaveAssets();
+
+            decorationDatabase = database;
+            Debug.Log($"TerrainDecorationDatabase olusturuldu: {assetPath}");
         }
 
         private void SetupPrefabsFromKayKit()
@@ -295,6 +343,98 @@ namespace EmpireWars.Editor
                      $"- Coasts: {coastTiles.Count} adet");
         }
 
+        private void SetupDecorationPrefabs()
+        {
+            CreateFolderIfNeeded(DecorationPrefabPath);
+            CreateFolderIfNeeded($"{DecorationPrefabPath}/Mountains");
+            CreateFolderIfNeeded($"{DecorationPrefabPath}/Trees");
+            CreateFolderIfNeeded($"{DecorationPrefabPath}/Rocks");
+            CreateFolderIfNeeded($"{DecorationPrefabPath}/Hills");
+
+            int prefabCount = 0;
+
+            // Nature dekorasyonlari
+            prefabCount += CreatePrefabsFromFolder($"{KayKitDecorationPath}/nature", DecorationPrefabPath, true);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log($"Toplam {prefabCount} dekorasyon prefab olusturuldu/guncellendi.");
+        }
+
+        private void AutoAssignDecorations()
+        {
+            if (decorationDatabase == null)
+            {
+                Debug.LogError("Decoration database secilmedi!");
+                return;
+            }
+
+            // Mountain modelleri
+            var mountains = new List<GameObject>();
+            foreach (char c in "ABC")
+            {
+                // Grass versiyonlarini kullan (renkli)
+                GameObject m = LoadPrefab($"{DecorationPrefabPath}/mountain_{c}_grass.prefab");
+                if (m != null) mountains.Add(m);
+            }
+            decorationDatabase.mountainModels = mountains.ToArray();
+
+            // Forest agaclari
+            var trees = new List<GameObject>();
+            foreach (string size in new[] { "large", "medium", "small" })
+            {
+                GameObject t = LoadPrefab($"{DecorationPrefabPath}/trees_A_{size}.prefab");
+                if (t != null) trees.Add(t);
+                t = LoadPrefab($"{DecorationPrefabPath}/trees_B_{size}.prefab");
+                if (t != null) trees.Add(t);
+            }
+            // Tek agaclar da ekle
+            trees.Add(LoadPrefab($"{DecorationPrefabPath}/tree_single_A.prefab"));
+            trees.Add(LoadPrefab($"{DecorationPrefabPath}/tree_single_B.prefab"));
+            decorationDatabase.forestTrees = trees.Where(t => t != null).ToArray();
+
+            // Hill kayalari ve tepeler
+            var hills = new List<GameObject>();
+            foreach (char c in "ABC")
+            {
+                GameObject h = LoadPrefab($"{DecorationPrefabPath}/hills_{c}_trees.prefab");
+                if (h != null) hills.Add(h);
+            }
+            decorationDatabase.hillRocks = hills.ToArray();
+
+            // Tek kayalar
+            var rocks = new List<GameObject>();
+            foreach (char c in "ABCDE")
+            {
+                GameObject r = LoadPrefab($"{DecorationPrefabPath}/rock_single_{c}.prefab");
+                if (r != null) rocks.Add(r);
+            }
+            decorationDatabase.singleRocks = rocks.ToArray();
+
+            // Desert, Snow, Swamp icin kayaklari ve kesik agaclari kullan
+            decorationDatabase.desertDecorations = rocks.Take(2).ToArray();
+            decorationDatabase.snowDecorations = rocks.Skip(2).Take(2).ToArray();
+
+            // Swamp icin kesik agaclar
+            var swamp = new List<GameObject>();
+            swamp.Add(LoadPrefab($"{DecorationPrefabPath}/trees_A_cut.prefab"));
+            swamp.Add(LoadPrefab($"{DecorationPrefabPath}/trees_B_cut.prefab"));
+            swamp.Add(LoadPrefab($"{DecorationPrefabPath}/tree_single_A_cut.prefab"));
+            swamp.Add(LoadPrefab($"{DecorationPrefabPath}/tree_single_B_cut.prefab"));
+            decorationDatabase.swampDecorations = swamp.Where(s => s != null).ToArray();
+
+            EditorUtility.SetDirty(decorationDatabase);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log($"Decoration database guncellendi:\n" +
+                     $"- Mountains: {mountains.Count} adet\n" +
+                     $"- Trees (Forest): {decorationDatabase.forestTrees?.Length ?? 0} adet\n" +
+                     $"- Hills: {hills.Count} adet\n" +
+                     $"- Rocks: {rocks.Count} adet\n" +
+                     $"- Swamp: {decorationDatabase.swampDecorations?.Length ?? 0} adet");
+        }
+
         private GameObject LoadPrefab(string path)
         {
             return AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -335,19 +475,24 @@ namespace EmpireWars.Editor
                 factory = factoryObj.AddComponent<HexTileFactory>();
             }
 
-            // Database'i factory'ye ata
+            // Database'leri factory'ye ata
+            SerializedObject so = new SerializedObject(factory);
             if (targetDatabase != null)
             {
-                SerializedObject so = new SerializedObject(factory);
                 so.FindProperty("prefabDatabase").objectReferenceValue = targetDatabase;
-                so.FindProperty("tilesParent").objectReferenceValue = hexGrid.transform;
-                so.ApplyModifiedProperties();
             }
+            if (decorationDatabase != null)
+            {
+                so.FindProperty("decorationDatabase").objectReferenceValue = decorationDatabase;
+            }
+            so.FindProperty("tilesParent").objectReferenceValue = hexGrid.transform;
+            so.FindProperty("addDecorations").boolValue = true;
+            so.ApplyModifiedProperties();
 
-            // Test grid olustur (10x10)
+            // Sabit harita olustur (10x10)
             factory.GenerateTestGrid(10, 10);
 
-            Debug.Log("10x10 test grid olusturuldu - tum terrain tipleri dahil.");
+            Debug.Log("10x10 SABIT harita olusturuldu - tum terrain tipleri ve dekorasyonlar dahil.");
         }
 
         private void ClearHexTiles()

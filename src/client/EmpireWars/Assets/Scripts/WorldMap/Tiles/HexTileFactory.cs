@@ -10,12 +10,14 @@ namespace EmpireWars.WorldMap.Tiles
     /// </summary>
     public class HexTileFactory : MonoBehaviour
     {
-        [Header("Database")]
+        [Header("Databases")]
         [SerializeField] private HexTilePrefabDatabase prefabDatabase;
+        [SerializeField] private TerrainDecorationDatabase decorationDatabase;
 
         [Header("Settings")]
         [SerializeField] private Transform tilesParent;
         [SerializeField] private float tileScale = 1f;
+        [SerializeField] private bool addDecorations = true;
 
         private static HexTileFactory _instance;
         public static HexTileFactory Instance => _instance;
@@ -105,7 +107,42 @@ namespace EmpireWars.WorldMap.Tiles
             }
             hexTile.Initialize(coords, terrainType);
 
+            // Dekorasyon ekle (orman, dag, tepe vb.)
+            if (addDecorations && decorationDatabase != null)
+            {
+                AddDecoration(tile, coords, terrainType);
+            }
+
             return tile;
+        }
+
+        /// <summary>
+        /// Terrain tipine gore uygun dekorasyon ekler
+        /// </summary>
+        private void AddDecoration(GameObject tile, HexCoordinates coords, TerrainType terrainType)
+        {
+            if (!decorationDatabase.RequiresDecoration(terrainType)) return;
+
+            // Koordinata gore tutarli seed (her tile ayni dekorasyonu alir)
+            int seed = coords.Q * 1000 + coords.R;
+            GameObject decorPrefab = decorationDatabase.GetRandomDecoration(terrainType, seed);
+
+            if (decorPrefab == null) return;
+
+            // Dekorasyonu tile'in child'i olarak ekle
+            GameObject decor = Instantiate(decorPrefab, tile.transform);
+            decor.name = $"Decor_{terrainType}";
+
+            // Pozisyon ve olcek ayarla
+            float yOffset = decorationDatabase.GetDecorationYOffset(terrainType);
+            decor.transform.localPosition = new Vector3(0, yOffset, 0);
+
+            float scale = decorationDatabase.GetDecorationScale(terrainType);
+            decor.transform.localScale = Vector3.one * scale;
+
+            // Seed'e gore rotasyon varyasyonu (dogal gorunum)
+            float rotationY = (seed % 6) * 60f; // 0, 60, 120, 180, 240, 300 derece
+            decor.transform.localRotation = Quaternion.Euler(0, rotationY, 0);
         }
 
         /// <summary>
@@ -184,85 +221,60 @@ namespace EmpireWars.WorldMap.Tiles
         }
 
         /// <summary>
-        /// Test icin basit bir grid olusturur
-        /// Tum terrain tiplerinden en az 2 tane olur
+        /// Sabit harita olusturur - her seferinde ayni harita
+        /// Tum terrain tiplerinden en az 2 tane bulunur
         /// </summary>
         public void GenerateTestGrid(int width, int height)
         {
             ClearAllTiles();
 
-            // Garantili tile listesi - her tipten en az 2 tane
-            var guaranteedTiles = new System.Collections.Generic.List<(int q, int r, TerrainType type)>
+            // Sabit harita verisini kullan
+            var mapTiles = FixedMapData.GetMapTiles();
+            var (mapWidth, mapHeight) = FixedMapData.GetMapSize();
+
+            // Istenilen boyut sabit haritadan buyukse, sadece sabit kisimlari olustur
+            int actualWidth = Mathf.Min(width, mapWidth);
+            int actualHeight = Mathf.Min(height, mapHeight);
+
+            int tileCount = 0;
+            foreach (var tile in mapTiles)
             {
-                // Grass (4 tane - en yaygin)
-                (0, 0, TerrainType.Grass),
-                (1, 0, TerrainType.Grass),
-                (2, 0, TerrainType.Grass),
-                (3, 0, TerrainType.Grass),
-
-                // Water (2 tane)
-                (0, 1, TerrainType.Water),
-                (1, 1, TerrainType.Water),
-
-                // Forest (2 tane)
-                (2, 1, TerrainType.Forest),
-                (3, 1, TerrainType.Forest),
-
-                // Hill (2 tane)
-                (4, 0, TerrainType.Hill),
-                (4, 1, TerrainType.Hill),
-
-                // Mountain (2 tane)
-                (5, 0, TerrainType.Mountain),
-                (5, 1, TerrainType.Mountain),
-
-                // Desert (2 tane)
-                (6, 0, TerrainType.Desert),
-                (6, 1, TerrainType.Desert),
-
-                // Snow (2 tane)
-                (7, 0, TerrainType.Snow),
-                (7, 1, TerrainType.Snow),
-
-                // Swamp (2 tane)
-                (8, 0, TerrainType.Swamp),
-                (8, 1, TerrainType.Swamp),
-
-                // Road (2 tane)
-                (0, 2, TerrainType.Road),
-                (1, 2, TerrainType.Road),
-
-                // Coast (2 tane)
-                (2, 2, TerrainType.Coast),
-                (3, 2, TerrainType.Coast),
-            };
-
-            // Garantili tile'lari olustur
-            var usedCoords = new System.Collections.Generic.HashSet<(int, int)>();
-            foreach (var tile in guaranteedTiles)
-            {
-                if (tile.q < width && tile.r < height)
+                if (tile.q < actualWidth && tile.r < actualHeight)
                 {
                     HexCoordinates coords = new HexCoordinates(tile.q, tile.r);
                     CreateTile(coords, tile.type);
-                    usedCoords.Add((tile.q, tile.r));
+                    tileCount++;
                 }
             }
 
-            // Geri kalan tile'lari rastgele doldur
+            // Terrain sayilarini logla
+            var counts = FixedMapData.GetTerrainCounts();
+            string countLog = "Terrain Sayilari:\n";
+            foreach (var kvp in counts)
+            {
+                countLog += $"  {kvp.Key}: {kvp.Value}\n";
+            }
+            Debug.Log($"HexTileFactory: {tileCount} tile olusturuldu (Sabit Harita).\n{countLog}");
+        }
+
+        /// <summary>
+        /// Rastgele harita olusturur (test amacli)
+        /// </summary>
+        public void GenerateRandomGrid(int width, int height)
+        {
+            ClearAllTiles();
+
             for (int r = 0; r < height; r++)
             {
                 for (int q = 0; q < width; q++)
                 {
-                    if (usedCoords.Contains((q, r))) continue;
-
                     HexCoordinates coords = new HexCoordinates(q, r);
                     TerrainType terrain = GetRandomTerrainForTest(q, r);
                     CreateTile(coords, terrain);
                 }
             }
 
-            Debug.Log($"HexTileFactory: {width}x{height} = {width * height} tile olusturuldu. Tum terrain tipleri dahil.");
+            Debug.Log($"HexTileFactory: {width}x{height} = {width * height} rastgele tile olusturuldu.");
         }
 
         private TerrainType GetRandomTerrainForTest(int q, int r)
