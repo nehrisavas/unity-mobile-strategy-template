@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cba71e1ae01c294a8859c8fe0ad9009, type: 3}
+  m_Name: HexTilePrefabDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.WorldMap.Tiles.HexTilePrefabDatabase
+  grassTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  waterTile: {fileID: 2974647367989608734, guid: 5858975bd3bb6d94293220168a784290, type: 3}
+  forestTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  mountainTile: {fileID: 0}
+  desertTile: {fileID: 0}
+  snowTile: {fileID: 0}
+  swampTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  plainsTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}
+  roadTiles:
+  - {fileID: 6706576718033221646, guid: 6793df535f9f9454bbcc9b261ec5b355, type: 3}
+  - {fileID: 547813541639976475, guid: 802922ca99e611b49a8aceaef7d99435, type: 3}
+  - {fileID: 5272777828327046699, guid: 49b6a9ab513c8cf4fbbbd68ce4d6e9b1, type: 3}
+  - {fileID: 6139317746701172948, guid: 44a7dbe5df7d43247b4abf70a2931c54, type: 3}
+  - {fileID: 688535049581275347, guid: 0c3454cfe6d4f8e48ad82c2cec794dd2, type: 3}
+  - {fileID: 4933224955291299015, guid: 56fd0e3d9181ffd4fa1fc9d4fd997049, type: 3}
+  - {fileID: 8717989814600427567, guid: d701645c80ddb6a4b85defc8723cba9b, type: 3}
+  - {fileID: 5999280713363934834, guid: 5c540773350a7ab41a7762f726096d51, type: 3}
+  - {fileID: 1292901041876187056, guid: bdc711b8756c14943bceaacadaef7d0d, type: 3}
+  - {fileID: 7674435383913741102, guid: e199b7f0d5f65ed40aa3ff657805c7e3, type: 3}
+  - {fileID: 5764191707561369700, guid: d329fd809a497f242a9134420f083489, type: 3}
+  - {fileID: 5929650395784007813, guid: aecaba662918be946a44d40f0a96e520, type: 3}
+  - {fileID: 1631033755044383681, guid: 14fb1b3c27fa6fe458d548f82481a154, type: 3}
+  riverTiles:
+  - {fileID: 3519230379458270766, guid: d725f35acd9fcb843937400e8079f7a2, type: 3}
+  - {fileID: 5530284826423746027, guid: e2368f2f7ca1a0d4a8fa66a4f1798227, type: 3}
+  - {fileID: 3793635643936508771, guid: 772d73043c033dc44aa648f2b1ac7e32, type: 3}
+  - {fileID: 8168768363044587388, guid: 72ab1fe074d5431449a07d499a26d752, type: 3}
+  - {fileID: 8574846143777605274, guid: e6f566743b240b94aa9ab138fa214d6b, type: 3}
+  - {fileID: 2313163021390797172, guid: 81d4e6bc7b84479408b3233893e05524, type: 3}
+  - {fileID: 5839123873361906810, guid: 5e5b2c6e8fb3a6649969abeb9f59306c, type: 3}
+  - {fileID: 7851396782837555617, guid: 1b13b1ef23ac41e45b2973a86c5054e1, type: 3}
+  - {fileID: 1291828445394619984, guid: e3b8b5f7ce3171343a46bcf47a815bf1, type: 3}
+  - {fileID: 5024834962924462617, guid: 64d651db94485b54e9d9fa30d7237718, type: 3}
+  - {fileID: 7884581415624083304, guid: 2d9a249ad9429cc4aa81d4a708735647, type: 3}
+  - {fileID: 3245113036442872009, guid: 56635ca019bd23143b95e9e8332e5743, type: 3}
+  coastTiles:
+  - {fileID: 7057568177221965596, guid: 1cc4f8fdae4a36a4a9b81b3a0cc3c3e9, type: 3}
+  - {fileID: 1457843315254703173, guid: 7bcf0379f379a5940ab54c673600705a, type: 3}
+  - {fileID: 7203673528708204297, guid: 5765392d48d2626428b76a33434ee6b9, type: 3}
+  - {fileID: 1722722874494638241, guid: 0f8fb9f10bf3cea4ebb4284dbd2e3bf4, type: 3}
+  - {fileID: 3079648918084741054, guid: 4467c005bce0ef04f82c931236fbb0a2, type: 3}
+  defaultTile: {fileID: 2783817894595198638, guid: 2049d291c07c49e448d1bd93be0bdee1, type: 3}

@@ -1,0 +1,11 @@
+{
+    "asset": "bf8f98065cd27bd4099c504efa0a6158",
+    "fileName": "019b42b3-dc4a-7bad-963d-d38026beb636.pose.json",
+    "prompt": "Hexagonal areas creating a trembling effect",
+    "negativePrompt": "",
+    "model": "9e46c009-67d8-4254-a3a0-32e3168247ee",
+    "modelName": "Text to Motion",
+    "customSeed": 1457503617,
+    "w3CTraceId": "76b5dc29670cb217bf9f7154424c82f3",
+    "isTrimmed": false
+}
