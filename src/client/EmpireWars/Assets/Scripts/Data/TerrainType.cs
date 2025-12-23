@@ -20,6 +20,9 @@ namespace EmpireWars.Data
         Road = 10,          // Yol - 1.5x hareket
         Bridge = 11,        // Kopru - Su uzerinden gecis
         Coast = 12,         // Kiyi - Su kenari
+        River = 13,         // Nehir - Gecilmez (kopru ile gecilebilir)
+        GrassSlopedHigh = 14, // Yuksek egimli cimen
+        GrassSlopedLow = 15,  // Alcak egimli cimen
 
         // Kaynak arazileri
         Farm = 20,          // Ciftlik alani
@@ -49,13 +52,16 @@ namespace EmpireWars.Data
                 TerrainType.Road => 1.5f,
                 TerrainType.Bridge => 1.0f,
                 TerrainType.Coast => 0.9f,
+                TerrainType.River => 0f,            // Gecilmez
+                TerrainType.GrassSlopedHigh => 0.7f,
+                TerrainType.GrassSlopedLow => 0.8f,
                 _ => 1.0f
             };
         }
 
         public static bool IsPassable(TerrainType terrain)
         {
-            return terrain != TerrainType.Mountain && terrain != TerrainType.Water;
+            return terrain != TerrainType.Mountain && terrain != TerrainType.Water && terrain != TerrainType.River;
         }
 
         public static float GetDefenseBonus(TerrainType terrain)
@@ -104,6 +110,9 @@ namespace EmpireWars.Data
                 TerrainType.Road => "Yol",
                 TerrainType.Bridge => "Kopru",
                 TerrainType.Coast => "Kiyi",
+                TerrainType.River => "Nehir",
+                TerrainType.GrassSlopedHigh => "Egimli Arazi (Yuksek)",
+                TerrainType.GrassSlopedLow => "Egimli Arazi (Alcak)",
                 TerrainType.Farm => "Ciftlik",
                 TerrainType.Mine => "Maden",
                 TerrainType.Quarry => "Tas Ocagi",

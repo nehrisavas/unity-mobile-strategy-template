@@ -87,10 +87,55 @@ namespace EmpireWars.Map
 
         #region Initialization
 
+        /// <summary>
+        /// Fog of War sistemini baslatir
+        /// Tum hucreleri kesfedilmemis olarak isaretle
+        /// </summary>
         private void InitializeFog()
         {
-            // WorldMapManager'dan tum hucreleri al ve sisli yap
-            // Bu islem chunk yuklendikce yapilacak
+            // Cache'leri temizle
+            exploredCells.Clear();
+            visibleCells.Clear();
+
+            // WorldMapManager varsa, mevcut hucreleri sisli yap
+            if (WorldMapManager.Instance != null)
+            {
+                // WorldMapManager'in hazir olmasini bekle
+                StartCoroutine(InitializeFogDelayed());
+            }
+            else
+            {
+                Debug.Log("FogOfWarManager: WorldMapManager bulunamadi, fog baslangic durumu atandi.");
+            }
+        }
+
+        /// <summary>
+        /// WorldMapManager hazir oldugunda fog'u baslat
+        /// </summary>
+        private System.Collections.IEnumerator InitializeFogDelayed()
+        {
+            // WorldMapManager'in chunk'lari yuklemesini bekle
+            yield return new WaitForSeconds(0.5f);
+
+            if (WorldMapManager.Instance == null) yield break;
+
+            // Varsayilan bir gorus kaynagi olustur (oyuncu baslangic noktasi)
+            // Bu normalde oyuncu spawn oldugunda yapilir
+            Debug.Log("FogOfWarManager: Fog of War sistemi baslatildi.");
+
+            needsUpdate = true;
+        }
+
+        /// <summary>
+        /// Yeni bir oyuncu gorus kaynagi olusturur
+        /// </summary>
+        public VisionSource CreatePlayerVisionSource(Vector3 position, int range = 0)
+        {
+            if (range <= 0) range = defaultVisionRange;
+
+            var source = new VisionSource(VisionSourceType.City, 1, position, range);
+            RegisterVisionSource(source);
+            return source;
         }
 
         #endregion

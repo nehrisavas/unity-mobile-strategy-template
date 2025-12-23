@@ -83,35 +83,52 @@ namespace EmpireWars.Core
 
         private void AssignDatabases()
         {
-            var factoryType = typeof(HexTileFactory);
-            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-
-            // Tile database
-            var prefabDbField = factoryType.GetField("prefabDatabase", flags);
-            if (prefabDbField != null && tilePrefabDatabase != null)
+            if (tileFactory == null)
             {
-                prefabDbField.SetValue(tileFactory, tilePrefabDatabase);
+                Debug.LogError("GameInitializer: tileFactory null, database atanamadi!");
+                return;
             }
 
-            // Decoration database
-            var decorDbField = factoryType.GetField("decorationDatabase", flags);
-            if (decorDbField != null && decorationDatabase != null)
+            try
             {
-                decorDbField.SetValue(tileFactory, decorationDatabase);
-            }
+                var factoryType = typeof(HexTileFactory);
+                var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
 
-            // Tiles parent
-            var tilesParentField = factoryType.GetField("tilesParent", flags);
-            if (tilesParentField != null)
-            {
-                tilesParentField.SetValue(tileFactory, hexGridObj.transform);
-            }
+                // Tile database
+                var prefabDbField = factoryType.GetField("prefabDatabase", flags);
+                if (prefabDbField != null && tilePrefabDatabase != null)
+                {
+                    prefabDbField.SetValue(tileFactory, tilePrefabDatabase);
+                }
+                else if (prefabDbField == null)
+                {
+                    Debug.LogWarning("GameInitializer: prefabDatabase field bulunamadi!");
+                }
 
-            // Add decorations
-            var addDecorField = factoryType.GetField("addDecorations", flags);
-            if (addDecorField != null)
+                // Decoration database
+                var decorDbField = factoryType.GetField("decorationDatabase", flags);
+                if (decorDbField != null && decorationDatabase != null)
+                {
+                    decorDbField.SetValue(tileFactory, decorationDatabase);
+                }
+
+                // Tiles parent
+                var tilesParentField = factoryType.GetField("tilesParent", flags);
+                if (tilesParentField != null && hexGridObj != null)
+                {
+                    tilesParentField.SetValue(tileFactory, hexGridObj.transform);
+                }
+
+                // Add decorations
+                var addDecorField = factoryType.GetField("addDecorations", flags);
+                if (addDecorField != null)
+                {
+                    addDecorField.SetValue(tileFactory, decorationDatabase != null);
+                }
+            }
+            catch (System.Exception ex)
             {
-                addDecorField.SetValue(tileFactory, decorationDatabase != null);
+                Debug.LogError($"GameInitializer: Reflection hatasi - {ex.Message}");
             }
         }
 

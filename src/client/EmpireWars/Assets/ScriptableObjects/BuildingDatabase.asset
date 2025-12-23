@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 380e5fa0ad740b143aeacf6886b2dfb5, type: 3}
+  m_Name: BuildingDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.WorldMap.Tiles.BuildingDatabase
+  castleGreen: {fileID: 919132149155446097, guid: 7d3c0355f098f4a45ae0e74eabc56c34, type: 3}
+  castleBlue: {fileID: 919132149155446097, guid: 15e9ab6f8a6734d4c9cd951456073bf5, type: 3}
+  castleRed: {fileID: 919132149155446097, guid: bf83e017a05b11f449376836812578ad, type: 3}
+  towerCannonGreen: {fileID: 919132149155446097, guid: c59bf7eac2fb9744b889e7a819045864, type: 3}
+  towerCannonBlue: {fileID: 919132149155446097, guid: 6a35a7c6797f1b0409156e193c2f0d09, type: 3}
+  towerCannonRed: {fileID: 919132149155446097, guid: 51a39970625bf5040b48ffa861a958b2, type: 3}
+  towerCatapultGreen: {fileID: 919132149155446097, guid: 0b93b1f28714e8a48a6cb77f4ad7e660, type: 3}
+  towerCatapultBlue: {fileID: 919132149155446097, guid: 8b30fd4c8094caa4caa0d11ce4a36ad9, type: 3}
+  towerCatapultRed: {fileID: 919132149155446097, guid: 26dd536d5d68b5847892510e902cdb82, type: 3}
+  watchtowerGreen: {fileID: 919132149155446097, guid: 41db728f65e676d4789f1844d203ab39, type: 3}
+  watchtowerBlue: {fileID: 919132149155446097, guid: 7c0e5e1063f13b949968a6ecafbdbdce, type: 3}
+  watchtowerRed: {fileID: 919132149155446097, guid: 16ec7a8a00b392a4a9776f141428cb6c, type: 3}
+  towerAGreen: {fileID: 919132149155446097, guid: d1fc7be228df0f34796ec649e0d0ff8a, type: 3}
+  towerBGreen: {fileID: 919132149155446097, guid: fcaa81bca8a8e06439713f25f03998ce, type: 3}
+  barracksGreen: {fileID: 919132149155446097, guid: 1d2dbb7f5e4552348acd3a86967d7225, type: 3}
+  barracksBlue: {fileID: 919132149155446097, guid: ab69081e2b22dec4da9c5370e0d36067, type: 3}
+  barracksRed: {fileID: 919132149155446097, guid: b720ef13a5443ae46b538378ba133f2c, type: 3}
+  archeryRangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
+  stablesGreen: {fileID: 919132149155446097, guid: b23f374b5e77ed04b9dbc9fa88c09b3f, type: 3}
+  townhallGreen: {fileID: 919132149155446097, guid: e451bf3da931f464f819a38d75b2c366, type: 3}
+  marketGreen: {fileID: 919132149155446097, guid: f9068a06b8f8c6b449bcc1f2b277ab2a, type: 3}
+  blacksmithGreen: {fileID: 919132149155446097, guid: 85a3772fcbccbc2419de1113c83e58fe, type: 3}
+  workshopGreen: {fileID: 919132149155446097, guid: 4e389b504e1f2c1448af5452321450e0, type: 3}
+  mineGreen: {fileID: 919132149155446097, guid: e04b564ee25390347bd8752b38e106d7, type: 3}
+  lumbermillGreen: {fileID: 919132149155446097, guid: ba59b48317ea3904ba5338767c27f520, type: 3}
+  windmillGreen: {fileID: 919132149155446097, guid: 1a9ed5e032df555429d9167b2d14e5ac, type: 3}
+  watermillGreen: {fileID: 919132149155446097, guid: 6c7548fd752779f47b85d50372a6f662, type: 3}
+  homeAGreen: {fileID: 919132149155446097, guid: e05c673b18ec1904a8c046b8d1a70668, type: 3}
+  homeBGreen: {fileID: 919132149155446097, guid: c09dfe5fe15d77a40ac56182d0b7b5da, type: 3}
+  tavernGreen: {fileID: 919132149155446097, guid: 3c3ad61709e0a6248b48ea956d3a6113, type: 3}
+  tentGreen: {fileID: 919132149155446097, guid: 9aaa1a5df7b35e94d9ff93fef59e4b7c, type: 3}
+  churchGreen: {fileID: 919132149155446097, guid: 392ee3c3e2f07ba42b4a404c3dcfb52e, type: 3}
+  shrineGreen: {fileID: 919132149155446097, guid: ee3cbffb5dd29e14e9d506b21e9c7e04, type: 3}
+  shipyardGreen: {fileID: 919132149155446097, guid: dd38cce3df122dd4abdd410a464194ce, type: 3}
+  docksGreen: {fileID: 919132149155446097, guid: 73c3999097f629a418877d095b83d76c, type: 3}
+  bridgeA: {fileID: 919132149155446097, guid: 374ab942956d88b449a38fac49e99ae4, type: 3}
+  bridgeB: {fileID: 919132149155446097, guid: 97412b7da4839434fa1b1e6fcc3098af, type: 3}
+  buildingDestroyed: {fileID: 919132149155446097, guid: bfc9a3e48318b1346bd547fe20fd8b02, type: 3}
+  scaffolding: {fileID: 919132149155446097, guid: 044688884a4b4bd44916f1e63108235c, type: 3}

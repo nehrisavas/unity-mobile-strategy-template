@@ -38,7 +38,11 @@
       "Bash(find:*)",
       "Bash(bash ./claude-compile-check.sh:*)",
       "WebFetch(domain:yottagames-mafia-city.tr.uptodown.com)",
-      "WebFetch(domain:www.gameuidatabase.com)"
+      "WebFetch(domain:www.gameuidatabase.com)",
+      "Bash(if [ -f \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\" ])",
+      "Bash(then tail -200 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(else echo \"Log not found at SAVAS path\")",
+      "Bash(fi)"
     ]
   }
 }

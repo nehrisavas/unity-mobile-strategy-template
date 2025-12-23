@@ -12,8 +12,8 @@ namespace EmpireWars.Core
     public class WorldMapBootstrap : MonoBehaviour
     {
         [Header("Harita Ayarlari")]
-        [SerializeField] private int mapWidth = 10;
-        [SerializeField] private int mapHeight = 10;
+        [SerializeField] private int mapWidth = 60;
+        [SerializeField] private int mapHeight = 60;
 
         [Header("Databases (Opsiyonel - Inspector'dan ata)")]
         [SerializeField] private HexTilePrefabDatabase tilePrefabDatabase;
@@ -97,32 +97,46 @@ namespace EmpireWars.Core
             GameObject factoryObj = new GameObject("HexTileFactory");
             HexTileFactory tileFactory = factoryObj.AddComponent<HexTileFactory>();
 
-            // Database'leri ata (reflection ile)
-            var factoryType = typeof(HexTileFactory);
-            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-
-            var prefabDbField = factoryType.GetField("prefabDatabase", flags);
-            if (prefabDbField != null)
+            if (tileFactory == null)
             {
-                prefabDbField.SetValue(tileFactory, tilePrefabDatabase);
+                Debug.LogError("WorldMapBootstrap: HexTileFactory olusturulamadi!");
+                return;
             }
 
-            var decorDbField = factoryType.GetField("decorationDatabase", flags);
-            if (decorDbField != null && decorationDatabase != null)
+            try
             {
-                decorDbField.SetValue(tileFactory, decorationDatabase);
-            }
+                // Database'leri ata (reflection ile)
+                var factoryType = typeof(HexTileFactory);
+                var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
 
-            var tilesParentField = factoryType.GetField("tilesParent", flags);
-            if (tilesParentField != null)
-            {
-                tilesParentField.SetValue(tileFactory, hexGridObj.transform);
-            }
+                var prefabDbField = factoryType.GetField("prefabDatabase", flags);
+                if (prefabDbField != null)
+                {
+                    prefabDbField.SetValue(tileFactory, tilePrefabDatabase);
+                }
 
-            var addDecorField = factoryType.GetField("addDecorations", flags);
-            if (addDecorField != null)
+                var decorDbField = factoryType.GetField("decorationDatabase", flags);
+                if (decorDbField != null && decorationDatabase != null)
+                {
+                    decorDbField.SetValue(tileFactory, decorationDatabase);
+                }
+
+                var tilesParentField = factoryType.GetField("tilesParent", flags);
+                if (tilesParentField != null)
+                {
+                    tilesParentField.SetValue(tileFactory, hexGridObj.transform);
+                }
+
+                var addDecorField = factoryType.GetField("addDecorations", flags);
+                if (addDecorField != null)
+                {
+                    addDecorField.SetValue(tileFactory, decorationDatabase != null);
+                }
+            }
+            catch (System.Exception ex)
             {
-                addDecorField.SetValue(tileFactory, decorationDatabase != null);
+                Debug.LogError($"WorldMapBootstrap: Reflection hatasi - {ex.Message}");
+                return;
             }
 
             // Haritayi olustur

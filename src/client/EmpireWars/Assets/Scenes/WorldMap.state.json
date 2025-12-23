@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "sceneName": "WorldMap",
-  "exportTimestamp": "2025-12-23 00:16:43",
+  "exportTimestamp": "2025-12-23 12:03:39",
   "gameObjects": [
     {
       "name": "Directional Light",
@@ -30,8 +30,8 @@
       "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_0_Grass",
-      "path": "HexGrid/Hex_0_0_Grass",
+      "name": "Hex_0_0_Water",
+      "path": "HexGrid/Hex_0_0_Water",
       "active": true,
       "position": [0,000, 0,000, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -41,23 +41,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_0_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_0_0_Water/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_0_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_0_0_Water/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_0_Grass",
-      "path": "HexGrid/Hex_1_0_Grass",
+      "name": "Decor_Water",
+      "path": "HexGrid/Hex_0_0_Water/Decor_Water",
+      "active": true,
+      "position": [0,000, 0,020, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_1_0_Water",
+      "path": "HexGrid/Hex_1_0_Water",
       "active": true,
       "position": [1,732, 0,001, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -67,23 +75,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_0_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_1_0_Water/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_0_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_1_0_Water/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_0_Road",
-      "path": "HexGrid/Hex_2_0_Road",
+      "name": "Decor_Water",
+      "path": "HexGrid/Hex_1_0_Water/Decor_Water",
+      "active": true,
+      "position": [0,000, 0,020, 0,000],
+      "rotation": [0,000, 240,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_2_0_Coast",
+      "path": "HexGrid/Hex_2_0_Coast",
       "active": true,
       "position": [3,464, 0,001, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -93,23 +109,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_0_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_2_0_Coast/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_0_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_2_0_Coast/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_3_0_Grass",
-      "path": "HexGrid/Hex_3_0_Grass",
+      "name": "Decor_Coast",
+      "path": "HexGrid/Hex_2_0_Coast/Decor_Coast",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 120,000, 0,000],
+      "scale": [0,600, 0,600, 0,600]
+    },
+    {
+      "name": "Hex_3_0_Coast",
+      "path": "HexGrid/Hex_3_0_Coast",
       "active": true,
       "position": [5,196, 0,002, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -119,23 +143,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_0_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_3_0_Coast/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_0_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_3_0_Coast/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_0_Forest",
-      "path": "HexGrid/Hex_4_0_Forest",
+      "name": "Decor_Coast",
+      "path": "HexGrid/Hex_3_0_Coast/Decor_Coast",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,600, 0,600, 0,600]
+    },
+    {
+      "name": "Hex_4_0_Grass",
+      "path": "HexGrid/Hex_4_0_Grass",
       "active": true,
       "position": [6,928, 0,003, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -145,31 +177,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_0_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_4_0_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_0_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_4_0_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_4_0_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_5_0_Forest",
-      "path": "HexGrid/Hex_5_0_Forest",
+      "name": "Hex_5_0_Grass",
+      "path": "HexGrid/Hex_5_0_Grass",
       "active": true,
       "position": [8,660, 0,004, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -179,31 +203,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_0_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_5_0_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_0_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_5_0_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_5_0_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 120,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_6_0_Hill",
-      "path": "HexGrid/Hex_6_0_Hill",
+      "name": "Hex_6_0_Forest",
+      "path": "HexGrid/Hex_6_0_Forest",
       "active": true,
       "position": [10,392, 0,004, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -213,31 +229,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_0_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_6_0_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_0_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_6_0_Forest/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_6_0_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_0_Mountain",
-      "path": "HexGrid/Hex_7_0_Mountain",
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_6_0_Forest/Decor_Forest",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,800, 0,800, 0,800]
+    },
+    {
+      "name": "Hex_7_0_Forest",
+      "path": "HexGrid/Hex_7_0_Forest",
       "active": true,
       "position": [12,124, 0,005, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -247,27 +263,27 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_0_Mountain/HighlightOverlay",
+      "path": "HexGrid/Hex_7_0_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_0_Mountain/SelectionOverlay",
+      "path": "HexGrid/Hex_7_0_Forest/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Mountain",
-      "path": "HexGrid/Hex_7_0_Mountain/Decor_Mountain",
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_7_0_Forest/Decor_Forest",
       "active": true,
-      "position": [0,000, 0,000, 0,000],
+      "position": [0,000, 0,050, 0,000],
       "rotation": [0,000, 240,000, 0,000],
-      "scale": [1,000, 1,000, 1,000]
+      "scale": [0,800, 0,800, 0,800]
     },
     {
       "name": "Hex_8_0_Mountain",
@@ -283,17 +299,17 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_8_0_Mountain/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_8_0_Mountain/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Decor_Mountain",
@@ -304,8 +320,8 @@
       "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_0_Snow",
-      "path": "HexGrid/Hex_9_0_Snow",
+      "name": "Hex_9_0_Mountain",
+      "path": "HexGrid/Hex_9_0_Mountain",
       "active": true,
       "position": [15,588, 0,006, 0,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -315,27 +331,27 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_0_Snow/HighlightOverlay",
+      "path": "HexGrid/Hex_9_0_Mountain/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_0_Snow/SelectionOverlay",
+      "path": "HexGrid/Hex_9_0_Mountain/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Snow",
-      "path": "HexGrid/Hex_9_0_Snow/Decor_Snow",
+      "name": "Decor_Mountain",
+      "path": "HexGrid/Hex_9_0_Mountain/Decor_Mountain",
       "active": true,
       "position": [0,000, 0,000, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [0,700, 0,700, 0,700]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_0_1_Water",
@@ -351,21 +367,29 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_0_1_Water/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_0_1_Water/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_1_Water",
-      "path": "HexGrid/Hex_1_1_Water",
+      "name": "Decor_Water",
+      "path": "HexGrid/Hex_0_1_Water/Decor_Water",
+      "active": true,
+      "position": [0,000, 0,020, 0,000],
+      "rotation": [0,000, 60,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_1_1_Coast",
+      "path": "HexGrid/Hex_1_1_Coast",
       "active": true,
       "position": [2,598, 0,002, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -375,23 +399,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_1_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_1_1_Coast/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_1_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_1_1_Coast/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_1_Coast",
-      "path": "HexGrid/Hex_2_1_Coast",
+      "name": "Decor_Coast",
+      "path": "HexGrid/Hex_1_1_Coast/Decor_Coast",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 300,000, 0,000],
+      "scale": [0,600, 0,600, 0,600]
+    },
+    {
+      "name": "Hex_2_1_Grass",
+      "path": "HexGrid/Hex_2_1_Grass",
       "active": true,
       "position": [4,330, 0,003, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -401,23 +433,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_1_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_2_1_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_1_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_2_1_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_3_1_Grass",
-      "path": "HexGrid/Hex_3_1_Grass",
+      "name": "Hex_3_1_Road",
+      "path": "HexGrid/Hex_3_1_Road",
       "active": true,
       "position": [6,062, 0,003, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -427,23 +459,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_1_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_3_1_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_1_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_3_1_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_1_Grass",
-      "path": "HexGrid/Hex_4_1_Grass",
+      "name": "Hex_4_1_Road",
+      "path": "HexGrid/Hex_4_1_Road",
       "active": true,
       "position": [7,794, 0,004, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -453,23 +485,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_1_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_4_1_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_1_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_4_1_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_1_Forest",
-      "path": "HexGrid/Hex_5_1_Forest",
+      "name": "Hex_5_1_Grass",
+      "path": "HexGrid/Hex_5_1_Grass",
       "active": true,
       "position": [9,526, 0,005, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -479,31 +511,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_1_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_5_1_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_1_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_5_1_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_5_1_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_6_1_Hill",
-      "path": "HexGrid/Hex_6_1_Hill",
+      "name": "Hex_6_1_Grass",
+      "path": "HexGrid/Hex_6_1_Grass",
       "active": true,
       "position": [11,258, 0,006, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -513,31 +537,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_1_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_6_1_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_1_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_6_1_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_6_1_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_1_Grass",
-      "path": "HexGrid/Hex_7_1_Grass",
+      "name": "Hex_7_1_Forest",
+      "path": "HexGrid/Hex_7_1_Forest",
       "active": true,
       "position": [12,990, 0,006, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -547,23 +563,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_1_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_7_1_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_1_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_7_1_Forest/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_8_1_Mountain",
-      "path": "HexGrid/Hex_8_1_Mountain",
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_7_1_Forest/Decor_Forest",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 300,000, 0,000],
+      "scale": [0,800, 0,800, 0,800]
+    },
+    {
+      "name": "Hex_8_1_Hill",
+      "path": "HexGrid/Hex_8_1_Hill",
       "active": true,
       "position": [14,722, 0,007, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -573,31 +597,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_1_Mountain/HighlightOverlay",
+      "path": "HexGrid/Hex_8_1_Hill/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_1_Mountain/SelectionOverlay",
-      "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Mountain",
-      "path": "HexGrid/Hex_8_1_Mountain/Decor_Mountain",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
       "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_1_Snow",
-      "path": "HexGrid/Hex_9_1_Snow",
+      "name": "SelectionOverlay",
+      "path": "HexGrid/Hex_8_1_Hill/SelectionOverlay",
+      "active": false,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    },
+    {
+      "name": "Decor_Hill",
+      "path": "HexGrid/Hex_8_1_Hill/Decor_Hill",
+      "active": true,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 180,000, 0,000],
+      "scale": [0,600, 0,600, 0,600]
+    },
+    {
+      "name": "Hex_9_1_Mountain",
+      "path": "HexGrid/Hex_9_1_Mountain",
       "active": true,
       "position": [16,454, 0,008, 1,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -607,31 +631,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_1_Snow/HighlightOverlay",
+      "path": "HexGrid/Hex_9_1_Mountain/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_1_Snow/SelectionOverlay",
+      "path": "HexGrid/Hex_9_1_Mountain/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Snow",
-      "path": "HexGrid/Hex_9_1_Snow/Decor_Snow",
+      "name": "Decor_Mountain",
+      "path": "HexGrid/Hex_9_1_Mountain/Decor_Mountain",
       "active": true,
       "position": [0,000, 0,000, 0,000],
       "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,700, 0,700, 0,700]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_2_Water",
-      "path": "HexGrid/Hex_0_2_Water",
+      "name": "Hex_0_2_Coast",
+      "path": "HexGrid/Hex_0_2_Coast",
       "active": true,
       "position": [0,000, 0,003, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -641,23 +665,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_2_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_0_2_Coast/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_2_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_0_2_Coast/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_2_Coast",
-      "path": "HexGrid/Hex_1_2_Coast",
+      "name": "Decor_Coast",
+      "path": "HexGrid/Hex_0_2_Coast/Decor_Coast",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 120,000, 0,000],
+      "scale": [0,600, 0,600, 0,600]
+    },
+    {
+      "name": "Hex_1_2_Grass",
+      "path": "HexGrid/Hex_1_2_Grass",
       "active": true,
       "position": [1,732, 0,003, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -667,23 +699,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_2_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_1_2_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_2_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_1_2_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_2_Swamp",
-      "path": "HexGrid/Hex_2_2_Swamp",
+      "name": "Hex_2_2_Grass",
+      "path": "HexGrid/Hex_2_2_Grass",
       "active": true,
       "position": [3,464, 0,004, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -693,31 +725,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_2_Swamp/HighlightOverlay",
+      "path": "HexGrid/Hex_2_2_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_2_Swamp/SelectionOverlay",
+      "path": "HexGrid/Hex_2_2_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Swamp",
-      "path": "HexGrid/Hex_2_2_Swamp/Decor_Swamp",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,500, 0,500, 0,500]
-    },
-    {
-      "name": "Hex_3_2_Swamp",
-      "path": "HexGrid/Hex_3_2_Swamp",
+      "name": "Hex_3_2_Grass",
+      "path": "HexGrid/Hex_3_2_Grass",
       "active": true,
       "position": [5,196, 0,005, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -727,31 +751,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_2_Swamp/HighlightOverlay",
+      "path": "HexGrid/Hex_3_2_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_2_Swamp/SelectionOverlay",
+      "path": "HexGrid/Hex_3_2_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Swamp",
-      "path": "HexGrid/Hex_3_2_Swamp/Decor_Swamp",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 120,000, 0,000],
-      "scale": [0,500, 0,500, 0,500]
-    },
-    {
-      "name": "Hex_4_2_Grass",
-      "path": "HexGrid/Hex_4_2_Grass",
+      "name": "Hex_4_2_Road",
+      "path": "HexGrid/Hex_4_2_Road",
       "active": true,
       "position": [6,928, 0,005, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -761,23 +777,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_2_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_4_2_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_2_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_4_2_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_2_Road",
-      "path": "HexGrid/Hex_5_2_Road",
+      "name": "Hex_5_2_Grass",
+      "path": "HexGrid/Hex_5_2_Grass",
       "active": true,
       "position": [8,660, 0,006, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -787,23 +803,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_2_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_5_2_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_2_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_5_2_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_6_2_Grass",
-      "path": "HexGrid/Hex_6_2_Grass",
+      "name": "Hex_6_2_River",
+      "path": "HexGrid/Hex_6_2_River",
       "active": true,
       "position": [10,392, 0,007, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -813,23 +829,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_2_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_6_2_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_2_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_6_2_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_2_Hill",
-      "path": "HexGrid/Hex_7_2_Hill",
+      "name": "Hex_7_2_River",
+      "path": "HexGrid/Hex_7_2_River",
       "active": true,
       "position": [12,124, 0,008, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -839,31 +855,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_2_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_7_2_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_2_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_7_2_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_7_2_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_8_2_Grass",
-      "path": "HexGrid/Hex_8_2_Grass",
+      "name": "Hex_8_2_Bridge",
+      "path": "HexGrid/Hex_8_2_Bridge",
       "active": true,
       "position": [13,856, 0,008, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -873,23 +881,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_2_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_8_2_Bridge/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_2_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_8_2_Bridge/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_2_Snow",
-      "path": "HexGrid/Hex_9_2_Snow",
+      "name": "Hex_9_2_Grass",
+      "path": "HexGrid/Hex_9_2_Grass",
       "active": true,
       "position": [15,588, 0,009, 3,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -899,31 +907,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_2_Snow/HighlightOverlay",
+      "path": "HexGrid/Hex_9_2_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_2_Snow/SelectionOverlay",
+      "path": "HexGrid/Hex_9_2_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Snow",
-      "path": "HexGrid/Hex_9_2_Snow/Decor_Snow",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 120,000, 0,000],
-      "scale": [0,700, 0,700, 0,700]
-    },
-    {
-      "name": "Hex_0_3_Coast",
-      "path": "HexGrid/Hex_0_3_Coast",
+      "name": "Hex_0_3_Grass",
+      "path": "HexGrid/Hex_0_3_Grass",
       "active": true,
       "position": [0,866, 0,004, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -933,19 +933,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_3_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_0_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_3_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_0_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_1_3_Grass",
@@ -961,21 +961,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_1_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_1_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_3_Grass",
-      "path": "HexGrid/Hex_2_3_Grass",
+      "name": "Hex_2_3_Desert",
+      "path": "HexGrid/Hex_2_3_Desert",
       "active": true,
       "position": [4,330, 0,005, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -985,23 +985,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_3_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_2_3_Desert/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_3_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_2_3_Desert/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_3_3_Road",
-      "path": "HexGrid/Hex_3_3_Road",
+      "name": "Decor_Desert",
+      "path": "HexGrid/Hex_2_3_Desert/Decor_Desert",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 300,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_3_3_Desert",
+      "path": "HexGrid/Hex_3_3_Desert",
       "active": true,
       "position": [6,062, 0,006, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1011,23 +1019,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_3_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_3_3_Desert/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_3_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_3_3_Desert/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_3_Desert",
-      "path": "HexGrid/Hex_4_3_Desert",
+      "name": "Decor_Desert",
+      "path": "HexGrid/Hex_3_3_Desert/Decor_Desert",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 180,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_4_3_Road",
+      "path": "HexGrid/Hex_4_3_Road",
       "active": true,
       "position": [7,794, 0,007, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1037,31 +1053,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_3_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_4_3_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_3_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_4_3_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_4_3_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
-    },
-    {
-      "name": "Hex_5_3_Desert",
-      "path": "HexGrid/Hex_5_3_Desert",
+      "name": "Hex_5_3_River",
+      "path": "HexGrid/Hex_5_3_River",
       "active": true,
       "position": [9,526, 0,007, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1071,31 +1079,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_3_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_5_3_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_3_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_5_3_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_5_3_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 300,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
-    },
-    {
-      "name": "Hex_6_3_Desert",
-      "path": "HexGrid/Hex_6_3_Desert",
+      "name": "Hex_6_3_Grass",
+      "path": "HexGrid/Hex_6_3_Grass",
       "active": true,
       "position": [11,258, 0,008, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1105,27 +1105,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_3_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_6_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_3_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_6_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_6_3_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_7_3_Grass",
@@ -1141,21 +1133,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_7_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_7_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_8_3_Forest",
-      "path": "HexGrid/Hex_8_3_Forest",
+      "name": "Hex_8_3_Grass",
+      "path": "HexGrid/Hex_8_3_Grass",
       "active": true,
       "position": [14,722, 0,010, 4,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1165,27 +1157,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_3_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_8_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_3_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_8_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_8_3_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 300,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_9_3_Grass",
@@ -1201,17 +1185,17 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_9_3_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_9_3_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_0_4_Grass",
@@ -1227,21 +1211,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_0_4_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_0_4_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_4_Forest",
-      "path": "HexGrid/Hex_1_4_Forest",
+      "name": "Hex_1_4_Desert",
+      "path": "HexGrid/Hex_1_4_Desert",
       "active": true,
       "position": [1,732, 0,006, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1251,31 +1235,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_4_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_1_4_Desert/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_4_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_1_4_Desert/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_1_4_Forest/Decor_Forest",
+      "name": "Decor_Desert",
+      "path": "HexGrid/Hex_1_4_Desert/Decor_Desert",
       "active": true,
-      "position": [0,000, 0,050, 0,000],
+      "position": [0,000, 0,000, 0,000],
       "rotation": [0,000, 120,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
+      "scale": [0,400, 0,400, 0,400]
     },
     {
-      "name": "Hex_2_4_Grass",
-      "path": "HexGrid/Hex_2_4_Grass",
+      "name": "Hex_2_4_Desert",
+      "path": "HexGrid/Hex_2_4_Desert",
       "active": true,
       "position": [3,464, 0,007, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1285,23 +1269,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_4_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_2_4_Desert/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_4_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_2_4_Desert/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_3_4_Hill",
-      "path": "HexGrid/Hex_3_4_Hill",
+      "name": "Decor_Desert",
+      "path": "HexGrid/Hex_2_4_Desert/Decor_Desert",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,400, 0,400, 0,400]
+    },
+    {
+      "name": "Hex_3_4_Grass",
+      "path": "HexGrid/Hex_3_4_Grass",
       "active": true,
       "position": [5,196, 0,007, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1311,31 +1303,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_4_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_3_4_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_4_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_3_4_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_3_4_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_4_Grass",
-      "path": "HexGrid/Hex_4_4_Grass",
+      "name": "Hex_4_4_Road",
+      "path": "HexGrid/Hex_4_4_Road",
       "active": true,
       "position": [6,928, 0,008, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1345,23 +1329,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_4_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_4_4_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_4_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_4_4_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_4_Road",
-      "path": "HexGrid/Hex_5_4_Road",
+      "name": "Hex_5_4_River",
+      "path": "HexGrid/Hex_5_4_River",
       "active": true,
       "position": [8,660, 0,009, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1371,19 +1355,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_4_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_5_4_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_4_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_5_4_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_6_4_Grass",
@@ -1399,21 +1383,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_6_4_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_6_4_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_4_Swamp",
-      "path": "HexGrid/Hex_7_4_Swamp",
+      "name": "Hex_7_4_Farm",
+      "path": "HexGrid/Hex_7_4_Farm",
       "active": true,
       "position": [12,124, 0,000, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1423,31 +1407,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_4_Swamp/HighlightOverlay",
+      "path": "HexGrid/Hex_7_4_Farm/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_4_Swamp/SelectionOverlay",
+      "path": "HexGrid/Hex_7_4_Farm/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Swamp",
-      "path": "HexGrid/Hex_7_4_Swamp/Decor_Swamp",
+      "name": "Decor_Farm",
+      "path": "HexGrid/Hex_7_4_Farm/Decor_Farm",
       "active": true,
-      "position": [0,000, 0,000, 0,000],
+      "position": [0,000, 0,050, 0,000],
       "rotation": [0,000, 120,000, 0,000],
       "scale": [0,500, 0,500, 0,500]
     },
     {
-      "name": "Hex_8_4_Grass",
-      "path": "HexGrid/Hex_8_4_Grass",
+      "name": "Hex_8_4_Farm",
+      "path": "HexGrid/Hex_8_4_Farm",
       "active": true,
       "position": [13,856, 0,001, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1457,23 +1441,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_4_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_8_4_Farm/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_4_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_8_4_Farm/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_4_Hill",
-      "path": "HexGrid/Hex_9_4_Hill",
+      "name": "Decor_Farm",
+      "path": "HexGrid/Hex_8_4_Farm/Decor_Farm",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,500, 0,500, 0,500]
+    },
+    {
+      "name": "Hex_9_4_Grass",
+      "path": "HexGrid/Hex_9_4_Grass",
       "active": true,
       "position": [15,588, 0,002, 6,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1483,27 +1475,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_4_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_9_4_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_4_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_9_4_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_9_4_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_0_5_Grass",
@@ -1519,17 +1503,17 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_0_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_0_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_1_5_Grass",
@@ -1545,21 +1529,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_1_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_1_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_5_Forest",
-      "path": "HexGrid/Hex_2_5_Forest",
+      "name": "Hex_2_5_Grass",
+      "path": "HexGrid/Hex_2_5_Grass",
       "active": true,
       "position": [4,330, 0,008, 7,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1569,27 +1553,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_5_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_2_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_5_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_2_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_2_5_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_3_5_Grass",
@@ -1605,17 +1581,17 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_3_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_3_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_4_5_Road",
@@ -1631,21 +1607,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_4_5_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_4_5_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_5_Grass",
-      "path": "HexGrid/Hex_5_5_Grass",
+      "name": "Hex_5_5_Bridge",
+      "path": "HexGrid/Hex_5_5_Bridge",
       "active": true,
       "position": [9,526, 0,000, 7,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1655,23 +1631,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_5_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_5_5_Bridge/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_5_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_5_5_Bridge/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_6_5_Road",
-      "path": "HexGrid/Hex_6_5_Road",
+      "name": "Hex_6_5_River",
+      "path": "HexGrid/Hex_6_5_River",
       "active": true,
       "position": [11,258, 0,001, 7,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1681,19 +1657,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_5_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_6_5_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_5_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_6_5_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_7_5_Grass",
@@ -1709,21 +1685,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_7_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_7_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_8_5_Forest",
-      "path": "HexGrid/Hex_8_5_Forest",
+      "name": "Hex_8_5_Farm",
+      "path": "HexGrid/Hex_8_5_Farm",
       "active": true,
       "position": [14,722, 0,002, 7,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -1733,27 +1709,27 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_5_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_8_5_Farm/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_5_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_8_5_Farm/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_8_5_Forest/Decor_Forest",
+      "name": "Decor_Farm",
+      "path": "HexGrid/Hex_8_5_Farm/Decor_Farm",
       "active": true,
       "position": [0,000, 0,050, 0,000],
       "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
+      "scale": [0,500, 0,500, 0,500]
     },
     {
       "name": "Hex_9_5_Grass",
@@ -1769,21 +1745,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_9_5_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_9_5_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_6_Water",
-      "path": "HexGrid/Hex_0_6_Water",
+      "name": "Hex_0_6_Forest",
+      "path": "HexGrid/Hex_0_6_Forest",
       "active": true,
       "position": [0,000, 0,008, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1793,23 +1769,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_6_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_0_6_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_6_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_0_6_Forest/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_6_Coast",
-      "path": "HexGrid/Hex_1_6_Coast",
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_0_6_Forest/Decor_Forest",
+      "active": true,
+      "position": [0,000, 0,050, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [0,800, 0,800, 0,800]
+    },
+    {
+      "name": "Hex_1_6_Forest",
+      "path": "HexGrid/Hex_1_6_Forest",
       "active": true,
       "position": [1,732, 0,009, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1819,19 +1803,27 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_6_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_1_6_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_6_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_1_6_Forest/SelectionOverlay",
       "active": false,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    },
+    {
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_1_6_Forest/Decor_Forest",
+      "active": true,
       "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "rotation": [0,000, 240,000, 0,000],
+      "scale": [0,800, 0,800, 0,800]
     },
     {
       "name": "Hex_2_6_Grass",
@@ -1847,21 +1839,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_2_6_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_2_6_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_3_6_Hill",
-      "path": "HexGrid/Hex_3_6_Hill",
+      "name": "Hex_3_6_Grass",
+      "path": "HexGrid/Hex_3_6_Grass",
       "active": true,
       "position": [5,196, 0,010, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1871,31 +1863,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_6_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_3_6_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_6_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_3_6_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_3_6_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_6_Grass",
-      "path": "HexGrid/Hex_4_6_Grass",
+      "name": "Hex_4_6_Road",
+      "path": "HexGrid/Hex_4_6_Road",
       "active": true,
       "position": [6,928, 0,001, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1905,23 +1889,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_6_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_4_6_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_6_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_4_6_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_6_Road",
-      "path": "HexGrid/Hex_5_6_Road",
+      "name": "Hex_5_6_Grass",
+      "path": "HexGrid/Hex_5_6_Grass",
       "active": true,
       "position": [8,660, 0,001, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1931,23 +1915,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_6_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_5_6_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_6_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_5_6_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_6_6_Grass",
-      "path": "HexGrid/Hex_6_6_Grass",
+      "name": "Hex_6_6_River",
+      "path": "HexGrid/Hex_6_6_River",
       "active": true,
       "position": [10,392, 0,002, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1957,23 +1941,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_6_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_6_6_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_6_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_6_6_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_6_Desert",
-      "path": "HexGrid/Hex_7_6_Desert",
+      "name": "Hex_7_6_Grass",
+      "path": "HexGrid/Hex_7_6_Grass",
       "active": true,
       "position": [12,124, 0,003, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -1983,27 +1967,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_6_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_7_6_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_6_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_7_6_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_7_6_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_8_6_Grass",
@@ -2019,21 +1995,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_8_6_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_8_6_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_6_Mountain",
-      "path": "HexGrid/Hex_9_6_Mountain",
+      "name": "Hex_9_6_Road",
+      "path": "HexGrid/Hex_9_6_Road",
       "active": true,
       "position": [15,588, 0,004, 9,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2043,31 +2019,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_6_Mountain/HighlightOverlay",
+      "path": "HexGrid/Hex_9_6_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_6_Mountain/SelectionOverlay",
-      "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Mountain",
-      "path": "HexGrid/Hex_9_6_Mountain/Decor_Mountain",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
+      "position": [0,000, 0,100, 0,000],
       "rotation": [0,000, 0,000, 0,000],
       "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_7_Water",
-      "path": "HexGrid/Hex_0_7_Water",
+      "name": "SelectionOverlay",
+      "path": "HexGrid/Hex_9_6_Road/SelectionOverlay",
+      "active": false,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    },
+    {
+      "name": "Hex_0_7_Forest",
+      "path": "HexGrid/Hex_0_7_Forest",
       "active": true,
       "position": [0,866, 0,009, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2077,19 +2045,27 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_7_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_0_7_Forest/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_7_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_0_7_Forest/SelectionOverlay",
       "active": false,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    },
+    {
+      "name": "Decor_Forest",
+      "path": "HexGrid/Hex_0_7_Forest/Decor_Forest",
+      "active": true,
       "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "rotation": [0,000, 60,000, 0,000],
+      "scale": [0,800, 0,800, 0,800]
     },
     {
       "name": "Hex_1_7_Grass",
@@ -2105,21 +2081,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_1_7_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_1_7_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_7_Swamp",
-      "path": "HexGrid/Hex_2_7_Swamp",
+      "name": "Hex_2_7_Grass",
+      "path": "HexGrid/Hex_2_7_Grass",
       "active": true,
       "position": [4,330, 0,001, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2129,31 +2105,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_7_Swamp/HighlightOverlay",
+      "path": "HexGrid/Hex_2_7_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_7_Swamp/SelectionOverlay",
+      "path": "HexGrid/Hex_2_7_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Swamp",
-      "path": "HexGrid/Hex_2_7_Swamp/Decor_Swamp",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
-      "scale": [0,500, 0,500, 0,500]
-    },
-    {
-      "name": "Hex_3_7_Grass",
-      "path": "HexGrid/Hex_3_7_Grass",
+      "name": "Hex_3_7_Road",
+      "path": "HexGrid/Hex_3_7_Road",
       "active": true,
       "position": [6,062, 0,001, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2163,23 +2131,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_3_7_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_3_7_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_3_7_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_3_7_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_7_Forest",
-      "path": "HexGrid/Hex_4_7_Forest",
+      "name": "Hex_4_7_Road",
+      "path": "HexGrid/Hex_4_7_Road",
       "active": true,
       "position": [7,794, 0,002, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2189,31 +2157,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_7_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_4_7_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_7_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_4_7_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_4_7_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 300,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_5_7_Road",
-      "path": "HexGrid/Hex_5_7_Road",
+      "name": "Hex_5_7_Grass",
+      "path": "HexGrid/Hex_5_7_Grass",
       "active": true,
       "position": [9,526, 0,003, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2223,23 +2183,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_7_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_5_7_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_7_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_5_7_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_6_7_Forest",
-      "path": "HexGrid/Hex_6_7_Forest",
+      "name": "Hex_6_7_River",
+      "path": "HexGrid/Hex_6_7_River",
       "active": true,
       "position": [11,258, 0,003, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2249,31 +2209,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_7_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_6_7_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_7_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_6_7_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_6_7_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_7_7_Grass",
-      "path": "HexGrid/Hex_7_7_Grass",
+      "name": "Hex_7_7_River",
+      "path": "HexGrid/Hex_7_7_River",
       "active": true,
       "position": [12,990, 0,004, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2283,23 +2235,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_7_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_7_7_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_7_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_7_7_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_8_7_Hill",
-      "path": "HexGrid/Hex_8_7_Hill",
+      "name": "Hex_8_7_Bridge",
+      "path": "HexGrid/Hex_8_7_Bridge",
       "active": true,
       "position": [14,722, 0,005, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2309,31 +2261,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_7_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_8_7_Bridge/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_7_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_8_7_Bridge/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_8_7_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_7_Mountain",
-      "path": "HexGrid/Hex_9_7_Mountain",
+      "name": "Hex_9_7_Road",
+      "path": "HexGrid/Hex_9_7_Road",
       "active": true,
       "position": [16,454, 0,005, 10,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2343,31 +2287,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_7_Mountain/HighlightOverlay",
+      "path": "HexGrid/Hex_9_7_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_7_Mountain/SelectionOverlay",
-      "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Mountain",
-      "path": "HexGrid/Hex_9_7_Mountain/Decor_Mountain",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
       "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_8_Coast",
-      "path": "HexGrid/Hex_0_8_Coast",
+      "name": "SelectionOverlay",
+      "path": "HexGrid/Hex_9_7_Road/SelectionOverlay",
+      "active": false,
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    },
+    {
+      "name": "Hex_0_8_Grass",
+      "path": "HexGrid/Hex_0_8_Grass",
       "active": true,
       "position": [0,000, 0,000, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2377,19 +2313,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_8_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_0_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_8_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_0_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_1_8_Grass",
@@ -2405,21 +2341,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_1_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_1_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_8_Grass",
-      "path": "HexGrid/Hex_2_8_Grass",
+      "name": "Hex_2_8_Road",
+      "path": "HexGrid/Hex_2_8_Road",
       "active": true,
       "position": [3,464, 0,002, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2429,19 +2365,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_8_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_2_8_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_8_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_2_8_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_3_8_Road",
@@ -2457,17 +2393,17 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_3_8_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_3_8_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_4_8_Grass",
@@ -2483,21 +2419,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_4_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_4_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_5_8_Snow",
-      "path": "HexGrid/Hex_5_8_Snow",
+      "name": "Hex_5_8_Grass",
+      "path": "HexGrid/Hex_5_8_Grass",
       "active": true,
       "position": [8,660, 0,004, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2507,31 +2443,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_8_Snow/HighlightOverlay",
+      "path": "HexGrid/Hex_5_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_8_Snow/SelectionOverlay",
+      "path": "HexGrid/Hex_5_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Snow",
-      "path": "HexGrid/Hex_5_8_Snow/Decor_Snow",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 240,000, 0,000],
-      "scale": [0,700, 0,700, 0,700]
-    },
-    {
-      "name": "Hex_6_8_Snow",
-      "path": "HexGrid/Hex_6_8_Snow",
+      "name": "Hex_6_8_Grass",
+      "path": "HexGrid/Hex_6_8_Grass",
       "active": true,
       "position": [10,392, 0,005, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2541,31 +2469,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_8_Snow/HighlightOverlay",
+      "path": "HexGrid/Hex_6_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_8_Snow/SelectionOverlay",
+      "path": "HexGrid/Hex_6_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Snow",
-      "path": "HexGrid/Hex_6_8_Snow/Decor_Snow",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 120,000, 0,000],
-      "scale": [0,700, 0,700, 0,700]
-    },
-    {
-      "name": "Hex_7_8_Hill",
-      "path": "HexGrid/Hex_7_8_Hill",
+      "name": "Hex_7_8_River",
+      "path": "HexGrid/Hex_7_8_River",
       "active": true,
       "position": [12,124, 0,005, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2575,27 +2495,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_8_Hill/HighlightOverlay",
+      "path": "HexGrid/Hex_7_8_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_8_Hill/SelectionOverlay",
+      "path": "HexGrid/Hex_7_8_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Hill",
-      "path": "HexGrid/Hex_7_8_Hill/Decor_Hill",
-      "active": true,
       "position": [0,000, 0,100, 0,000],
       "rotation": [0,000, 0,000, 0,000],
-      "scale": [0,600, 0,600, 0,600]
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_8_8_Grass",
@@ -2611,21 +2523,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_8_8_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_8_8_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_9_8_Grass",
-      "path": "HexGrid/Hex_9_8_Grass",
+      "name": "Hex_9_8_Road",
+      "path": "HexGrid/Hex_9_8_Road",
       "active": true,
       "position": [15,588, 0,007, 12,000],
       "rotation": [0,000, 0,000, 0,000],
@@ -2635,23 +2547,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_8_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_9_8_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_8_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_9_8_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_0_9_Water",
-      "path": "HexGrid/Hex_0_9_Water",
+      "name": "Hex_0_9_Grass",
+      "path": "HexGrid/Hex_0_9_Grass",
       "active": true,
       "position": [0,866, 0,002, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2661,23 +2573,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_0_9_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_0_9_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_0_9_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_0_9_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_1_9_Water",
-      "path": "HexGrid/Hex_1_9_Water",
+      "name": "Hex_1_9_Road",
+      "path": "HexGrid/Hex_1_9_Road",
       "active": true,
       "position": [2,598, 0,002, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2687,23 +2599,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_1_9_Water/HighlightOverlay",
+      "path": "HexGrid/Hex_1_9_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_1_9_Water/SelectionOverlay",
+      "path": "HexGrid/Hex_1_9_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_2_9_Coast",
-      "path": "HexGrid/Hex_2_9_Coast",
+      "name": "Hex_2_9_Road",
+      "path": "HexGrid/Hex_2_9_Road",
       "active": true,
       "position": [4,330, 0,003, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2713,19 +2625,19 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_2_9_Coast/HighlightOverlay",
+      "path": "HexGrid/Hex_2_9_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_2_9_Coast/SelectionOverlay",
+      "path": "HexGrid/Hex_2_9_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "Hex_3_9_Grass",
@@ -2741,21 +2653,21 @@
       "name": "HighlightOverlay",
       "path": "HexGrid/Hex_3_9_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
       "path": "HexGrid/Hex_3_9_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_4_9_Forest",
-      "path": "HexGrid/Hex_4_9_Forest",
+      "name": "Hex_4_9_Grass",
+      "path": "HexGrid/Hex_4_9_Grass",
       "active": true,
       "position": [7,794, 0,005, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2765,31 +2677,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_4_9_Forest/HighlightOverlay",
+      "path": "HexGrid/Hex_4_9_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_4_9_Forest/SelectionOverlay",
+      "path": "HexGrid/Hex_4_9_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Forest",
-      "path": "HexGrid/Hex_4_9_Forest/Decor_Forest",
-      "active": true,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,800, 0,800, 0,800]
-    },
-    {
-      "name": "Hex_5_9_Road",
-      "path": "HexGrid/Hex_5_9_Road",
+      "name": "Hex_5_9_Snow",
+      "path": "HexGrid/Hex_5_9_Snow",
       "active": true,
       "position": [9,526, 0,005, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2799,23 +2703,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_5_9_Road/HighlightOverlay",
+      "path": "HexGrid/Hex_5_9_Snow/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_5_9_Road/SelectionOverlay",
+      "path": "HexGrid/Hex_5_9_Snow/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_6_9_Grass",
-      "path": "HexGrid/Hex_6_9_Grass",
+      "name": "Decor_Snow",
+      "path": "HexGrid/Hex_5_9_Snow/Decor_Snow",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 300,000, 0,000],
+      "scale": [0,700, 0,700, 0,700]
+    },
+    {
+      "name": "Hex_6_9_Snow",
+      "path": "HexGrid/Hex_6_9_Snow",
       "active": true,
       "position": [11,258, 0,006, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2825,23 +2737,31 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_6_9_Grass/HighlightOverlay",
+      "path": "HexGrid/Hex_6_9_Snow/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_6_9_Grass/SelectionOverlay",
+      "path": "HexGrid/Hex_6_9_Snow/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Hex_7_9_Desert",
-      "path": "HexGrid/Hex_7_9_Desert",
+      "name": "Decor_Snow",
+      "path": "HexGrid/Hex_6_9_Snow/Decor_Snow",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 180,000, 0,000],
+      "scale": [0,700, 0,700, 0,700]
+    },
+    {
+      "name": "Hex_7_9_River",
+      "path": "HexGrid/Hex_7_9_River",
       "active": true,
       "position": [12,990, 0,007, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2851,31 +2771,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_7_9_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_7_9_River/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_7_9_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_7_9_River/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_7_9_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 60,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
-    },
-    {
-      "name": "Hex_8_9_Desert",
-      "path": "HexGrid/Hex_8_9_Desert",
+      "name": "Hex_8_9_Grass",
+      "path": "HexGrid/Hex_8_9_Grass",
       "active": true,
       "position": [14,722, 0,007, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2885,31 +2797,23 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_8_9_Desert/HighlightOverlay",
+      "path": "HexGrid/Hex_8_9_Grass/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_8_9_Desert/SelectionOverlay",
+      "path": "HexGrid/Hex_8_9_Grass/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
-      "name": "Decor_Desert",
-      "path": "HexGrid/Hex_8_9_Desert/Decor_Desert",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 300,000, 0,000],
-      "scale": [0,400, 0,400, 0,400]
-    },
-    {
-      "name": "Hex_9_9_Mountain",
-      "path": "HexGrid/Hex_9_9_Mountain",
+      "name": "Hex_9_9_Road",
+      "path": "HexGrid/Hex_9_9_Road",
       "active": true,
       "position": [16,454, 0,008, 13,500],
       "rotation": [0,000, 0,000, 0,000],
@@ -2919,26 +2823,18 @@
       ]    },
     {
       "name": "HighlightOverlay",
-      "path": "HexGrid/Hex_9_9_Mountain/HighlightOverlay",
+      "path": "HexGrid/Hex_9_9_Road/HighlightOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
     },
     {
       "name": "SelectionOverlay",
-      "path": "HexGrid/Hex_9_9_Mountain/SelectionOverlay",
+      "path": "HexGrid/Hex_9_9_Road/SelectionOverlay",
       "active": false,
-      "position": [0,000, 0,050, 0,000],
-      "rotation": [90,000, 0,000, 0,000],
-      "scale": [1,559, 1,559, 1,000]
-    },
-    {
-      "name": "Decor_Mountain",
-      "path": "HexGrid/Hex_9_9_Mountain/Decor_Mountain",
-      "active": true,
-      "position": [0,000, 0,000, 0,000],
-      "rotation": [0,000, 180,000, 0,000],
+      "position": [0,000, 0,100, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
       "scale": [1,000, 1,000, 1,000]
     },
     {
@@ -3017,6 +2913,34 @@
       "scale": [1,000, 1,000, 1,000],
       "scripts": [
         "HexTileFactory"
-      ]    }
+      ]    },
+    {
+      "name": "WorldMapBootstrap",
+      "path": "WorldMapBootstrap",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000],
+      "scripts": [
+        "WorldMapBootstrap"
+      ]    },
+    {
+      "name": "MapCameraController",
+      "path": "MapCameraController",
+      "active": true,
+      "position": [15,000, 30,000, 15,000],
+      "rotation": [0,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000],
+      "scripts": [
+        "MapCameraController"
+      ]    },
+    {
+      "name": "Main Camera",
+      "path": "MapCameraController/Main Camera",
+      "active": true,
+      "position": [0,000, 0,000, 0,000],
+      "rotation": [60,000, 0,000, 0,000],
+      "scale": [1,000, 1,000, 1,000]
+    }
   ]
 }
