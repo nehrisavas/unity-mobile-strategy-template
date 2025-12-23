@@ -1,5 +1,6 @@
 using UnityEngine;
 using EmpireWars.UI;
+using EmpireWars.WorldMap;
 using EmpireWars.WorldMap.Tiles;
 
 namespace EmpireWars.Core
@@ -19,10 +20,16 @@ namespace EmpireWars.Core
         [SerializeField] private HexTilePrefabDatabase tilePrefabDatabase;
         [SerializeField] private TerrainDecorationDatabase decorationDatabase;
 
+        [Header("Cloud Prefabs (Opsiyonel)")]
+        [SerializeField] private GameObject cloudBigPrefab;
+        [SerializeField] private GameObject cloudSmallPrefab;
+        [SerializeField] private int cloudCount = 15;
+
         [Header("Ozellikler")]
         [SerializeField] private bool createMap = true;
         [SerializeField] private bool createMinimap = true;
         [SerializeField] private bool createBottomNav = true;
+        [SerializeField] private bool createClouds = true;
         [SerializeField] private bool setupHDGraphics = true;
 
         private void Awake()
@@ -63,6 +70,12 @@ namespace EmpireWars.Core
             if (createBottomNav)
             {
                 CreateBottomNavigation();
+            }
+
+            // Bulutlar olustur
+            if (createClouds)
+            {
+                CreateClouds();
             }
 
             Debug.Log("=== WorldMap Bootstrap Tamamlandi ===");
@@ -165,6 +178,69 @@ namespace EmpireWars.Core
                 bottomNav = navObj.AddComponent<MobileBottomNavigation>();
             }
             Debug.Log("WorldMapBootstrap: Bottom Navigation olusturuldu");
+        }
+
+        private void CreateClouds()
+        {
+            CloudManager cloudManager = FindFirstObjectByType<CloudManager>();
+            if (cloudManager == null)
+            {
+                GameObject cloudObj = new GameObject("Cloud Manager");
+                cloudManager = cloudObj.AddComponent<CloudManager>();
+            }
+
+            // Cloud prefab'larini ata
+            if (cloudBigPrefab != null || cloudSmallPrefab != null)
+            {
+                cloudManager.SetCloudPrefabs(cloudBigPrefab, cloudSmallPrefab);
+            }
+            else
+            {
+                // Prefab'lari otomatik bul
+                TryAutoAssignCloudPrefabs(cloudManager);
+            }
+
+            // Cloud sayisini ayarla
+            var cloudCountField = typeof(CloudManager).GetField("cloudCount",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (cloudCountField != null)
+            {
+                cloudCountField.SetValue(cloudManager, cloudCount);
+            }
+
+            // Harita merkezine gore alan ayarla
+            var areaCenterField = typeof(CloudManager).GetField("areaCenter",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (areaCenterField != null)
+            {
+                areaCenterField.SetValue(cloudManager, new Vector3(mapWidth / 2f, 0, mapHeight / 2f));
+            }
+
+            Debug.Log($"WorldMapBootstrap: {cloudCount} bulut ile CloudManager olusturuldu");
+        }
+
+        private void TryAutoAssignCloudPrefabs(CloudManager cloudManager)
+        {
+            // KayKit cloud prefab'larini bul
+            string cloudBigPath = "Assets/KayKit_Medieval_Hexagon/decoration/nature/cloud_big.fbx";
+            string cloudSmallPath = "Assets/KayKit_Medieval_Hexagon/decoration/nature/cloud_small.fbx";
+
+            #if UNITY_EDITOR
+            var bigCloud = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(cloudBigPath);
+            var smallCloud = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(cloudSmallPath);
+
+            if (bigCloud != null || smallCloud != null)
+            {
+                cloudManager.SetCloudPrefabs(bigCloud, smallCloud);
+                Debug.Log("WorldMapBootstrap: Cloud prefab'lari otomatik atandi");
+            }
+            else
+            {
+                Debug.LogWarning("WorldMapBootstrap: Cloud prefab'lari bulunamadi. Inspector'dan atayin.");
+            }
+            #else
+            Debug.LogWarning("WorldMapBootstrap: Cloud prefab'larini Inspector'dan atayin.");
+            #endif
         }
     }
 }

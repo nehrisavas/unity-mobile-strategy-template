@@ -27,6 +27,11 @@ namespace EmpireWars.WorldMap
         public const int MINE_ZONE_3 = 20;  // 14-20: Level 3-4
         public const int MINE_ZONE_4 = 27;  // 20-27: Level 1-2
 
+        // Mevsim bölgeleri
+        public const int SNOW_ZONE_START = 5;   // Kar bölgesi başlangıç (kuzey)
+        public const int SNOW_ZONE_END = 18;    // Kar bölgesi bitiş
+        public const int DESERT_ZONE_START = 42; // Çöl bölgesi başlangıç (güney)
+
         /// <summary>
         /// Tile verisi - koordinat, terrain tipi ve maden seviyesi
         /// </summary>
@@ -117,14 +122,26 @@ namespace EmpireWars.WorldMap
                 return new TileData(q, r, TerrainType.Coast);
             }
 
-            // 6. MADEN ALANLARI (mesafeye göre)
+            // 6. KAR BÖLGESİ (kuzey kısım)
+            if (IsInSnowZone(q, r))
+            {
+                return GenerateSnowTerrain(q, r, random);
+            }
+
+            // 7. ÇÖL BÖLGESİ (güney kısım)
+            if (IsInDesertZone(q, r))
+            {
+                return GenerateDesertTerrain(q, r, random);
+            }
+
+            // 8. MADEN ALANLARI (mesafeye göre)
             var mineData = TryGenerateMine(q, r, distance, random);
             if (mineData.HasValue)
             {
                 return mineData.Value;
             }
 
-            // 7. DOĞAL ARAZİ (Perlin noise ile)
+            // 9. DOĞAL ARAZİ (Perlin noise ile)
             return GenerateNaturalTerrain(q, r, random);
         }
 
@@ -208,6 +225,74 @@ namespace EmpireWars.WorldMap
                    (q >= MAP_SIZE - coastEnd && q < MAP_SIZE - coastStart) ||
                    (r >= coastStart && r < coastEnd) ||
                    (r >= MAP_SIZE - coastEnd && r < MAP_SIZE - coastStart);
+        }
+
+        /// <summary>
+        /// Kar bölgesinde mi? (kuzey kısım)
+        /// </summary>
+        private static bool IsInSnowZone(int q, int r)
+        {
+            return r >= SNOW_ZONE_START && r <= SNOW_ZONE_END && q >= 5 && q <= 25;
+        }
+
+        /// <summary>
+        /// Çöl bölgesinde mi? (güney kısım)
+        /// </summary>
+        private static bool IsInDesertZone(int q, int r)
+        {
+            return r >= DESERT_ZONE_START && r < MAP_SIZE - 5 && q >= 35 && q <= 55;
+        }
+
+        /// <summary>
+        /// Kar bölgesi arazisi üret
+        /// </summary>
+        private static TileData GenerateSnowTerrain(int q, int r, System.Random random)
+        {
+            float noise = Mathf.PerlinNoise(q * 0.15f, r * 0.15f);
+
+            TerrainType terrain;
+            if (noise > 0.8f)
+            {
+                terrain = TerrainType.Mountain; // Karlı dağlar
+            }
+            else if (noise > 0.6f)
+            {
+                terrain = TerrainType.Hill; // Karlı tepeler
+            }
+            else if (noise < 0.2f)
+            {
+                terrain = TerrainType.Forest; // Karlı orman
+            }
+            else
+            {
+                terrain = TerrainType.Snow; // Düz kar
+            }
+
+            return new TileData(q, r, terrain);
+        }
+
+        /// <summary>
+        /// Çöl bölgesi arazisi üret
+        /// </summary>
+        private static TileData GenerateDesertTerrain(int q, int r, System.Random random)
+        {
+            float noise = Mathf.PerlinNoise(q * 0.12f + 50f, r * 0.12f + 50f);
+
+            TerrainType terrain;
+            if (noise > 0.85f)
+            {
+                terrain = TerrainType.Mountain; // Çöl dağları
+            }
+            else if (noise > 0.7f)
+            {
+                terrain = TerrainType.Hill; // Çöl tepeleri
+            }
+            else
+            {
+                terrain = TerrainType.Desert; // Düz çöl
+            }
+
+            return new TileData(q, r, terrain);
         }
 
         /// <summary>
