@@ -13,24 +13,40 @@ namespace EmpireWars.WorldMap
     /// </summary>
     public static class KingdomMapGenerator
     {
-        public const int MAP_SIZE = 60;
-        public const int CENTER_X = 30;
-        public const int CENTER_Y = 30;
+        // Varsayilan harita boyutu (degistirilebilir)
+        private static int _mapSize = 60;
+        private static int _centerX = 30;
+        private static int _centerY = 30;
 
-        // Bataklık alanı boyutu (merkeze göre)
-        public const int SWAMP_INNER_RADIUS = 2;  // Merkez etrafı boş
-        public const int SWAMP_OUTER_RADIUS = 5;  // Bataklık dış sınırı
+        public static int MAP_SIZE => _mapSize;
+        public static int CENTER_X => _centerX;
+        public static int CENTER_Y => _centerY;
 
-        // Maden mesafe sınırları
-        public const int MINE_ZONE_1 = 8;   // 0-8: Level 7 (en değerli)
-        public const int MINE_ZONE_2 = 14;  // 8-14: Level 5-6
-        public const int MINE_ZONE_3 = 20;  // 14-20: Level 3-4
-        public const int MINE_ZONE_4 = 27;  // 20-27: Level 1-2
+        // Bataklık alanı boyutu (merkeze göre) - ölçeklenir
+        public static int SWAMP_INNER_RADIUS => Mathf.Max(2, _mapSize / 30);
+        public static int SWAMP_OUTER_RADIUS => Mathf.Max(5, _mapSize / 12);
 
-        // Mevsim bölgeleri
-        public const int SNOW_ZONE_START = 5;   // Kar bölgesi başlangıç (kuzey)
-        public const int SNOW_ZONE_END = 18;    // Kar bölgesi bitiş
-        public const int DESERT_ZONE_START = 42; // Çöl bölgesi başlangıç (güney)
+        // Maden mesafe sınırları - ölçeklenir
+        public static int MINE_ZONE_1 => _mapSize * 8 / 60;
+        public static int MINE_ZONE_2 => _mapSize * 14 / 60;
+        public static int MINE_ZONE_3 => _mapSize * 20 / 60;
+        public static int MINE_ZONE_4 => _mapSize * 27 / 60;
+
+        // Mevsim bölgeleri - ölçeklenir
+        public static int SNOW_ZONE_START => _mapSize * 5 / 60;
+        public static int SNOW_ZONE_END => _mapSize * 18 / 60;
+        public static int DESERT_ZONE_START => _mapSize * 42 / 60;
+
+        /// <summary>
+        /// Harita boyutunu ayarla (cagrilmadan once)
+        /// </summary>
+        public static void SetMapSize(int size)
+        {
+            _mapSize = Mathf.Max(20, size);
+            _centerX = _mapSize / 2;
+            _centerY = _mapSize / 2;
+            Debug.Log($"KingdomMapGenerator: Harita boyutu {_mapSize}x{_mapSize} olarak ayarlandi");
+        }
 
         /// <summary>
         /// Tile verisi - koordinat, terrain tipi ve maden seviyesi
@@ -232,7 +248,9 @@ namespace EmpireWars.WorldMap
         /// </summary>
         private static bool IsInSnowZone(int q, int r)
         {
-            return r >= SNOW_ZONE_START && r <= SNOW_ZONE_END && q >= 5 && q <= 25;
+            int snowQStart = _mapSize * 5 / 60;
+            int snowQEnd = _mapSize * 25 / 60;
+            return r >= SNOW_ZONE_START && r <= SNOW_ZONE_END && q >= snowQStart && q <= snowQEnd;
         }
 
         /// <summary>
@@ -240,7 +258,10 @@ namespace EmpireWars.WorldMap
         /// </summary>
         private static bool IsInDesertZone(int q, int r)
         {
-            return r >= DESERT_ZONE_START && r < MAP_SIZE - 5 && q >= 35 && q <= 55;
+            int desertQStart = _mapSize * 35 / 60;
+            int desertQEnd = _mapSize * 55 / 60;
+            int edgeMargin = _mapSize * 5 / 60;
+            return r >= DESERT_ZONE_START && r < MAP_SIZE - edgeMargin && q >= desertQStart && q <= desertQEnd;
         }
 
         /// <summary>

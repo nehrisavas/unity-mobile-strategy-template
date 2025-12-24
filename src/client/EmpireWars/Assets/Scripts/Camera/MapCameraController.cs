@@ -31,7 +31,8 @@ namespace EmpireWars.CameraSystem
 
         [Header("Sinirlar")]
         [SerializeField] private bool useBounds = true;
-        [SerializeField] private Vector2 mapSize = new Vector2(100f, 100f);
+        [SerializeField] private Vector2 mapSize = new Vector2(60f, 60f);
+        [SerializeField] private Vector2 mapOffset = new Vector2(0f, 0f); // Harita baslangic noktasi
 
         [Header("Drag Ayarlari")]
         [SerializeField] private float dragThreshold = 5f;
@@ -327,15 +328,29 @@ namespace EmpireWars.CameraSystem
         {
             if (!useBounds) return;
 
-            float halfWidth = mapSize.x / 2f;
-            float halfHeight = mapSize.y / 2f;
+            // Harita 0,0'dan baslar, mapSize'a kadar gider
+            float minX = mapOffset.x;
+            float maxX = mapOffset.x + mapSize.x;
+            float minZ = mapOffset.y;
+            float maxZ = mapOffset.y + mapSize.y;
 
-            targetPosition.x = Mathf.Clamp(targetPosition.x, -halfWidth, halfWidth);
-            targetPosition.z = Mathf.Clamp(targetPosition.z, -halfHeight, halfHeight);
+            // Zoom'a gore margin ekle (kamera kenarlardan uzak dursun)
+            float zoomMargin = targetZoom * 0.5f;
+            minX += zoomMargin;
+            maxX -= zoomMargin;
+            minZ += zoomMargin;
+            maxZ -= zoomMargin;
+
+            // Minimum degerlerin maximum'u gecmemesini sagla
+            if (minX > maxX) { minX = maxX = (mapOffset.x + mapSize.x) / 2f; }
+            if (minZ > maxZ) { minZ = maxZ = (mapOffset.y + mapSize.y) / 2f; }
+
+            targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
+            targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
 
             Vector3 pos = transform.position;
-            pos.x = Mathf.Clamp(pos.x, -halfWidth, halfWidth);
-            pos.z = Mathf.Clamp(pos.z, -halfHeight, halfHeight);
+            pos.x = Mathf.Clamp(pos.x, minX, maxX);
+            pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
             transform.position = pos;
         }
 
@@ -365,6 +380,20 @@ namespace EmpireWars.CameraSystem
                 ? targetCamera.orthographicSize
                 : transform.position.y;
         }
+
+        /// <summary>
+        /// Harita sinirlarini ayarlar
+        /// </summary>
+        public void SetMapBounds(float width, float height, float offsetX = 0f, float offsetZ = 0f)
+        {
+            mapSize = new Vector2(width, height);
+            mapOffset = new Vector2(offsetX, offsetZ);
+        }
+
+        /// <summary>
+        /// Harita boyutunu dondurur
+        /// </summary>
+        public Vector2 GetMapSize() => mapSize;
 
         #endregion
     }

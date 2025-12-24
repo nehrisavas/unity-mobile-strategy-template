@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace EmpireWars.WorldMap
 {
     /// <summary>
-    /// Harita uzerinde yavasce hareket eden bulutlar olusturur
-    /// KayKit cloud_big ve cloud_small prefab'larini kullanir
+    /// Hafif bulut sistemi - sadece dekoratif amacli
+    /// Object pooling ve minimal update ile optimize edilmis
     /// </summary>
     public class CloudManager : MonoBehaviour
     {
@@ -16,260 +16,124 @@ namespace EmpireWars.WorldMap
         [SerializeField] private GameObject cloudSmallPrefab;
 
         [Header("Settings")]
-        [SerializeField] private int cloudCount = 15;
-        [SerializeField] private float minHeight = 15f;
-        [SerializeField] private float maxHeight = 25f;
-        [SerializeField] private float minSpeed = 0.5f;
-        [SerializeField] private float maxSpeed = 2f;
-        [SerializeField] private float minScale = 1.5f;
-        [SerializeField] private float maxScale = 4f;
+        [SerializeField] private int cloudCount = 8; // Az sayida bulut
+        [SerializeField] private float minHeight = 20f;
+        [SerializeField] private float maxHeight = 30f;
+        [SerializeField] private float cloudSpeed = 1f;
 
-        [Header("Spawn Area")]
-        [SerializeField] private float areaWidth = 120f;
-        [SerializeField] private float areaDepth = 120f;
-        [SerializeField] private Vector3 areaCenter = new Vector3(60f, 0f, 60f);
+        [Header("Area")]
+        [SerializeField] private float areaWidth = 80f;
+        [SerializeField] private float areaDepth = 80f;
+        [SerializeField] private Vector3 areaCenter = new Vector3(30f, 0f, 30f);
 
-        [Header("Wind Direction")]
-        [SerializeField] private Vector3 windDirection = new Vector3(1f, 0f, 0.3f);
+        // Object pool
+        private Transform[] cloudPool;
+        private float[] cloudSpeeds;
+        private bool initialized = false;
 
-        private List<CloudInstance> clouds = new List<CloudInstance>();
-        private Transform cloudsParent;
-
-        private class CloudInstance
-        {
-            public GameObject gameObject;
-            public float speed;
-            public Vector3 direction;
-        }
+        // Update optimization - her frame degil
+        private float updateTimer = 0f;
+        private const float UPDATE_INTERVAL = 0.1f; // 10 FPS update
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (Instance == null) Instance = this;
+            else { Destroy(gameObject); return; }
         }
 
         private void Start()
         {
-            cloudsParent = new GameObject("Clouds").transform;
-            cloudsParent.SetParent(transform);
-
-            SpawnInitialClouds();
+            InitializeClouds();
         }
 
         private void Update()
         {
-            MoveClouds();
+            if (!initialized) return;
+
+            updateTimer += Time.deltaTime;
+            if (updateTimer >= UPDATE_INTERVAL)
+            {
+                updateTimer = 0f;
+                MoveClouds(UPDATE_INTERVAL);
+            }
         }
 
-        /// <summary>
-        /// Baslangicta bulutlari olusturur
-        /// </summary>
-        private void SpawnInitialClouds()
+        private void InitializeClouds()
         {
             if (cloudBigPrefab == null && cloudSmallPrefab == null)
             {
-                Debug.LogWarning("CloudManager: Cloud prefab'lari atanmamis!");
+                Debug.LogWarning("CloudManager: Prefab atanmamis");
                 return;
             }
 
+            cloudPool = new Transform[cloudCount];
+            cloudSpeeds = new float[cloudCount];
+
+            Transform parent = new GameObject("Clouds").transform;
+            parent.SetParent(transform);
+
             for (int i = 0; i < cloudCount; i++)
             {
-                SpawnCloud(true);
+                GameObject prefab = (i % 2 == 0) ? cloudBigPrefab : cloudSmallPrefab;
+                if (prefab == null) prefab = cloudBigPrefab ?? cloudSmallPrefab;
+                if (prefab == null) continue;
+
+                Vector3 pos = GetRandomPosition();
+                GameObject cloud = Instantiate(prefab, pos, Quaternion.Euler(0, Random.Range(0, 360), 0));
+                cloud.transform.SetParent(parent);
+                cloud.transform.localScale = Vector3.one * Random.Range(2f, 4f);
+
+                cloudPool[i] = cloud.transform;
+                cloudSpeeds[i] = Random.Range(0.5f, 1.5f) * cloudSpeed;
             }
 
+            initialized = true;
             Debug.Log($"CloudManager: {cloudCount} bulut olusturuldu");
         }
 
-        /// <summary>
-        /// Yeni bulut olusturur
-        /// </summary>
-        private void SpawnCloud(bool randomPosition)
+        private void MoveClouds(float deltaTime)
         {
-            // Rastgele buyuk veya kucuk bulut
-            GameObject prefab = Random.value > 0.5f ? cloudBigPrefab : cloudSmallPrefab;
-            if (prefab == null)
+            for (int i = 0; i < cloudPool.Length; i++)
             {
-                prefab = cloudBigPrefab ?? cloudSmallPrefab;
-            }
-            if (prefab == null) return;
+                if (cloudPool[i] == null) continue;
 
-            // Pozisyon
-            Vector3 position;
-            if (randomPosition)
-            {
-                position = GetRandomPositionInArea();
-            }
-            else
-            {
-                // Kenardan spawn (ruzgar yonunun tersinden)
-                position = GetSpawnPositionAtEdge();
-            }
+                // Basit X yonunde hareket
+                Vector3 pos = cloudPool[i].position;
+                pos.x += cloudSpeeds[i] * deltaTime;
 
-            // Yukseklik
-            position.y = Random.Range(minHeight, maxHeight);
-
-            // Bulut olustur
-            GameObject cloud = Instantiate(prefab, position, Quaternion.identity);
-            cloud.transform.SetParent(cloudsParent);
-            cloud.name = $"Cloud_{clouds.Count}";
-
-            // Rastgele olcek
-            float scale = Random.Range(minScale, maxScale);
-            cloud.transform.localScale = Vector3.one * scale;
-
-            // Rastgele rotasyon (Y ekseni)
-            cloud.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
-
-            // Instance olustur
-            var instance = new CloudInstance
-            {
-                gameObject = cloud,
-                speed = Random.Range(minSpeed, maxSpeed),
-                direction = windDirection.normalized
-            };
-
-            clouds.Add(instance);
-        }
-
-        /// <summary>
-        /// Bulutlari hareket ettirir
-        /// </summary>
-        private void MoveClouds()
-        {
-            for (int i = clouds.Count - 1; i >= 0; i--)
-            {
-                var cloud = clouds[i];
-                if (cloud.gameObject == null)
+                // Alan disina ciktiysa diger tarafa tasi
+                float halfWidth = areaWidth / 2f;
+                if (pos.x > areaCenter.x + halfWidth + 10f)
                 {
-                    clouds.RemoveAt(i);
-                    continue;
+                    pos.x = areaCenter.x - halfWidth - 10f;
+                    pos.z = areaCenter.z + Random.Range(-areaDepth / 2f, areaDepth / 2f);
+                    pos.y = Random.Range(minHeight, maxHeight);
                 }
 
-                // Hareket
-                cloud.gameObject.transform.position += cloud.direction * cloud.speed * Time.deltaTime;
-
-                // Alan disina ciktiysa yeniden spawn
-                if (IsOutOfArea(cloud.gameObject.transform.position))
-                {
-                    Destroy(cloud.gameObject);
-                    clouds.RemoveAt(i);
-                    SpawnCloud(false);
-                }
+                cloudPool[i].position = pos;
             }
         }
 
-        /// <summary>
-        /// Alan icinde rastgele pozisyon
-        /// </summary>
-        private Vector3 GetRandomPositionInArea()
+        private Vector3 GetRandomPosition()
         {
-            float x = areaCenter.x + Random.Range(-areaWidth / 2f, areaWidth / 2f);
-            float z = areaCenter.z + Random.Range(-areaDepth / 2f, areaDepth / 2f);
-            return new Vector3(x, 0, z);
+            return new Vector3(
+                areaCenter.x + Random.Range(-areaWidth / 2f, areaWidth / 2f),
+                Random.Range(minHeight, maxHeight),
+                areaCenter.z + Random.Range(-areaDepth / 2f, areaDepth / 2f)
+            );
         }
 
-        /// <summary>
-        /// Kenarda spawn pozisyonu (ruzgar yonunun tersinden)
-        /// </summary>
-        private Vector3 GetSpawnPositionAtEdge()
+        public void SetCloudPrefabs(GameObject big, GameObject small)
         {
-            // Ruzgarin geldigi kenardan spawn
-            float x, z;
-
-            if (Mathf.Abs(windDirection.x) > Mathf.Abs(windDirection.z))
-            {
-                // X yonunde hareket - sol veya sag kenardan
-                x = windDirection.x > 0 ? areaCenter.x - areaWidth / 2f - 10f : areaCenter.x + areaWidth / 2f + 10f;
-                z = areaCenter.z + Random.Range(-areaDepth / 2f, areaDepth / 2f);
-            }
-            else
-            {
-                // Z yonunde hareket - on veya arka kenardan
-                x = areaCenter.x + Random.Range(-areaWidth / 2f, areaWidth / 2f);
-                z = windDirection.z > 0 ? areaCenter.z - areaDepth / 2f - 10f : areaCenter.z + areaDepth / 2f + 10f;
-            }
-
-            return new Vector3(x, 0, z);
+            cloudBigPrefab = big;
+            cloudSmallPrefab = small;
         }
 
-        /// <summary>
-        /// Pozisyon alan disinda mi?
-        /// </summary>
-        private bool IsOutOfArea(Vector3 pos)
+        public void SetArea(Vector3 center, float width, float depth)
         {
-            float margin = 20f;
-            return pos.x < areaCenter.x - areaWidth / 2f - margin ||
-                   pos.x > areaCenter.x + areaWidth / 2f + margin ||
-                   pos.z < areaCenter.z - areaDepth / 2f - margin ||
-                   pos.z > areaCenter.z + areaDepth / 2f + margin;
-        }
-
-        /// <summary>
-        /// Ruzgar yonunu degistir
-        /// </summary>
-        public void SetWindDirection(Vector3 direction)
-        {
-            windDirection = direction.normalized;
-            foreach (var cloud in clouds)
-            {
-                cloud.direction = windDirection;
-            }
-        }
-
-        /// <summary>
-        /// Bulut sayisini ayarla
-        /// </summary>
-        public void SetCloudCount(int count)
-        {
-            cloudCount = count;
-
-            // Fazla bulutlari sil
-            while (clouds.Count > cloudCount)
-            {
-                int index = clouds.Count - 1;
-                if (clouds[index].gameObject != null)
-                {
-                    Destroy(clouds[index].gameObject);
-                }
-                clouds.RemoveAt(index);
-            }
-
-            // Eksik bulutlari ekle
-            while (clouds.Count < cloudCount)
-            {
-                SpawnCloud(true);
-            }
-        }
-
-        /// <summary>
-        /// Tum bulutlari temizle
-        /// </summary>
-        public void ClearAllClouds()
-        {
-            foreach (var cloud in clouds)
-            {
-                if (cloud.gameObject != null)
-                {
-                    Destroy(cloud.gameObject);
-                }
-            }
-            clouds.Clear();
-        }
-
-        /// <summary>
-        /// Prefab'lari runtime'da ata
-        /// </summary>
-        public void SetCloudPrefabs(GameObject bigCloud, GameObject smallCloud)
-        {
-            cloudBigPrefab = bigCloud;
-            cloudSmallPrefab = smallCloud;
+            areaCenter = center;
+            areaWidth = width;
+            areaDepth = depth;
         }
     }
 }

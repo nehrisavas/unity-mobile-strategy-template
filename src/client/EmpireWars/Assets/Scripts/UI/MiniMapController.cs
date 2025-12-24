@@ -2,93 +2,104 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using EmpireWars.Core;
-using EmpireWars.Map;
 using EmpireWars.CameraSystem;
 
 namespace EmpireWars.UI
 {
     /// <summary>
-    /// Mini harita kontrolcusu
-    /// Haritanin kucuk bir onizlemesini gosterir
-    /// Dokuman referansi: docs/01-game-design/map/MAP-SYSTEM.md
+    /// Dairesel Mini Harita Kontrolcusu
+    /// Rise of Kingdoms / Mafia City tarzi radar minimap
+    /// Zoom in/out ve konum takibi destekli
     /// </summary>
-    public class MiniMapController : MonoBehaviour, IPointerClickHandler, IDragHandler
+    public class MiniMapController : MonoBehaviour, IPointerClickHandler, IDragHandler, IScrollHandler
     {
         public static MiniMapController Instance { get; private set; }
 
         [Header("Render Ayarlari")]
         [SerializeField] private RenderTexture miniMapTexture;
-        [SerializeField] private UnityEngine.Camera miniMapCamera;
+        [SerializeField] private Camera miniMapCamera;
         [SerializeField] private RawImage miniMapImage;
         [SerializeField] private int textureSize = 256;
 
-        [Header("Gorus Alani")]
-        [SerializeField] private RectTransform viewportIndicator;
-        [SerializeField] private Color viewportColor = new Color(1, 1, 1, 0.5f);
+        [Header("UI Ayarlari")]
+        [SerializeField] private float minimapUISize = 180f;
+        [SerializeField] private Vector2 screenOffset = new Vector2(-20f, 100f); // Sag alt
 
-        [Header("Isaretler")]
-        [SerializeField] private GameObject playerMarkerPrefab;
-        [SerializeField] private GameObject allyMarkerPrefab;
-        [SerializeField] private GameObject enemyMarkerPrefab;
-        [SerializeField] private GameObject resourceMarkerPrefab;
-        [SerializeField] private Transform markersContainer;
+        [Header("Dairesel Gosterim")]
+        [SerializeField] private Material circularMaskMaterial;
+        [SerializeField] private Image borderRing;
+        [SerializeField] private Image playerDot;
+        [SerializeField] private Color borderColor = new Color(0.6f, 0.5f, 0.3f, 1f);
+        [SerializeField] private Color playerColor = Color.yellow;
 
-        [Header("Zoom")]
-        [SerializeField] private float minZoom = 100f;
-        [SerializeField] private float maxZoom = 1000f;
-        [SerializeField] private float currentZoom = 500f;
-        [SerializeField] private float zoomSpeed = 50f;
+        [Header("Zoom Ayarlari")]
+        [SerializeField] private float minZoom = 30f;
+        [SerializeField] private float maxZoom = 200f;
+        [SerializeField] private float currentZoom = 60f;
+        [SerializeField] private float zoomSpeed = 20f;
+        [SerializeField] private float zoomSmoothing = 8f;
 
-        [Header("Guncelleme")]
-        [SerializeField] private float updateInterval = 0.5f;
+        [Header("Harita Sinirlari")]
+        [SerializeField] private float worldMinX = 0f;
+        [SerializeField] private float worldMaxX = 60f;
+        [SerializeField] private float worldMinZ = 0f;
+        [SerializeField] private float worldMaxZ = 60f;
 
-        // Internal
+        [Header("Performans")]
+        [SerializeField] private float updateInterval = 0.1f; // 10 FPS
+
+        // Internal state
+        private float targetZoom;
         private float lastUpdateTime;
         private RectTransform rectTransform;
-        private Vector2 mapSize;
+        private RectTransform canvasRect;
+        private bool isInitialized = false;
 
         #region Unity Lifecycle
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
-
+            Instance = this;
             rectTransform = GetComponent<RectTransform>();
         }
 
         private void Start()
         {
-            InitializeMiniMap();
+            Initialize();
         }
 
         private void Update()
         {
-            // Periyodik guncelleme
+            if (!isInitialized) return;
+
+            // Periyodik guncelleme (performans icin)
             if (Time.time - lastUpdateTime >= updateInterval)
             {
-                UpdateMiniMap();
+                UpdateMiniMapCamera();
                 lastUpdateTime = Time.time;
             }
 
-            // Viewport guncelle
-            UpdateViewportIndicator();
-
-            // Mouse tekerlek zoom
-            if (IsMouseOverMiniMap())
+            // Zoom smooth gecis
+            if (miniMapCamera != null && Mathf.Abs(miniMapCamera.orthographicSize - targetZoom) > 0.1f)
             {
-                float scroll = Input.GetAxis("Mouse ScrollWheel");
-                if (scroll != 0)
-                {
-                    ZoomMiniMap(-scroll * zoomSpeed);
-                }
+                miniMapCamera.orthographicSize = Mathf.Lerp(
+                    miniMapCamera.orthographicSize,
+                    targetZoom,
+                    Time.deltaTime * zoomSmoothing
+                );
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (miniMapTexture != null)
+            {
+                miniMapTexture.Release();
             }
         }
 
@@ -96,125 +107,231 @@ namespace EmpireWars.UI
 
         #region Initialization
 
-        private void InitializeMiniMap()
+        public void Initialize()
         {
-            // Harita boyutu
-            mapSize = new Vector2(
-                HexMetrics.MapWidth * HexMetrics.InnerRadius * 2f,
-                HexMetrics.MapHeight * HexMetrics.OuterRadius * 1.5f
-            );
+            if (isInitialized) return;
 
-            // RenderTexture olustur
-            if (miniMapTexture == null)
-            {
-                miniMapTexture = new RenderTexture(textureSize, textureSize, 16);
-                miniMapTexture.Create();
-            }
+            CreateMiniMapCamera();
+            SetupUI();
 
-            // Mini harita kamerasini ayarla
-            if (miniMapCamera == null)
-            {
-                CreateMiniMapCamera();
-            }
-            else
-            {
-                ConfigureMiniMapCamera();
-            }
-
-            // RawImage'a texture ata
-            if (miniMapImage != null)
-            {
-                miniMapImage.texture = miniMapTexture;
-            }
+            targetZoom = currentZoom;
+            isInitialized = true;
+            Debug.Log("MiniMapController: Dairesel minimap olusturuldu");
         }
 
         private void CreateMiniMapCamera()
         {
-            GameObject camObj = new GameObject("MiniMapCamera");
-            camObj.transform.SetParent(transform);
+            // RenderTexture olustur
+            if (miniMapTexture == null)
+            {
+                miniMapTexture = new RenderTexture(textureSize, textureSize, 16);
+                miniMapTexture.filterMode = FilterMode.Bilinear;
+                miniMapTexture.Create();
+            }
 
-            miniMapCamera = camObj.AddComponent<UnityEngine.Camera>();
-            ConfigureMiniMapCamera();
-        }
+            // Kamera olustur
+            if (miniMapCamera == null)
+            {
+                GameObject camObj = new GameObject("MiniMap_Camera");
+                camObj.transform.SetParent(transform);
+                miniMapCamera = camObj.AddComponent<Camera>();
+            }
 
-        private void ConfigureMiniMapCamera()
-        {
+            // Kamera ayarlari
             miniMapCamera.targetTexture = miniMapTexture;
             miniMapCamera.orthographic = true;
             miniMapCamera.orthographicSize = currentZoom;
             miniMapCamera.clearFlags = CameraClearFlags.SolidColor;
-            miniMapCamera.backgroundColor = new Color(0.1f, 0.15f, 0.2f, 1f);
-            miniMapCamera.cullingMask = LayerMask.GetMask("MiniMap", "Terrain", "Default");
-            miniMapCamera.depth = -10;
+            miniMapCamera.backgroundColor = new Color(0.08f, 0.12f, 0.18f, 1f);
+            miniMapCamera.cullingMask = ~0; // Tum layerlar
+            miniMapCamera.depth = -100;
 
-            // Yukari bak
+            // Yukari bak (top-down)
             miniMapCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            miniMapCamera.transform.position = new Vector3(30f, 200f, 30f);
+        }
+
+        private void SetupUI()
+        {
+            // Canvas bul
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null)
+            {
+                canvas = FindFirstObjectByType<Canvas>();
+            }
+
+            if (canvas == null)
+            {
+                Debug.LogWarning("MiniMapController: Canvas bulunamadi");
+                return;
+            }
+
+            canvasRect = canvas.GetComponent<RectTransform>();
+
+            // RectTransform ayarla (sag alt kose)
+            if (rectTransform == null)
+            {
+                rectTransform = gameObject.AddComponent<RectTransform>();
+            }
+
+            rectTransform.anchorMin = new Vector2(1, 0);
+            rectTransform.anchorMax = new Vector2(1, 0);
+            rectTransform.pivot = new Vector2(1, 0);
+            rectTransform.anchoredPosition = screenOffset;
+            rectTransform.sizeDelta = new Vector2(minimapUISize, minimapUISize);
+
+            // Circular material olustur veya bul
+            if (circularMaskMaterial == null)
+            {
+                Shader shader = Shader.Find("EmpireWars/UI/CircularMask");
+                if (shader != null)
+                {
+                    circularMaskMaterial = new Material(shader);
+                    circularMaskMaterial.SetColor("_BorderColor", borderColor);
+                    circularMaskMaterial.SetFloat("_BorderWidth", 0.025f);
+                    circularMaskMaterial.SetFloat("_Softness", 0.01f);
+                }
+            }
+
+            // RawImage olustur veya ayarla
+            if (miniMapImage == null)
+            {
+                miniMapImage = GetComponentInChildren<RawImage>();
+                if (miniMapImage == null)
+                {
+                    GameObject imageObj = new GameObject("MiniMapImage");
+                    imageObj.transform.SetParent(transform);
+                    miniMapImage = imageObj.AddComponent<RawImage>();
+
+                    RectTransform imgRect = miniMapImage.GetComponent<RectTransform>();
+                    imgRect.anchorMin = Vector2.zero;
+                    imgRect.anchorMax = Vector2.one;
+                    imgRect.offsetMin = Vector2.zero;
+                    imgRect.offsetMax = Vector2.zero;
+                }
+            }
+
+            miniMapImage.texture = miniMapTexture;
+            if (circularMaskMaterial != null)
+            {
+                miniMapImage.material = circularMaskMaterial;
+            }
+
+            // Oyuncu gostergesi (sari nokta ortada)
+            if (playerDot == null)
+            {
+                GameObject dotObj = new GameObject("PlayerDot");
+                dotObj.transform.SetParent(transform);
+                playerDot = dotObj.AddComponent<Image>();
+                playerDot.color = playerColor;
+
+                RectTransform dotRect = playerDot.GetComponent<RectTransform>();
+                dotRect.anchorMin = new Vector2(0.5f, 0.5f);
+                dotRect.anchorMax = new Vector2(0.5f, 0.5f);
+                dotRect.sizeDelta = new Vector2(8f, 8f);
+                dotRect.anchoredPosition = Vector2.zero;
+
+                // Dairesel yapmak icin
+                playerDot.raycastTarget = false;
+            }
+
+            // Zoom butonlari
+            CreateZoomButtons();
+        }
+
+        private void CreateZoomButtons()
+        {
+            // Zoom In butonu (+)
+            GameObject zoomInObj = new GameObject("ZoomIn");
+            zoomInObj.transform.SetParent(transform);
+            Image zoomInBg = zoomInObj.AddComponent<Image>();
+            zoomInBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+            Button zoomInBtn = zoomInObj.AddComponent<Button>();
+            zoomInBtn.onClick.AddListener(ZoomIn);
+
+            RectTransform zoomInRect = zoomInObj.GetComponent<RectTransform>();
+            zoomInRect.anchorMin = new Vector2(1, 1);
+            zoomInRect.anchorMax = new Vector2(1, 1);
+            zoomInRect.pivot = new Vector2(1, 1);
+            zoomInRect.sizeDelta = new Vector2(28f, 28f);
+            zoomInRect.anchoredPosition = new Vector2(-5f, -5f);
+
+            // + text
+            GameObject plusText = new GameObject("Text");
+            plusText.transform.SetParent(zoomInObj.transform);
+            Text plusTxt = plusText.AddComponent<Text>();
+            plusTxt.text = "+";
+            plusTxt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            plusTxt.fontSize = 20;
+            plusTxt.alignment = TextAnchor.MiddleCenter;
+            plusTxt.color = Color.white;
+            RectTransform plusRect = plusText.GetComponent<RectTransform>();
+            plusRect.anchorMin = Vector2.zero;
+            plusRect.anchorMax = Vector2.one;
+            plusRect.offsetMin = Vector2.zero;
+            plusRect.offsetMax = Vector2.zero;
+
+            // Zoom Out butonu (-)
+            GameObject zoomOutObj = new GameObject("ZoomOut");
+            zoomOutObj.transform.SetParent(transform);
+            Image zoomOutBg = zoomOutObj.AddComponent<Image>();
+            zoomOutBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+            Button zoomOutBtn = zoomOutObj.AddComponent<Button>();
+            zoomOutBtn.onClick.AddListener(ZoomOut);
+
+            RectTransform zoomOutRect = zoomOutObj.GetComponent<RectTransform>();
+            zoomOutRect.anchorMin = new Vector2(1, 1);
+            zoomOutRect.anchorMax = new Vector2(1, 1);
+            zoomOutRect.pivot = new Vector2(1, 1);
+            zoomOutRect.sizeDelta = new Vector2(28f, 28f);
+            zoomOutRect.anchoredPosition = new Vector2(-5f, -38f);
+
+            // - text
+            GameObject minusText = new GameObject("Text");
+            minusText.transform.SetParent(zoomOutObj.transform);
+            Text minusTxt = minusText.AddComponent<Text>();
+            minusTxt.text = "-";
+            minusTxt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            minusTxt.fontSize = 24;
+            minusTxt.alignment = TextAnchor.MiddleCenter;
+            minusTxt.color = Color.white;
+            RectTransform minusRect = minusText.GetComponent<RectTransform>();
+            minusRect.anchorMin = Vector2.zero;
+            minusRect.anchorMax = Vector2.one;
+            minusRect.offsetMin = Vector2.zero;
+            minusRect.offsetMax = Vector2.zero;
         }
 
         #endregion
 
         #region Update
 
-        private void UpdateMiniMap()
+        private void UpdateMiniMapCamera()
         {
             if (miniMapCamera == null) return;
 
-            // Kamera pozisyonunu guncelle (merkeze veya oyuncuya odakla)
-            Vector3 cameraPos = miniMapCamera.transform.position;
+            // Ana kamera pozisyonunu takip et
+            Camera mainCam = Camera.main;
+            Vector3 camPos = miniMapCamera.transform.position;
 
             if (MapCameraController.Instance != null)
             {
                 Vector3 mainCamPos = MapCameraController.Instance.transform.position;
-                cameraPos.x = mainCamPos.x;
-                cameraPos.z = mainCamPos.z;
+                camPos.x = mainCamPos.x;
+                camPos.z = mainCamPos.z;
+            }
+            else if (mainCam != null)
+            {
+                camPos.x = mainCam.transform.position.x;
+                camPos.z = mainCam.transform.position.z;
             }
 
-            cameraPos.y = 500f; // Yuksekten bak
-            miniMapCamera.transform.position = cameraPos;
-            miniMapCamera.orthographicSize = currentZoom;
+            // Sinirlari kontrol et
+            camPos.x = Mathf.Clamp(camPos.x, worldMinX + targetZoom, worldMaxX - targetZoom);
+            camPos.z = Mathf.Clamp(camPos.z, worldMinZ + targetZoom, worldMaxZ - targetZoom);
+            camPos.y = 200f;
 
-            // Markerlari guncelle
-            UpdateMarkers();
-        }
-
-        private void UpdateViewportIndicator()
-        {
-            if (viewportIndicator == null || MapCameraController.Instance == null) return;
-
-            // Ana kameranin goruntuledigi alani hesapla
-            UnityEngine.Camera mainCam = UnityEngine.Camera.main;
-            if (mainCam == null) return;
-
-            float mainCamSize = mainCam.orthographicSize;
-            float aspect = mainCam.aspect;
-
-            // Mini harita uzerinde viewport boyutu
-            float viewWidth = (mainCamSize * 2f * aspect) / (currentZoom * 2f);
-            float viewHeight = (mainCamSize * 2f) / (currentZoom * 2f);
-
-            Vector2 miniMapSize = rectTransform.rect.size;
-            viewportIndicator.sizeDelta = new Vector2(
-                miniMapSize.x * viewWidth,
-                miniMapSize.y * viewHeight
-            );
-
-            // Viewport pozisyonu
-            Vector3 mainCamPos = MapCameraController.Instance.transform.position;
-            Vector3 miniCamPos = miniMapCamera.transform.position;
-
-            float offsetX = (mainCamPos.x - miniCamPos.x) / (currentZoom * 2f);
-            float offsetY = (mainCamPos.z - miniCamPos.z) / (currentZoom * 2f);
-
-            viewportIndicator.anchoredPosition = new Vector2(
-                offsetX * miniMapSize.x,
-                offsetY * miniMapSize.y
-            );
-        }
-
-        private void UpdateMarkers()
-        {
-            // TODO: Oyuncu, muttefik ve dusman markerlarini guncelle
-            // Bu islem backend'den gelen veriyle yapilacak
+            miniMapCamera.transform.position = camPos;
         }
 
         #endregion
@@ -225,27 +342,40 @@ namespace EmpireWars.UI
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                MoveToClickedPosition(eventData);
+                MoveToClickedPosition(eventData.position);
             }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            MoveToClickedPosition(eventData);
+            MoveToClickedPosition(eventData.position);
         }
 
-        private void MoveToClickedPosition(PointerEventData eventData)
+        public void OnScroll(PointerEventData eventData)
         {
-            if (MapCameraController.Instance == null) return;
+            // Mouse scroll ile zoom
+            float scrollDelta = eventData.scrollDelta.y;
+            if (scrollDelta > 0)
+            {
+                ZoomIn();
+            }
+            else if (scrollDelta < 0)
+            {
+                ZoomOut();
+            }
+        }
 
-            // Tiklanilan pozisyonu dunya koordinatina cevir
+        private void MoveToClickedPosition(Vector2 screenPosition)
+        {
+            if (MapCameraController.Instance == null || rectTransform == null) return;
+
+            // Screen pozisyonunu lokal pozisyona cevir
             Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                rectTransform,
-                eventData.position,
-                eventData.pressEventCamera,
-                out localPoint
-            );
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform, screenPosition, null, out localPoint))
+            {
+                return;
+            }
 
             // Normalize et (-0.5 to 0.5)
             Vector2 normalized = new Vector2(
@@ -253,126 +383,98 @@ namespace EmpireWars.UI
                 localPoint.y / rectTransform.rect.height
             );
 
-            // Dunya pozisyonuna cevir
+            // Daire icinde mi kontrol et
+            if (normalized.magnitude > 0.5f) return;
+
+            // Minimap kamera pozisyonuna gore world pozisyonu hesapla
             Vector3 miniCamPos = miniMapCamera.transform.position;
+            float currentOrthoSize = miniMapCamera.orthographicSize;
+
             Vector3 worldPos = new Vector3(
-                miniCamPos.x + normalized.x * currentZoom * 2f,
+                miniCamPos.x + normalized.x * currentOrthoSize * 2f,
                 0f,
-                miniCamPos.z + normalized.y * currentZoom * 2f
+                miniCamPos.z + normalized.y * currentOrthoSize * 2f
             );
 
             // Ana kamerayi hareket ettir
             MapCameraController.Instance.FocusOnPosition(worldPos);
         }
 
-        private bool IsMouseOverMiniMap()
-        {
-            return RectTransformUtility.RectangleContainsScreenPoint(
-                rectTransform,
-                Input.mousePosition,
-                null
-            );
-        }
-
         #endregion
 
         #region Zoom
 
-        public void ZoomMiniMap(float delta)
-        {
-            currentZoom = Mathf.Clamp(currentZoom + delta, minZoom, maxZoom);
-            if (miniMapCamera != null)
-            {
-                miniMapCamera.orthographicSize = currentZoom;
-            }
-        }
-
         public void ZoomIn()
         {
-            ZoomMiniMap(-zoomSpeed);
+            targetZoom = Mathf.Max(targetZoom - zoomSpeed, minZoom);
         }
 
         public void ZoomOut()
         {
-            ZoomMiniMap(zoomSpeed);
+            targetZoom = Mathf.Min(targetZoom + zoomSpeed, maxZoom);
         }
 
-        public void ResetZoom()
+        public void SetZoom(float zoom)
         {
-            currentZoom = (minZoom + maxZoom) / 2f;
-            if (miniMapCamera != null)
-            {
-                miniMapCamera.orthographicSize = currentZoom;
-            }
+            targetZoom = Mathf.Clamp(zoom, minZoom, maxZoom);
         }
 
-        #endregion
-
-        #region Markers
-
-        public void AddPlayerMarker(long playerId, Vector3 position, bool isAlly)
+        public float GetCurrentZoom()
         {
-            if (markersContainer == null) return;
-
-            GameObject prefab = isAlly ? allyMarkerPrefab : enemyMarkerPrefab;
-            if (prefab == null) return;
-
-            GameObject marker = Instantiate(prefab, markersContainer);
-            MiniMapMarker markerComponent = marker.GetComponent<MiniMapMarker>();
-            if (markerComponent == null)
-            {
-                markerComponent = marker.AddComponent<MiniMapMarker>();
-            }
-
-            markerComponent.Initialize(playerId, position, isAlly ? MarkerType.Ally : MarkerType.Enemy);
-        }
-
-        public void AddResourceMarker(Vector3 position, ResourceType resourceType)
-        {
-            if (markersContainer == null || resourceMarkerPrefab == null) return;
-
-            GameObject marker = Instantiate(resourceMarkerPrefab, markersContainer);
-            MiniMapMarker markerComponent = marker.GetComponent<MiniMapMarker>();
-            if (markerComponent == null)
-            {
-                markerComponent = marker.AddComponent<MiniMapMarker>();
-            }
-
-            markerComponent.Initialize(0, position, MarkerType.Resource);
-        }
-
-        public void ClearAllMarkers()
-        {
-            if (markersContainer == null) return;
-
-            foreach (Transform child in markersContainer)
-            {
-                Destroy(child.gameObject);
-            }
+            return miniMapCamera != null ? miniMapCamera.orthographicSize : targetZoom;
         }
 
         #endregion
 
-        #region Utility
+        #region Public API
 
-        public Vector3 WorldToMiniMapPosition(Vector3 worldPos)
+        /// <summary>
+        /// Harita sinirlarini ayarla (WorldMapGenerator'dan cagrilir)
+        /// </summary>
+        public void SetWorldBounds(float minX, float maxX, float minZ, float maxZ)
         {
-            if (miniMapCamera == null) return Vector3.zero;
+            worldMinX = minX;
+            worldMaxX = maxX;
+            worldMinZ = minZ;
+            worldMaxZ = maxZ;
+
+            // Zoom limitlerini harita boyutuna gore ayarla
+            float mapWidth = maxX - minX;
+            float mapHeight = maxZ - minZ;
+            float mapSize = Mathf.Min(mapWidth, mapHeight);
+
+            minZoom = Mathf.Max(20f, mapSize * 0.05f);
+            maxZoom = Mathf.Min(500f, mapSize * 0.5f);
+            targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+
+            Debug.Log($"MiniMapController: Sinirlar ayarlandi - Min({minX},{minZ}) Max({maxX},{maxZ})");
+        }
+
+        /// <summary>
+        /// Belirli bir dunya pozisyonunu minimap uzerinde goster
+        /// </summary>
+        public Vector2 WorldToMiniMapPosition(Vector3 worldPos)
+        {
+            if (miniMapCamera == null || rectTransform == null)
+                return Vector2.zero;
 
             Vector3 miniCamPos = miniMapCamera.transform.position;
-            Vector2 offset = new Vector2(
-                (worldPos.x - miniCamPos.x) / (currentZoom * 2f),
-                (worldPos.z - miniCamPos.z) / (currentZoom * 2f)
-            );
+            float orthoSize = miniMapCamera.orthographicSize;
 
-            Vector2 miniMapSize = rectTransform.rect.size;
-            return new Vector3(
-                offset.x * miniMapSize.x,
-                offset.y * miniMapSize.y,
-                0f
+            // Normalize et
+            float normalizedX = (worldPos.x - miniCamPos.x) / (orthoSize * 2f);
+            float normalizedZ = (worldPos.z - miniCamPos.z) / (orthoSize * 2f);
+
+            // UI pozisyonuna cevir
+            return new Vector2(
+                normalizedX * rectTransform.rect.width,
+                normalizedZ * rectTransform.rect.height
             );
         }
 
+        /// <summary>
+        /// Minimap'i goster/gizle
+        /// </summary>
         public void SetVisibility(bool visible)
         {
             gameObject.SetActive(visible);
@@ -383,35 +485,6 @@ namespace EmpireWars.UI
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Mini harita marker bileşeni
-    /// </summary>
-    public class MiniMapMarker : MonoBehaviour
-    {
-        public long OwnerId { get; private set; }
-        public MarkerType Type { get; private set; }
-        public Vector3 WorldPosition { get; private set; }
-
-        public void Initialize(long ownerId, Vector3 worldPos, MarkerType type)
-        {
-            OwnerId = ownerId;
-            WorldPosition = worldPos;
-            Type = type;
-        }
-
-        public void UpdatePosition(Vector3 newWorldPos)
-        {
-            WorldPosition = newWorldPos;
-
-            // Mini harita pozisyonunu guncelle
-            if (MiniMapController.Instance != null)
-            {
-                Vector3 miniMapPos = MiniMapController.Instance.WorldToMiniMapPosition(newWorldPos);
-                transform.localPosition = miniMapPos;
-            }
-        }
     }
 
     /// <summary>

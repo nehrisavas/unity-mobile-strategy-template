@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 using EmpireWars.UI;
 
 namespace EmpireWars.Core
@@ -36,7 +37,7 @@ namespace EmpireWars.Core
         private Light mainLight;
         private Volume globalVolume;
         private Camera mainCamera;
-        private MinimapSystem minimapSystem;
+        private MiniMapController minimapController;
 
         private void Start()
         {
@@ -61,15 +62,26 @@ namespace EmpireWars.Core
 
         private void SetupMinimap()
         {
-            minimapSystem = FindFirstObjectByType<MinimapSystem>();
-            if (minimapSystem == null)
+            // Canvas bul veya olustur
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null)
             {
-                GameObject minimapObj = new GameObject("Minimap System");
-                minimapObj.transform.SetParent(transform);
-                minimapSystem = minimapObj.AddComponent<MinimapSystem>();
+                GameObject canvasObj = new GameObject("UI Canvas");
+                canvas = canvasObj.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+                canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
             }
-            minimapSystem.Initialize();
-            Debug.Log("HDSceneSetup: Minimap olusturuldu (sag alt kose)");
+
+            minimapController = FindFirstObjectByType<MiniMapController>();
+            if (minimapController == null)
+            {
+                GameObject minimapObj = new GameObject("MiniMap Controller");
+                minimapObj.transform.SetParent(canvas.transform);
+                minimapController = minimapObj.AddComponent<MiniMapController>();
+            }
+            minimapController.Initialize();
+            Debug.Log("HDSceneSetup: Dairesel minimap olusturuldu");
         }
 
         private void SetupHDLighting()

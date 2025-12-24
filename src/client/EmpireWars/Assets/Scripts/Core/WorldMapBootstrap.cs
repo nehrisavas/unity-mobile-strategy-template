@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 using EmpireWars.UI;
 using EmpireWars.WorldMap;
 using EmpireWars.WorldMap.Tiles;
+using EmpireWars.CameraSystem;
 
 namespace EmpireWars.Core
 {
@@ -13,12 +16,14 @@ namespace EmpireWars.Core
     public class WorldMapBootstrap : MonoBehaviour
     {
         [Header("Harita Ayarlari")]
-        [SerializeField] private int mapWidth = 60;
-        [SerializeField] private int mapHeight = 60;
+        [SerializeField] private int mapWidth = 200;  // Buyuk harita icin 200
+        [SerializeField] private int mapHeight = 200;
+        [SerializeField] private bool useChunkedLoading = true; // Buyuk haritalar icin chunk sistemi
 
         [Header("Databases (Opsiyonel - Inspector'dan ata)")]
         [SerializeField] private HexTilePrefabDatabase tilePrefabDatabase;
         [SerializeField] private TerrainDecorationDatabase decorationDatabase;
+        [SerializeField] private BuildingDatabase buildingDatabase;
 
         [Header("Cloud Prefabs (Opsiyonel)")]
         [SerializeField] private GameObject cloudBigPrefab;
@@ -103,6 +108,66 @@ namespace EmpireWars.Core
 
         private void CreateMap()
         {
+            // Buyuk haritalar icin chunk-based loading kullan
+            if (useChunkedLoading && (mapWidth > 100 || mapHeight > 100))
+            {
+                CreateChunkedMap();
+                return;
+            }
+
+            // Kucuk haritalar icin eski sistem
+            CreateFullMap();
+        }
+
+        private void CreateChunkedMap()
+        {
+            GameObject loaderObj = new GameObject("ChunkedTileLoader");
+            ChunkedTileLoader loader = loaderObj.AddComponent<ChunkedTileLoader>();
+
+            // Database'leri ata (reflection ile)
+            var loaderType = typeof(ChunkedTileLoader);
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+
+            var prefabDbField = loaderType.GetField("prefabDatabase", flags);
+            if (prefabDbField != null)
+            {
+                prefabDbField.SetValue(loader, tilePrefabDatabase);
+            }
+
+            var decorDbField = loaderType.GetField("decorationDatabase", flags);
+            if (decorDbField != null && decorationDatabase != null)
+            {
+                decorDbField.SetValue(loader, decorationDatabase);
+            }
+
+            var buildingDbField = loaderType.GetField("buildingDatabase", flags);
+            if (buildingDbField != null && buildingDatabase != null)
+            {
+                buildingDbField.SetValue(loader, buildingDatabase);
+            }
+
+            // Chunk sistemi baslatma - bir frame bekle
+            StartCoroutine(InitializeChunkedLoader(loader));
+        }
+
+        private IEnumerator InitializeChunkedLoader(ChunkedTileLoader loader)
+        {
+            yield return null; // Bir frame bekle
+
+            loader.Initialize(mapWidth, mapHeight);
+            Debug.Log($"WorldMapBootstrap: {mapWidth}x{mapHeight} chunk-based harita baslatildi");
+
+            // Kamera sinirlarini ayarla
+            if (MapCameraController.Instance != null)
+            {
+                float worldWidth = mapWidth * HexMetrics.InnerRadius * 2f;
+                float worldHeight = mapHeight * HexMetrics.OuterRadius * 1.5f;
+                MapCameraController.Instance.SetMapBounds(worldWidth, worldHeight, 0, 0);
+            }
+        }
+
+        private void CreateFullMap()
+        {
             // HexGrid parent
             GameObject hexGridObj = new GameObject("HexGrid");
 
@@ -152,6 +217,9 @@ namespace EmpireWars.Core
                 return;
             }
 
+            // Harita boyutunu ayarla
+            KingdomMapGenerator.SetMapSize(Mathf.Max(mapWidth, mapHeight));
+
             // Haritayi olustur
             tileFactory.GenerateTestGrid(mapWidth, mapHeight);
             Debug.Log($"WorldMapBootstrap: {mapWidth}x{mapHeight} harita olusturuldu");
@@ -159,14 +227,32 @@ namespace EmpireWars.Core
 
         private void CreateMinimap()
         {
-            MinimapSystem minimapSystem = FindFirstObjectByType<MinimapSystem>();
-            if (minimapSystem == null)
+            // Canvas bul veya olustur
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null)
             {
-                GameObject minimapObj = new GameObject("Minimap System");
-                minimapSystem = minimapObj.AddComponent<MinimapSystem>();
+                GameObject canvasObj = new GameObject("UI Canvas");
+                canvas = canvasObj.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+                canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
             }
-            minimapSystem.Initialize();
-            Debug.Log("WorldMapBootstrap: Minimap olusturuldu (sag alt kose)");
+
+            MiniMapController miniMap = FindFirstObjectByType<MiniMapController>();
+            if (miniMap == null)
+            {
+                GameObject minimapObj = new GameObject("MiniMap Controller");
+                minimapObj.transform.SetParent(canvas.transform);
+                miniMap = minimapObj.AddComponent<MiniMapController>();
+            }
+
+            // Harita sinirlarini ayarla
+            float worldWidth = mapWidth * HexMetrics.InnerRadius * 2f;
+            float worldHeight = mapHeight * HexMetrics.OuterRadius * 1.5f;
+            miniMap.SetWorldBounds(0, worldWidth, 0, worldHeight);
+
+            miniMap.Initialize();
+            Debug.Log("WorldMapBootstrap: Dairesel minimap olusturuldu (sag alt kose)");
         }
 
         private void CreateBottomNavigation()
