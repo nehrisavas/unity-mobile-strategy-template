@@ -111,7 +111,16 @@ namespace EmpireWars.CameraSystem
 
             Debug.Log($"MapCamera: Zoom limitleri = {GameConfig.MinZoom} - {GameConfig.MaxZoom}, Orthographic: {targetCamera?.orthographic}");
 
-            targetPosition = transform.position;
+            // Başlangıç pozisyonu: Harita merkezi (NPC Kingdom)
+            // Harita merkezi = (MapWidth/2, MapHeight/2) tile koordinatı
+            // World koordinatına çevir
+            float centerX = GameConfig.WorldWidth / 2f;   // ~1732
+            float centerZ = GameConfig.WorldHeight / 2f;  // ~1500
+            Vector3 startPos = new Vector3(centerX, transform.position.y, centerZ);
+            targetPosition = startPos;
+            transform.position = startPos;
+
+            Debug.Log($"MapCamera: Başlangıç pozisyonu = Harita Merkezi ({centerX:F0}, {centerZ:F0})");
         }
 
         private void Update()

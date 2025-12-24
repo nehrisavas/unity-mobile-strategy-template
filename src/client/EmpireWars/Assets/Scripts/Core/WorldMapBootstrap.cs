@@ -47,6 +47,9 @@ namespace EmpireWars.Core
             GameConfig.Initialize();
             Debug.Log($"Harita: {GameConfig.MapWidth}x{GameConfig.MapHeight} ({GameConfig.WorldWidth:F0}x{GameConfig.WorldHeight:F0} units)");
 
+            // Database'leri otomatik bul (eger atanmamissa)
+            AutoFindDatabases();
+
             // HD grafik ayarlari
             if (setupHDGraphics)
             {
@@ -139,9 +142,17 @@ namespace EmpireWars.Core
             }
 
             var buildingDbField = loaderType.GetField("buildingDatabase", flags);
-            if (buildingDbField != null && buildingDatabase != null)
+            if (buildingDbField != null)
             {
-                buildingDbField.SetValue(loader, buildingDatabase);
+                if (buildingDatabase != null)
+                {
+                    buildingDbField.SetValue(loader, buildingDatabase);
+                    Debug.Log("WorldMapBootstrap: BuildingDatabase atandi");
+                }
+                else
+                {
+                    Debug.LogError("WorldMapBootstrap: BuildingDatabase NULL! Inspector'da atayin. Binalar gorunmeyecek!");
+                }
             }
 
             // Chunk sistemi baslatma - bir frame bekle
@@ -298,6 +309,54 @@ namespace EmpireWars.Core
             }
             #else
             Debug.LogWarning("WorldMapBootstrap: Cloud prefab'larini Inspector'dan atayin.");
+            #endif
+        }
+
+        private void AutoFindDatabases()
+        {
+            #if UNITY_EDITOR
+            // TilePrefabDatabase
+            if (tilePrefabDatabase == null)
+            {
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:HexTilePrefabDatabase");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    tilePrefabDatabase = UnityEditor.AssetDatabase.LoadAssetAtPath<HexTilePrefabDatabase>(path);
+                    if (tilePrefabDatabase != null)
+                        Debug.Log($"WorldMapBootstrap: TilePrefabDatabase otomatik bulundu: {path}");
+                }
+            }
+
+            // DecorationDatabase
+            if (decorationDatabase == null)
+            {
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:TerrainDecorationDatabase");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    decorationDatabase = UnityEditor.AssetDatabase.LoadAssetAtPath<TerrainDecorationDatabase>(path);
+                    if (decorationDatabase != null)
+                        Debug.Log($"WorldMapBootstrap: DecorationDatabase otomatik bulundu: {path}");
+                }
+            }
+
+            // BuildingDatabase
+            if (buildingDatabase == null)
+            {
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:BuildingDatabase");
+                if (guids.Length > 0)
+                {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    buildingDatabase = UnityEditor.AssetDatabase.LoadAssetAtPath<BuildingDatabase>(path);
+                    if (buildingDatabase != null)
+                        Debug.Log($"WorldMapBootstrap: BuildingDatabase otomatik bulundu: {path}");
+                }
+                else
+                {
+                    Debug.LogWarning("WorldMapBootstrap: BuildingDatabase bulunamadi! Tools > EmpireWars > Setup Building Database calistirin.");
+                }
+            }
             #endif
         }
     }

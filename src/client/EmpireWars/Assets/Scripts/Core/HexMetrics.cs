@@ -12,22 +12,22 @@ namespace EmpireWars.Core
         public const float OuterRadius = 1f;
         public const float InnerRadius = OuterRadius * 0.866025404f; // sqrt(3)/2
 
-        // Harita boyutlari (TEST: 50x50, PROD: 2000x2000)
-        public const int MapWidth = 50;
-        public const int MapHeight = 50;
-        public const int TotalTiles = MapWidth * MapHeight; // 2.500 (test)
+        // Harita boyutlari (PROD: 2000x2000)
+        public const int MapWidth = 2000;
+        public const int MapHeight = 2000;
+        public const int TotalTiles = MapWidth * MapHeight; // 4.000.000 tiles
 
-        // Chunk sistemi (performans icin)
-        public const int ChunkSizeX = 20;
-        public const int ChunkSizeZ = 20;
-        public const int ChunksX = MapWidth / ChunkSizeX;   // 100 chunk
-        public const int ChunksZ = MapHeight / ChunkSizeZ;  // 100 chunk
+        // Chunk sistemi (performans icin) - GameConfig ile uyumlu
+        public const int ChunkSizeX = 32;
+        public const int ChunkSizeZ = 32;
+        public const int ChunksX = MapWidth / ChunkSizeX;   // 62 chunk
+        public const int ChunksZ = MapHeight / ChunkSizeZ;  // 62 chunk
 
-        // Bolge sinirlari (merkeze uzaklik) - TEST icin kucuk degerler
-        public const int Zone1Radius = 10;    // Merkez (PROD: 200)
-        public const int Zone2Radius = 20;    // Ileri (PROD: 500)
-        public const int Zone3Radius = 30;    // Orta (PROD: 800)
-        // Zone4 = 30+ (Dis)
+        // Bolge sinirlari (merkeze uzaklik) - PROD degerler
+        public const int Zone1Radius = 200;   // Merkez
+        public const int Zone2Radius = 500;   // Ileri
+        public const int Zone3Radius = 800;   // Orta
+        // Zone4 = 800+ (Dis)
 
         // Hex koselerinin pozisyonlari (flat-top hex)
         private static Vector3[] corners;

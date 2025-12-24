@@ -72,12 +72,13 @@ namespace EmpireWars.Editor
                 decorationDbProp.objectReferenceValue = decorationDb;
             }
 
-            // Harita boyutunu 60x60 yap (Kingdom Map)
+            // Harita boyutunu GameConfig'den al (varsayilan 2000x2000)
+            GameConfig.Initialize();
             var mapWidthProp = serializedBootstrap.FindProperty("mapWidth");
-            if (mapWidthProp != null) mapWidthProp.intValue = 60;
+            if (mapWidthProp != null) mapWidthProp.intValue = GameConfig.MapWidth;
 
             var mapHeightProp = serializedBootstrap.FindProperty("mapHeight");
-            if (mapHeightProp != null) mapHeightProp.intValue = 60;
+            if (mapHeightProp != null) mapHeightProp.intValue = GameConfig.MapHeight;
 
             serializedBootstrap.ApplyModifiedProperties();
 
@@ -96,8 +97,8 @@ namespace EmpireWars.Editor
                 cameraController = cameraControllerObj.AddComponent<MapCameraController>();
             }
 
-            // Kamera pozisyonunu ayarla (Kingdom merkezi 30,30)
-            cameraControllerObj.transform.position = new Vector3(45f, 40f, 45f);
+            // Kamera pozisyonunu ayarla (Oyuncu sehri 0,0)
+            cameraControllerObj.transform.position = new Vector3(0f, 40f, 0f);
 
             // Main Camera'yi bul ve ayarla
             var mainCamera = Camera.main;

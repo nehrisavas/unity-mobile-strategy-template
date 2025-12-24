@@ -13,10 +13,10 @@ namespace EmpireWars.WorldMap
     /// </summary>
     public static class KingdomMapGenerator
     {
-        // Varsayilan harita boyutu (degistirilebilir)
-        private static int _mapSize = 60;
-        private static int _centerX = 30;
-        private static int _centerY = 30;
+        // Varsayilan harita boyutu (PROD: 2000x2000)
+        private static int _mapSize = 2000;
+        private static int _centerX = 1000;
+        private static int _centerY = 1000;
 
         public static int MAP_SIZE => _mapSize;
         public static int CENTER_X => _centerX;
@@ -90,8 +90,10 @@ namespace EmpireWars.WorldMap
             public MineType MineType;   // Maden türü
             public bool HasBuilding;
             public string BuildingType;
+            public int BuildingLevel;   // 0-30 bina seviyesi
+            public float BuildingRotation; // Bina rotasyonu (Y ekseni derece)
 
-            public TileData(int q, int r, TerrainType terrain, int mineLevel = 0, MineType mineType = MineType.None, bool hasBuilding = false, string buildingType = "")
+            public TileData(int q, int r, TerrainType terrain, int mineLevel = 0, MineType mineType = MineType.None, bool hasBuilding = false, string buildingType = "", int buildingLevel = 0, float buildingRotation = 0f)
             {
                 Q = q;
                 R = r;
@@ -100,8 +102,17 @@ namespace EmpireWars.WorldMap
                 MineType = mineType;
                 HasBuilding = hasBuilding;
                 BuildingType = buildingType;
+                BuildingLevel = buildingLevel;
+                BuildingRotation = buildingRotation;
             }
         }
+
+        // Oyuncu şehri için sabit (0,0)
+        // Oyuncu şehri devre dışı - sadece NPC Kingdom var
+        public const int PLAYER_CITY_X = -9999; // Harita dışı
+        public const int PLAYER_CITY_Y = -9999;
+        public const int PLAYER_CITY_RADIUS = 0; // Devre dışı
+        public const int MAX_BUILDING_LEVEL = 30;
 
         /// <summary>
         /// Tüm harita tile'larını üretir
@@ -149,10 +160,16 @@ namespace EmpireWars.WorldMap
         {
             float distance = GetDistanceFromCenter(q, r);
 
-            // 1. MERKEZ KALE
+            // 0. OYUNCU ŞEHRİ (0,0) - EN ÖNCELİKLİ
+            if (IsInPlayerCity(q, r))
+            {
+                return GeneratePlayerCityTile(q, r, random);
+            }
+
+            // 1. MERKEZ KALE (NPC Krallık)
             if (q == CENTER_X && r == CENTER_Y)
             {
-                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "castle_green");
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "castle_green", MAX_BUILDING_LEVEL);
             }
 
             // 2. BATAKLIK ÇEVRESİ (kare şeklinde)
@@ -161,7 +178,7 @@ namespace EmpireWars.WorldMap
                 // Köşe kontrol - topçu kuleleri
                 if (IsSwampCorner(q, r))
                 {
-                    return new TileData(q, r, TerrainType.Swamp, 0, MineType.None, true, "tower_cannon_green");
+                    return new TileData(q, r, TerrainType.Swamp, 0, MineType.None, true, "tower_cannon_green", 15);
                 }
                 return new TileData(q, r, TerrainType.Swamp);
             }
@@ -244,97 +261,581 @@ namespace EmpireWars.WorldMap
         }
 
         /// <summary>
-        /// Krallık merkezi görsel şölen alanı
-        /// Fütüristik manzara - kale, kuleler, su içinde gemiler, bahçeler
+        /// Krallık merkezi - Tam teşekküllü NPC şehri
+        /// Binalar, surlar, kuleler ve savunma yapıları
         /// </summary>
         private static TileData GenerateKingdomCenterTile(int q, int r, System.Random random)
         {
             int dx = q - CENTER_X;
             int dy = r - CENTER_Y;
-            float dist = Mathf.Sqrt(dx * dx + dy * dy);
+            int absDx = Mathf.Abs(dx);
+            int absDy = Mathf.Abs(dy);
+            int ring = Mathf.Max(absDx, absDy);
+            int hash = GetTileHash(q, r);
 
-            // Merkez kale
+            // ════════════════════════════════════════════════════════════════
+            // MERKEZ KALE (Ring 0) - Level 30
+            // ════════════════════════════════════════════════════════════════
             if (q == CENTER_X && r == CENTER_Y)
             {
-                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "castle_green");
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "castle_blue", MAX_BUILDING_LEVEL);
             }
 
-            // İç içe halkalar halinde dekoratif yapı
-            int ring = Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy));
-
-            // Halka 1: Merkez kaleyi çevreleyen yol
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 1: Kale etrafı - Belediye, Market (Level 28-30)
+            // ════════════════════════════════════════════════════════════════
             if (ring == 1)
             {
+                // 4 ana yönde önemli binalar
+                if (dx == 0 && dy == -1) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "townhall_blue", 30);
+                if (dx == 0 && dy == 1) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "market_blue", 29);
+                if (dx == -1 && dy == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "blacksmith_blue", 28);
+                if (dx == 1 && dy == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "workshop_blue", 28);
+                // Köşeler - yol
                 return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
             }
 
-            // Halka 2: Su kanalı (hendek)
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 2: İç yol halkası + köşe kuleleri
+            // ════════════════════════════════════════════════════════════════
             if (ring == 2)
             {
-                // Köşelerde köprü
-                if ((Mathf.Abs(dx) == 2 && dy == 0) || (dx == 0 && Mathf.Abs(dy) == 2))
+                // Köşelerde gözetleme kuleleri
+                if (absDx == 2 && absDy == 2)
                 {
-                    return new TileData(q, r, TerrainType.Bridge, 0, MineType.None, false, "");
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 25);
+                }
+                return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+            }
+
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 3: Askeri bölge (Level 25-28)
+            // ════════════════════════════════════════════════════════════════
+            if (ring == 3)
+            {
+                // Ana yollar - rotasyon ile
+                // Dikey yol (dx == 0): 90°, Yatay yol (dy == 0): 0°
+                if (dx == 0 || dy == 0)
+                {
+                    float roadRotation = (dx == 0) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRotation);
+                }
+
+                // Askeri binalar - 4 bölge
+                if (dx > 0 && dy > 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 27);
+                if (dx < 0 && dy > 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "archeryrange_blue", 26);
+                if (dx > 0 && dy < 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "stables_blue", 26);
+                if (dx < 0 && dy < 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 25);
+
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+            }
+
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 4: Su hendeği (savunma)
+            // ════════════════════════════════════════════════════════════════
+            if (ring == 4)
+            {
+                // 4 ana yönde köprüler - rotasyon ile
+                if ((absDx == 4 && dy == 0) || (dx == 0 && absDy == 4))
+                {
+                    // Yatay köprü (dy == 0): 0°, Dikey köprü (dx == 0): 90°
+                    float bridgeRotation = (dy == 0) ? 0f : 90f;
+                    return new TileData(q, r, TerrainType.Bridge, 0, MineType.None, false, "", 0, bridgeRotation);
                 }
                 return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
             }
 
-            // Halka 3: İç bahçe - çimen ve ağaçlar
-            if (ring == 3)
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 5: İç sur + kuleler
+            // ════════════════════════════════════════════════════════════════
+            if (ring == 5)
             {
-                // Her 2. tile'da ağaç
-                if ((dx + dy) % 2 == 0)
+                // Köşelerde topçu kuleleri
+                if (absDx == 5 && absDy == 5)
                 {
-                    return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 28);
                 }
-                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-            }
-
-            // Halka 4: Dış yol halkası
-            if (ring == 4)
-            {
-                // Köşelerde savunma kuleleri
-                if (Mathf.Abs(dx) == 4 && Mathf.Abs(dy) == 4)
+                // Kapı kuleleri (4 ana yön)
+                if ((absDx == 5 && dy == 0) || (dx == 0 && absDy == 5))
                 {
-                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_green");
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, true, "tower_a_blue", 25);
+                }
+                // Sur duvarları - dikdörtgen şekli için rotasyon
+                // Sol/sağ kenarlar (dx == ±5): 90° (dikey duvar)
+                // Üst/alt kenarlar (dy == ±5): 0° (yatay duvar)
+                if (absDx == 5 || absDy == 5)
+                {
+                    float wallRotation = (absDx == 5) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 20, wallRotation);
                 }
                 return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
             }
 
-            // Halka 5+: Dış bahçe ve dekoratif alanlar
-            if (ring >= 5)
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 6-8: Üretim ve konut bölgesi
+            // ════════════════════════════════════════════════════════════════
+            if (ring >= 6 && ring <= 8)
             {
-                int hash = GetTileHash(q, r);
-                float normalized = (hash % 100) / 100f;
+                // Ana yollar - rotasyon ile
+                // Dikey yol (dx == 0): 90°, Yatay yol (dy == 0): 0°
+                if (dx == 0 || dy == 0)
+                {
+                    float roadRotation = (dx == 0) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRotation);
+                }
 
-                // %15 su havuzu / gölet
-                if (normalized < 0.15f)
+                // Bina dağılımı
+                int buildingHash = hash % 20;
+                int level = 18 + (hash % 8); // 18-25
+
+                if (ring == 6)
                 {
-                    return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    // Üretim binaları
+                    if (buildingHash < 4) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "mine_blue", level);
+                    if (buildingHash < 8) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "lumbermill_blue", level);
+                    if (buildingHash < 12) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "windmill_blue", level);
+                    if (buildingHash < 16) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watermill_blue", level);
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                 }
-                // %20 orman/bahçe
-                else if (normalized < 0.35f)
+
+                if (ring == 7)
                 {
-                    return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");
+                    // Konut binaları
+                    if (buildingHash < 5) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "home_a_blue", level);
+                    if (buildingHash < 10) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "home_b_blue", level);
+                    if (buildingHash < 13) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tavern_blue", level);
+                    if (buildingHash < 15) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "well_blue", level);
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                 }
-                // %15 çiftlik
-                else if (normalized < 0.50f)
+
+                if (ring == 8)
                 {
-                    return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
-                }
-                // Ana yollar (merkeze giden)
-                else if (dx == 0 || dy == 0)
-                {
-                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
-                }
-                // Geri kalan çimen
-                else
-                {
+                    // Dini ve özel binalar
+                    if (buildingHash < 3) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "church_blue", level);
+                    if (buildingHash < 6) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "shrine_blue", level);
+                    if (buildingHash < 10) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "home_a_blue", level - 2);
                     return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                 }
             }
 
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 9: Orta sur + kuleler
+            // ════════════════════════════════════════════════════════════════
+            if (ring == 9)
+            {
+                // Köşelerde mancınık kuleleri
+                if (absDx == 9 && absDy == 9)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_catapult_blue", 24);
+                }
+                // Kapı kuleleri
+                if ((absDx == 9 && dy == 0) || (dx == 0 && absDy == 9))
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, true, "tower_b_blue", 22);
+                }
+                // Sur boyunca gözetleme kuleleri (her 3 tile'da)
+                if ((absDx == 9 || absDy == 9) && (absDx + absDy) % 3 == 0)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 20);
+                }
+                // Sur duvarları - dikdörtgen şekli için rotasyon
+                if (absDx == 9 || absDy == 9)
+                {
+                    float wallRotation = (absDx == 9) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 18, wallRotation);
+                }
+                return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+            }
+
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 10-14: Dış şehir - çiftlik ve liman
+            // ════════════════════════════════════════════════════════════════
+            if (ring >= 10 && ring <= 14)
+            {
+                // Ana yollar - rotasyon ile
+                // Dikey yol (dx == 0): 90°, Yatay yol (dy == 0): 0°
+                if (dx == 0 || dy == 0)
+                {
+                    float roadRotation = (dx == 0) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRotation);
+                }
+
+                int buildingHash = hash % 25;
+                int level = 12 + (hash % 10); // 12-21
+
+                // ════════════════════════════════════════════════════════════
+                // LİMAN BÖLGESİ (sağ taraf dx > 8, ring 11-14)
+                // Tersane ve rıhtımlar kıyıda, etrafında su
+                // ════════════════════════════════════════════════════════════
+                if (dx > 8 && ring >= 11 && ring <= 14)
+                {
+                    // En dış halka (14) - Açık deniz
+                    if (ring == 14 && dx > 10)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+
+                    // Ring 13 - Kıyı suyu + gemiler
+                    if (ring == 13 && dx > 9)
+                    {
+                        // Su alanı
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+
+                    // Ring 12 - Rıhtım ve tersane
+                    if (ring == 12)
+                    {
+                        // Kıyı tile'ları (geçiş)
+                        if (dx >= 11)
+                        {
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
+                        }
+                        // Tersane
+                        if (buildingHash < 4)
+                        {
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
+                        }
+                        // Rıhtım
+                        if (buildingHash < 8)
+                        {
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
+                        }
+                    }
+
+                    // Ring 11 - Liman arkası binalar
+                    if (ring == 11)
+                    {
+                        if (buildingHash < 3)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "docks_blue", level);
+                        }
+                        if (buildingHash < 6)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "home_a_blue", level - 2);
+                        }
+                    }
+
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+
+                // Çiftlik bölgesi (azaltıldı)
+                if (buildingHash < 5)
+                {
+                    return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
+                }
+                // Ormanlık alan - AZALTILDI (sadece %12 -> %8)
+                if (buildingHash < 7)
+                {
+                    return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");
+                }
+                // Dağınık evler
+                if (buildingHash < 11)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", level - 5);
+                }
+
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+            }
+
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 15: DIŞ SUR - Ana savunma hattı
+            // ════════════════════════════════════════════════════════════════
+            if (ring == 15)
+            {
+                // Köşelerde büyük topçu kuleleri
+                if (absDx == 15 && absDy == 15)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 26);
+                }
+                // Ana kapı kuleleri (4 ana yön)
+                if ((absDx == 15 && dy == 0) || (dx == 0 && absDy == 15))
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, true, "tower_cannon_blue", 24);
+                }
+                // Sur boyunca kuleler (her 4 tile'da)
+                if ((absDx == 15 || absDy == 15) && (absDx + absDy) % 4 == 0)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_a_blue", 20);
+                }
+                // Sur duvarları - dikdörtgen şekli için rotasyon
+                if (absDx == 15 || absDy == 15)
+                {
+                    float wallRotation = (absDx == 15) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 15, wallRotation);
+                }
+                return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+            }
+
+            // ════════════════════════════════════════════════════════════════
+            // HALKA 16+: Sur dışı - Açık alan ve ileri karakollar
+            // ════════════════════════════════════════════════════════════════
+            if (ring > 15)
+            {
+                // Ana yollar
+                // Dikey yol (dx == 0): 90°, Yatay yol (dy == 0): 0°
+                if (dx == 0 || dy == 0)
+                {
+                    float roadRotation = (dx == 0) ? 90f : 0f;
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRotation);
+                }
+
+                int buildingHash = hash % 30;
+                float noise = Mathf.PerlinNoise(q * 0.1f + 100f, r * 0.1f + 100f);
+
+                // İleri gözetleme kuleleri (ring 18 ve 20'de)
+                if ((ring == 18 || ring == 20) && (absDx == ring && absDy == ring))
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 15);
+                }
+
+                // Ring 16-17: Sur çevresi - hendek ve savunma alanı
+                if (ring <= 17)
+                {
+                    // Hendek suyu (sur etrafı)
+                    if (ring == 16 && buildingHash < 8)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+                    // Kıyı
+                    if (ring == 16 && buildingHash < 12)
+                    {
+                        return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
+                    }
+                    // Boş alan (savunma görüş alanı)
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+
+                // Ring 18+: Doğal peyzaj - çeşitlilik artırıldı
+                // Küçük göller
+                if (noise > 0.85f && buildingHash < 5)
+                {
+                    return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                }
+                // Tepeler
+                if (noise > 0.75f && buildingHash < 8)
+                {
+                    return new TileData(q, r, TerrainType.Hill, 0, MineType.None, false, "");
+                }
+                // Ormanlar - dağınık
+                if (buildingHash < 4 && noise > 0.4f)
+                {
+                    return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");
+                }
+                // Çiftlikler
+                if (buildingHash >= 4 && buildingHash < 10 && noise < 0.5f)
+                {
+                    return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
+                }
+                // Köyler (dağınık evler)
+                if (buildingHash >= 10 && buildingHash < 13 && ring < 22)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 5 + (hash % 5));
+                }
+
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+            }
+
             return new TileData(q, r, TerrainType.Grass);
+        }
+
+        /// <summary>
+        /// Oyuncu şehri alanında mı? (0,0 etrafında)
+        /// </summary>
+        private static bool IsInPlayerCity(int q, int r)
+        {
+            int dx = Mathf.Abs(q - PLAYER_CITY_X);
+            int dy = Mathf.Abs(r - PLAYER_CITY_Y);
+            return dx <= PLAYER_CITY_RADIUS && dy <= PLAYER_CITY_RADIUS;
+        }
+
+        /// <summary>
+        /// Oyuncu şehri tile'ı oluştur - Gelişmiş şehir yapısı
+        /// Max seviye 30, tüm binalar dahil
+        /// </summary>
+        private static TileData GeneratePlayerCityTile(int q, int r, System.Random random)
+        {
+            int dx = q - PLAYER_CITY_X;
+            int dy = r - PLAYER_CITY_Y;
+            int ring = Mathf.Max(Mathf.Abs(dx), Mathf.Abs(dy));
+
+            // Merkez - Ana Kale (Level 30)
+            if (q == PLAYER_CITY_X && r == PLAYER_CITY_Y)
+            {
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "castle_green", MAX_BUILDING_LEVEL);
+            }
+
+            // Halka 1: Belediye binası, market, blacksmith, workshop (Level 28-30)
+            if (ring == 1)
+            {
+                string[] coreBuildings = { "townhall_green", "market_green", "blacksmith_green", "workshop_green" };
+                int buildingIndex = ((dx + 1) + (dy + 1) * 3) % coreBuildings.Length;
+                // Köşelerde çim bırak
+                if (Mathf.Abs(dx) == 1 && Mathf.Abs(dy) == 1)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+                int level = 28 + random.Next(3); // 28-30
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, coreBuildings[buildingIndex], level);
+            }
+
+            // Halka 2: Yol çevresi
+            if (ring == 2)
+            {
+                // Köşelerde savunma kuleleri (Level 25)
+                if (Mathf.Abs(dx) == 2 && Mathf.Abs(dy) == 2)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_green", 25);
+                }
+                return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+            }
+
+            // Halka 3: Askeri binalar (Level 22-26)
+            if (ring == 3)
+            {
+                string[] militaryBuildings = { "barracks_green", "archeryrange_green", "stables_green", "watchtower_green" };
+                int hash = GetTileHash(q, r);
+
+                // Yollar (merkeze giden)
+                if (dx == 0 || dy == 0)
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                }
+
+                int buildingIndex = (Mathf.Abs(hash)) % militaryBuildings.Length;
+                int level = 22 + random.Next(5); // 22-26
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, militaryBuildings[buildingIndex], level);
+            }
+
+            // Halka 4: Üretim binaları (Level 18-24)
+            if (ring == 4)
+            {
+                string[] productionBuildings = { "mine_green", "lumbermill_green", "windmill_green", "watermill_green" };
+                int hash = GetTileHash(q, r);
+
+                // Yollar
+                if (dx == 0 || dy == 0)
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                }
+
+                // Köşelerde gözetleme kuleleri
+                if (Mathf.Abs(dx) == 4 && Mathf.Abs(dy) == 4)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_a_green", 20);
+                }
+
+                int buildingIndex = (Mathf.Abs(hash)) % productionBuildings.Length;
+                int level = 18 + random.Next(7); // 18-24
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, productionBuildings[buildingIndex], level);
+            }
+
+            // Halka 5: Konut ve dini binalar (Level 15-20)
+            if (ring == 5)
+            {
+                string[] residentialBuildings = { "home_a_green", "home_b_green", "tavern_green", "church_green", "shrine_green" };
+                int hash = GetTileHash(q, r);
+
+                // Yollar
+                if (dx == 0 || dy == 0)
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                }
+
+                int buildingIndex = (Mathf.Abs(hash)) % residentialBuildings.Length;
+                int level = 15 + random.Next(6); // 15-20
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, residentialBuildings[buildingIndex], level);
+            }
+
+            // Halka 6: Denizcilik ve ek binalar (Level 12-18)
+            if (ring == 6)
+            {
+                string[] mixedBuildings = { "shipyard_green", "docks_green", "tent_green", "home_a_green", "home_b_green" };
+                int hash = GetTileHash(q, r);
+
+                // Dış yol halkası
+                if (dx == 0 || dy == 0)
+                {
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                }
+
+                // Su alanları (liman için)
+                if ((dx > 0 && Mathf.Abs(dy) <= 1) || (dx < 0 && Mathf.Abs(dy) <= 1))
+                {
+                    // Rıhtım veya tersane
+                    if (hash % 3 == 0)
+                    {
+                        return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, dx > 0 ? "shipyard_green" : "docks_green", 15);
+                    }
+                    return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
+                }
+
+                int buildingIndex = (Mathf.Abs(hash)) % mixedBuildings.Length;
+                int level = 12 + random.Next(7); // 12-18
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, mixedBuildings[buildingIndex], level);
+            }
+
+            // Halka 7: Sur ve savunma hattı (Level 20-25)
+            if (ring == 7)
+            {
+                // Köşelerde mancınık kuleleri
+                if (Mathf.Abs(dx) == 7 && Mathf.Abs(dy) == 7)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_catapult_green", 22);
+                }
+
+                // Kenarlar boyunca duvar/yol
+                if (Mathf.Abs(dx) == 7 || Mathf.Abs(dy) == 7)
+                {
+                    // Her 3 tile'da bir gözetleme kulesi
+                    if ((dx + dy) % 3 == 0)
+                    {
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_green", 18);
+                    }
+                    return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                }
+
+                // İç kısım - çiftlik ve bahçe
+                int hash = GetTileHash(q, r);
+                if (hash % 4 == 0)
+                {
+                    return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
+                }
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+            }
+
+            // Halka 8: Dış çiftlik ve kaynak alanı
+            if (ring == 8)
+            {
+                int hash = GetTileHash(q, r);
+                float normalized = (hash % 100) / 100f;
+
+                // Dış köşelerde son savunma kuleleri
+                if (Mathf.Abs(dx) == 8 && Mathf.Abs(dy) == 8)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_b_green", 15);
+                }
+
+                // %40 çiftlik
+                if (normalized < 0.4f)
+                {
+                    return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
+                }
+                // %20 orman
+                else if (normalized < 0.6f)
+                {
+                    return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");
+                }
+                // %10 tent (geçici yapı)
+                else if (normalized < 0.7f)
+                {
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_green", 5);
+                }
+
+                return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+            }
+
+            // Varsayılan - çim
+            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
         }
 
         /// <summary>

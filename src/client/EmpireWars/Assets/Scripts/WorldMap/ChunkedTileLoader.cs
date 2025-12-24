@@ -160,6 +160,8 @@ namespace EmpireWars.WorldMap
             UpdateVisibleChunks();
 
             Debug.Log($"ChunkedTileLoader: {mapWidth}x{mapHeight} harita, chunk:{chunkSize}, radius:{loadRadius}");
+            Debug.Log($"ChunkedTileLoader: BuildingDatabase = {(buildingDatabase != null ? "ATANDI" : "NULL!")}");
+            Debug.Log($"ChunkedTileLoader: PrefabDatabase = {(prefabDatabase != null ? "ATANDI" : "NULL!")}");
         }
 
         /// <summary>
@@ -450,17 +452,32 @@ namespace EmpireWars.WorldMap
 
         private GameObject CreateTileFromData(KingdomMapGenerator.TileData tileData)
         {
-            if (prefabDatabase == null) return null;
+            if (prefabDatabase == null)
+            {
+                Debug.LogError($"ChunkedTileLoader: PrefabDatabase NULL! Tile olusturulamiyor: ({tileData.Q}, {tileData.R})");
+                return null;
+            }
 
             HexCoordinates coords = new HexCoordinates(tileData.Q, tileData.R);
             Vector3 worldPos = coords.ToWorldPosition();
 
             GameObject prefab = prefabDatabase.GetTilePrefab(tileData.Terrain);
-            if (prefab == null) return null;
+            if (prefab == null)
+            {
+                Debug.LogWarning($"ChunkedTileLoader: Terrain prefab bulunamadi: {tileData.Terrain} at ({tileData.Q}, {tileData.R})");
+                return null;
+            }
 
             GameObject tile = Instantiate(prefab, worldPos, Quaternion.identity);
             tile.name = $"Hex_{tileData.Q}_{tileData.R}";
             tile.transform.SetParent(tilesParent);
+
+            // Yol ve köprü tile'ları için rotasyon uygula
+            if ((tileData.Terrain == TerrainType.Road || tileData.Terrain == TerrainType.Bridge) &&
+                tileData.BuildingRotation != 0)
+            {
+                tile.transform.rotation = Quaternion.Euler(0, tileData.BuildingRotation, 0);
+            }
 
             // HexTile component
             HexTile hexTile = tile.GetComponent<HexTile>();
@@ -477,9 +494,22 @@ namespace EmpireWars.WorldMap
             }
 
             // Bina
-            if (tileData.HasBuilding && buildingDatabase != null)
+            if (tileData.HasBuilding)
             {
-                PlaceBuilding(tile, tileData.BuildingType);
+                if (buildingDatabase == null)
+                {
+                    Debug.LogError($"ChunkedTileLoader: BuildingDatabase NULL! Bina: {tileData.BuildingType} at ({tileData.Q}, {tileData.R})");
+                }
+                else
+                {
+                    PlaceBuilding(tile, tileData.BuildingType, tileData.BuildingRotation);
+                    // Bina seviyesi göstergesi ekle
+                    if (tileData.BuildingLevel > 0)
+                    {
+                        hexTile.SetBuildingInfo(tileData.BuildingType, tileData.BuildingLevel);
+                        tile.name = $"Hex_{tileData.Q}_{tileData.R}_{tileData.BuildingType}_Lv{tileData.BuildingLevel}";
+                    }
+                }
             }
 
             // Maden bilgisi
@@ -529,15 +559,57 @@ namespace EmpireWars.WorldMap
             };
         }
 
-        private void PlaceBuilding(GameObject tile, string buildingType)
+        private void PlaceBuilding(GameObject tile, string buildingType, float customRotation = 0f)
         {
+            if (buildingDatabase == null)
+            {
+                Debug.LogError($"ChunkedTileLoader: BuildingDatabase NULL! Bina yerlestirilemiyor: {buildingType}");
+                return;
+            }
+
             GameObject buildingPrefab = buildingDatabase.GetBuildingPrefab(buildingType);
-            if (buildingPrefab == null) return;
+            if (buildingPrefab == null)
+            {
+                Debug.LogWarning($"ChunkedTileLoader: Bina prefab bulunamadi: {buildingType}");
+                return;
+            }
 
             GameObject building = Instantiate(buildingPrefab, tile.transform);
             building.name = $"Building_{buildingType}";
             building.transform.localPosition = new Vector3(0, 0.1f, 0);
             building.transform.localScale = Vector3.one * 0.8f;
+
+            // Rotasyon ayarla - TileData'dan gelen değer varsa onu kullan
+            // Yoksa varsayılan rotasyon mantığını uygula
+            float rotation = customRotation != 0f ? customRotation : GetDefaultBuildingRotation(buildingType);
+            if (rotation != 0)
+            {
+                building.transform.localRotation = Quaternion.Euler(0, rotation, 0);
+            }
+        }
+
+        /// <summary>
+        /// TileData'da rotasyon belirtilmemişse varsayılan rotasyon
+        /// </summary>
+        private float GetDefaultBuildingRotation(string buildingType)
+        {
+            if (string.IsNullOrEmpty(buildingType)) return 0;
+
+            string lowerType = buildingType.ToLower();
+
+            // Köşe duvarları - pozisyona göre farklı açılar
+            if (lowerType.Contains("wall_corner"))
+            {
+                return 0f;
+            }
+
+            // Çitler varsayılan 90°
+            if (lowerType.Contains("fence"))
+            {
+                return 90f;
+            }
+
+            return 0f;
         }
 
         #endregion

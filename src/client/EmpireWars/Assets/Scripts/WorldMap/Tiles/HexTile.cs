@@ -40,6 +40,9 @@ namespace EmpireWars.WorldMap.Tiles
         [Header("Building")]
         [SerializeField] private bool hasBuilding;
         [SerializeField] private GameObject buildingObject;
+        [SerializeField] private int buildingLevel;
+        [SerializeField] private string buildingType;
+        [SerializeField] private GameObject buildingLevelIndicator;
 
         [Header("Highlight Overlay")]
         [SerializeField] private GameObject highlightOverlay;
@@ -59,6 +62,8 @@ namespace EmpireWars.WorldMap.Tiles
         public int MineLevel => mineLevel;
         public KingdomMapGenerator.MineType MineType => mineType;
         public bool IsMine => mineLevel > 0;
+        public int BuildingLevel => buildingLevel;
+        public string BuildingType => buildingType;
 
         // Fog of War icin renderer cache
         private Renderer[] renderers;
@@ -370,6 +375,114 @@ namespace EmpireWars.WorldMap.Tiles
             {
                 rect.sizeDelta = new Vector2(2.5f, 2f);
             }
+        }
+
+        /// <summary>
+        /// Bina bilgisini ayarla ve seviye göstergesi oluştur
+        /// </summary>
+        public void SetBuildingInfo(string type, int level)
+        {
+            buildingType = type;
+            buildingLevel = level;
+            hasBuilding = !string.IsNullOrEmpty(type);
+
+            if (level > 0 && hasBuilding)
+            {
+                CreateBuildingLevelIndicator();
+            }
+        }
+
+        /// <summary>
+        /// Bina seviyesini gösteren 3D text oluştur
+        /// </summary>
+        private void CreateBuildingLevelIndicator()
+        {
+            if (buildingLevelIndicator != null)
+            {
+                DestroyImmediate(buildingLevelIndicator);
+            }
+
+            // 3D Text GameObject oluştur
+            buildingLevelIndicator = new GameObject("BuildingLevelIndicator");
+            buildingLevelIndicator.transform.SetParent(transform);
+            buildingLevelIndicator.transform.localPosition = new Vector3(0, 2.0f, 0); // Binanın üstünde
+            buildingLevelIndicator.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+
+            // TextMeshPro component ekle
+            TextMeshPro tmp = buildingLevelIndicator.AddComponent<TextMeshPro>();
+
+            // Bina adı + seviye
+            string displayName = GetBuildingDisplayName(buildingType);
+            tmp.text = $"<size=70%>{displayName}</size>\n<b>Lv.{buildingLevel}</b>";
+
+            // Seviyeye göre renk (düşük=gri, yüksek=altın)
+            tmp.color = GetBuildingLevelColor(buildingLevel);
+            tmp.fontSize = 2.2f;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.sortingOrder = 100;
+
+            // Outline
+            tmp.outlineWidth = 0.2f;
+            tmp.outlineColor = new Color32(0, 0, 0, 200);
+
+            // RectTransform
+            RectTransform rect = buildingLevelIndicator.GetComponent<RectTransform>();
+            if (rect != null)
+            {
+                rect.sizeDelta = new Vector2(3f, 2f);
+            }
+        }
+
+        /// <summary>
+        /// Bina türüne göre Türkçe ad döndür
+        /// </summary>
+        private static string GetBuildingDisplayName(string buildingType)
+        {
+            if (string.IsNullOrEmpty(buildingType)) return "";
+
+            string baseName = buildingType.Replace("_green", "").Replace("_blue", "").Replace("_red", "").Replace("_yellow", "");
+
+            return baseName switch
+            {
+                "castle" => "Kale",
+                "townhall" => "Belediye",
+                "market" => "Pazar",
+                "blacksmith" => "Demirci",
+                "workshop" => "Atölye",
+                "barracks" => "Kışla",
+                "archeryrange" => "Okçu",
+                "stables" => "Ahır",
+                "mine" => "Maden",
+                "lumbermill" => "Kereste",
+                "windmill" => "Değirmen",
+                "watermill" => "Su Değ.",
+                "home_a" or "home_b" => "Ev",
+                "tavern" => "Taverna",
+                "tent" => "Çadır",
+                "church" => "Kilise",
+                "shrine" => "Tapınak",
+                "shipyard" => "Tersane",
+                "docks" => "Rıhtım",
+                "tower_cannon" => "Top Kulesi",
+                "tower_catapult" => "Mancınık",
+                "watchtower" => "Gözcü",
+                "tower_a" or "tower_b" => "Kule",
+                _ => baseName
+            };
+        }
+
+        /// <summary>
+        /// Seviyeye göre renk döndür (1-30)
+        /// </summary>
+        private static Color GetBuildingLevelColor(int level)
+        {
+            if (level >= 25) return new Color(1f, 0.84f, 0f);      // Altın (25-30)
+            if (level >= 20) return new Color(0.8f, 0.5f, 1f);     // Mor (20-24)
+            if (level >= 15) return new Color(0.2f, 0.6f, 1f);     // Mavi (15-19)
+            if (level >= 10) return new Color(0.3f, 0.9f, 0.3f);   // Yeşil (10-14)
+            if (level >= 5) return new Color(1f, 1f, 1f);          // Beyaz (5-9)
+            return new Color(0.7f, 0.7f, 0.7f);                     // Gri (1-4)
         }
 
         #endregion

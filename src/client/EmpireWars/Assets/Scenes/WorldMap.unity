@@ -1688,8 +1688,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1960449948}
   selectionOverlay: {fileID: 1077272639}
 --- !u!64 &45859179
@@ -2675,8 +2681,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1863875973}
   selectionOverlay: {fileID: 94127735}
 --- !u!64 &60832167
@@ -3287,8 +3299,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 352950759}
   selectionOverlay: {fileID: 442601198}
 --- !u!64 &67561320
@@ -3665,8 +3683,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1648783566}
   selectionOverlay: {fileID: 1748510828}
 --- !u!64 &77404925
@@ -4188,8 +4212,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1168238788}
   selectionOverlay: {fileID: 311313161}
 --- !u!64 &102885164
@@ -5390,8 +5420,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 150447218}
   selectionOverlay: {fileID: 485727802}
 --- !u!64 &127752186
@@ -6089,8 +6125,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 40845003}
   selectionOverlay: {fileID: 1489468895}
 --- !u!64 &142721799
@@ -6282,12 +6324,10 @@ MonoBehaviour:
   panSmoothing: 10
   keyboardPanSpeed: 30
   zoomSpeed: 20
-  minZoom: 10
-  maxZoom: 200
   zoomSmoothing: 10
   pinchZoomSpeed: 0.5
   useBounds: 1
-  mapSize: {x: 100, y: 100}
+  useGameConfig: 1
   dragThreshold: 5
 --- !u!114 &142820934
 MonoBehaviour:
@@ -8254,8 +8294,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1391908310}
   selectionOverlay: {fileID: 64704881}
 --- !u!64 &196509728
@@ -8397,8 +8443,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 307827016}
   selectionOverlay: {fileID: 804816896}
 --- !u!64 &201484508
@@ -8595,8 +8647,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 541642449}
   selectionOverlay: {fileID: 239986687}
 --- !u!64 &207718444
@@ -8971,8 +9029,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1678453769}
   selectionOverlay: {fileID: 723364254}
 --- !u!64 &214913291
@@ -10103,8 +10167,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1834052715}
   selectionOverlay: {fileID: 1418794127}
 --- !u!64 &250363889
@@ -10628,8 +10698,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1557728057}
   selectionOverlay: {fileID: 1881924119}
 --- !u!64 &255183668
@@ -11327,8 +11403,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1670963824}
   selectionOverlay: {fileID: 1514672798}
 --- !u!64 &269985003
@@ -11704,8 +11786,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1365960128}
   selectionOverlay: {fileID: 1909982631}
 --- !u!64 &276103034
@@ -11848,8 +11936,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1015620994}
   selectionOverlay: {fileID: 1050538619}
 --- !u!64 &280178212
@@ -12493,8 +12587,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 375800982}
   selectionOverlay: {fileID: 1015834363}
 --- !u!64 &288624626
@@ -13576,8 +13676,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 22352803}
   selectionOverlay: {fileID: 1855167653}
 --- !u!64 &322937644
@@ -14010,8 +14116,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1865864363}
   selectionOverlay: {fileID: 1431424688}
 --- !u!64 &343921751
@@ -15819,8 +15931,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1155291989}
   selectionOverlay: {fileID: 1405512798}
 --- !u!64 &380649884
@@ -16140,8 +16258,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 155220609}
   selectionOverlay: {fileID: 286299289}
 --- !u!64 &384657943
@@ -17072,8 +17196,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1425826902}
   selectionOverlay: {fileID: 1025105968}
 --- !u!64 &409187645
@@ -18746,8 +18876,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 164727891}
   selectionOverlay: {fileID: 482586925}
 --- !u!64 &452391691
@@ -18889,8 +19025,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1840951829}
   selectionOverlay: {fileID: 1698709044}
 --- !u!64 &454441998
@@ -19613,8 +19755,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1514072312}
   selectionOverlay: {fileID: 1782182194}
 --- !u!64 &474127241
@@ -20616,8 +20764,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1225483700}
   selectionOverlay: {fileID: 458209512}
 --- !u!64 &485779375
@@ -20851,8 +21005,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2112099439}
   selectionOverlay: {fileID: 8121341}
 --- !u!64 &498059404
@@ -20994,8 +21154,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1600329199}
   selectionOverlay: {fileID: 1626749013}
 --- !u!64 &499364007
@@ -21137,8 +21303,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 437066134}
   selectionOverlay: {fileID: 1717523818}
 --- !u!64 &503504487
@@ -21390,8 +21562,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 169036331}
   selectionOverlay: {fileID: 1921585601}
 --- !u!64 &513778712
@@ -21944,8 +22122,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 183507792}
   selectionOverlay: {fileID: 1452010304}
 --- !u!64 &522560020
@@ -22735,8 +22919,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2120550164}
   selectionOverlay: {fileID: 1275906273}
 --- !u!64 &543072032
@@ -23079,8 +23269,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 31027541}
   selectionOverlay: {fileID: 1522906213}
 --- !u!64 &558238037
@@ -24767,8 +24963,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1702127419}
   selectionOverlay: {fileID: 735742364}
 --- !u!64 &600561868
@@ -24965,8 +25167,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1942145458}
   selectionOverlay: {fileID: 352649278}
 --- !u!64 &603302312
@@ -26345,8 +26553,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1389099285}
   selectionOverlay: {fileID: 180321946}
 --- !u!64 &643092245
@@ -27422,8 +27636,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1158040513}
   selectionOverlay: {fileID: 1842613447}
 --- !u!64 &683252214
@@ -28157,8 +28377,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 103841064}
   selectionOverlay: {fileID: 1754838705}
 --- !u!64 &701014667
@@ -28300,8 +28526,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 428639811}
   selectionOverlay: {fileID: 797621428}
 --- !u!64 &701636971
@@ -29021,8 +29253,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 757227658}
   selectionOverlay: {fileID: 545330153}
 --- !u!64 &727380542
@@ -29833,8 +30071,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 365370722}
   selectionOverlay: {fileID: 1905724283}
 --- !u!64 &749482463
@@ -30332,8 +30576,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2116586477}
   selectionOverlay: {fileID: 1993695653}
 --- !u!64 &751208398
@@ -30530,8 +30780,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 150777040}
   selectionOverlay: {fileID: 1458788092}
 --- !u!64 &753673456
@@ -31174,8 +31430,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 634266298}
   selectionOverlay: {fileID: 1400562357}
 --- !u!64 &758472202
@@ -36089,8 +36351,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 175592217}
   selectionOverlay: {fileID: 525517353}
 --- !u!64 &901985360
@@ -37867,8 +38135,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1960374200}
   selectionOverlay: {fileID: 1801422838}
 --- !u!64 &957779022
@@ -38566,8 +38840,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 124828361}
   selectionOverlay: {fileID: 247502659}
 --- !u!64 &980785730
@@ -39032,8 +39312,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 840925875}
   selectionOverlay: {fileID: 685744710}
 --- !u!64 &1000184434
@@ -40292,8 +40578,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 94859248}
   selectionOverlay: {fileID: 2033873641}
 --- !u!64 &1042139940
@@ -41046,8 +41338,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 630112268}
   selectionOverlay: {fileID: 1732640335}
 --- !u!64 &1054349561
@@ -44584,8 +44882,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 362916141}
   selectionOverlay: {fileID: 18377674}
 --- !u!64 &1143067662
@@ -46177,8 +46481,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1354927155}
   selectionOverlay: {fileID: 1837445505}
 --- !u!64 &1168972986
@@ -46376,8 +46686,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 116902154}
   selectionOverlay: {fileID: 633273863}
 --- !u!64 &1178687867
@@ -46788,8 +47104,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 596494806}
   selectionOverlay: {fileID: 129127538}
 --- !u!64 &1194450134
@@ -47364,8 +47686,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1138944393}
   selectionOverlay: {fileID: 884498424}
 --- !u!64 &1213783603
@@ -47708,8 +48036,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 251531309}
   selectionOverlay: {fileID: 838251294}
 --- !u!64 &1234705478
@@ -48197,8 +48531,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 982648174}
   selectionOverlay: {fileID: 1261407335}
 --- !u!64 &1256586517
@@ -48931,8 +49271,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1299250274}
   selectionOverlay: {fileID: 823581150}
 --- !u!64 &1270947135
@@ -50109,8 +50455,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1625342290}
   selectionOverlay: {fileID: 1322881305}
 --- !u!64 &1291370011
@@ -50252,8 +50604,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 339176347}
   selectionOverlay: {fileID: 64020864}
 --- !u!64 &1299204717
@@ -51324,8 +51682,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 882185941}
   selectionOverlay: {fileID: 1888569747}
 --- !u!64 &1329948217
@@ -51646,8 +52010,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1310462648}
   selectionOverlay: {fileID: 1568598793}
 --- !u!64 &1346145668
@@ -51845,8 +52215,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 635945303}
   selectionOverlay: {fileID: 670396493}
 --- !u!64 &1353394383
@@ -53785,8 +54161,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 584056841}
   selectionOverlay: {fileID: 979268326}
 --- !u!64 &1399167321
@@ -54631,8 +55013,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 87560353}
   selectionOverlay: {fileID: 28120358}
 --- !u!64 &1424505792
@@ -55657,8 +56045,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 326455513}
   selectionOverlay: {fileID: 1207327874}
 --- !u!64 &1437386558
@@ -55978,8 +56372,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1889329268}
   selectionOverlay: {fileID: 1756949392}
 --- !u!64 &1440074937
@@ -57646,8 +58046,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2093422284}
   selectionOverlay: {fileID: 847034178}
 --- !u!64 &1479364804
@@ -58469,8 +58875,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1687546534}
   selectionOverlay: {fileID: 1471671276}
 --- !u!64 &1501909576
@@ -59526,8 +59938,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1582953177}
   selectionOverlay: {fileID: 538311338}
 --- !u!64 &1525768925
@@ -61589,8 +62007,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 911141377}
   selectionOverlay: {fileID: 1603704678}
 --- !u!64 &1577923854
@@ -62415,8 +62839,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 827177580}
   selectionOverlay: {fileID: 1541511872}
 --- !u!64 &1603866167
@@ -62736,8 +63166,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 256532698}
   selectionOverlay: {fileID: 953272650}
 --- !u!64 &1606419989
@@ -63670,8 +64106,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 289647006}
   selectionOverlay: {fileID: 1599259538}
 --- !u!64 &1641502269
@@ -64226,8 +64668,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 24316986}
   selectionOverlay: {fileID: 1977191861}
 --- !u!64 &1660228432
@@ -65304,8 +65752,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1993583923}
   selectionOverlay: {fileID: 75461425}
 --- !u!64 &1685087162
@@ -67927,8 +68381,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1356989597}
   selectionOverlay: {fileID: 953860728}
 --- !u!64 &1759085871
@@ -68749,8 +69209,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 426945768}
   selectionOverlay: {fileID: 645484628}
 --- !u!64 &1791406393
@@ -68892,8 +69358,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1714823915}
   selectionOverlay: {fileID: 2080297461}
 --- !u!64 &1794094847
@@ -69303,8 +69775,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1458218236}
   selectionOverlay: {fileID: 479743102}
 --- !u!64 &1802927945
@@ -69790,8 +70268,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1323106907}
   selectionOverlay: {fileID: 874000322}
 --- !u!64 &1822470517
@@ -71678,8 +72162,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2132844466}
   selectionOverlay: {fileID: 56449017}
 --- !u!64 &1867717024
@@ -71821,8 +72311,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1731653022}
   selectionOverlay: {fileID: 712248452}
 --- !u!64 &1881121581
@@ -72608,8 +73104,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1163878313}
   selectionOverlay: {fileID: 1184856880}
 --- !u!64 &1901057457
@@ -73788,8 +74290,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1549344912}
   selectionOverlay: {fileID: 1113397560}
 --- !u!64 &1921850673
@@ -73932,8 +74440,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2132397350}
   selectionOverlay: {fileID: 301934488}
 --- !u!64 &1924109221
@@ -74389,8 +74903,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 2103867011}
   selectionOverlay: {fileID: 814869948}
 --- !u!64 &1945226087
@@ -74532,8 +75052,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1958730146}
   selectionOverlay: {fileID: 75866240}
 --- !u!64 &1945299866
@@ -75430,8 +75956,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1158472841}
   selectionOverlay: {fileID: 378213981}
 --- !u!64 &1954143321
@@ -75898,8 +76430,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 881052934}
   selectionOverlay: {fileID: 176165374}
 --- !u!64 &1964231630
@@ -76219,8 +76757,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 440657742}
   selectionOverlay: {fileID: 595861350}
 --- !u!64 &1970121194
@@ -76918,8 +77462,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 196391298}
   selectionOverlay: {fileID: 832135164}
 --- !u!64 &1985083961
@@ -78118,8 +78668,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 409216253}
   selectionOverlay: {fileID: 1139671084}
 --- !u!64 &2007171295
@@ -78262,8 +78818,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1948313033}
   selectionOverlay: {fileID: 1407379388}
 --- !u!64 &2012744990
@@ -79102,8 +79664,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1629948381}
   selectionOverlay: {fileID: 2115751148}
 --- !u!64 &2033292534
@@ -79390,8 +79958,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 26294840}
   selectionOverlay: {fileID: 1656003564}
 --- !u!64 &2051122254
@@ -80300,8 +80874,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1848703056}
   selectionOverlay: {fileID: 1862970584}
 --- !u!64 &2079275118
@@ -81158,8 +81738,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 395210711}
   selectionOverlay: {fileID: 123219064}
 --- !u!64 &2100259261
@@ -81301,8 +81887,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 1005818931}
   selectionOverlay: {fileID: 1823581595}
 --- !u!64 &2100360703
@@ -82010,12 +82602,10 @@ MonoBehaviour:
   panSmoothing: 10
   keyboardPanSpeed: 20
   zoomSpeed: 5
-  minZoom: 3
-  maxZoom: 60
   zoomSmoothing: 20
   pinchZoomSpeed: 0.15
   useBounds: 1
-  mapSize: {x: 40, y: 40}
+  useGameConfig: 1
   dragThreshold: 5
 --- !u!4 &2118017430
 Transform:
@@ -82183,8 +82773,14 @@ MonoBehaviour:
   ownerNationId: -1
   hasResource: 0
   resourceType: 0
+  mineLevel: 0
+  mineType: 0
+  mineLevelIndicator: {fileID: 0}
   hasBuilding: 0
   buildingObject: {fileID: 0}
+  buildingLevel: 0
+  buildingType: 
+  buildingLevelIndicator: {fileID: 0}
   highlightOverlay: {fileID: 700419620}
   selectionOverlay: {fileID: 463571245}
 --- !u!64 &2122761927
@@ -82385,13 +82981,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746e347b8214e5443a452afce3bff976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.Core.WorldMapBootstrap
-  mapWidth: 20
-  mapHeight: 20
   tilePrefabDatabase: {fileID: 11400000, guid: 02c6fdbccbe839f4d87490959856743e, type: 2}
   decorationDatabase: {fileID: 11400000, guid: 6317c7ea82ef02b43bdaffce2346e882, type: 2}
+  buildingDatabase: {fileID: 11400000, guid: 175bc79cfa6fc9d4983a5d9b17fe821a, type: 2}
+  cloudBigPrefab: {fileID: 0}
+  cloudSmallPrefab: {fileID: 0}
   createMap: 1
   createMinimap: 1
   createBottomNav: 1
+  createClouds: 1
   setupHDGraphics: 1
 --- !u!4 &2127141565
 Transform:

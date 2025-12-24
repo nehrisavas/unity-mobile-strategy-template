@@ -15,39 +15,129 @@ MonoBehaviour:
   castleGreen: {fileID: 919132149155446097, guid: 7d3c0355f098f4a45ae0e74eabc56c34, type: 3}
   castleBlue: {fileID: 919132149155446097, guid: 15e9ab6f8a6734d4c9cd951456073bf5, type: 3}
   castleRed: {fileID: 919132149155446097, guid: bf83e017a05b11f449376836812578ad, type: 3}
+  castleYellow: {fileID: 919132149155446097, guid: 0ad380c81903c7a4a8cb276fb936227e, type: 3}
   towerCannonGreen: {fileID: 919132149155446097, guid: c59bf7eac2fb9744b889e7a819045864, type: 3}
   towerCannonBlue: {fileID: 919132149155446097, guid: 6a35a7c6797f1b0409156e193c2f0d09, type: 3}
   towerCannonRed: {fileID: 919132149155446097, guid: 51a39970625bf5040b48ffa861a958b2, type: 3}
+  towerCannonYellow: {fileID: 919132149155446097, guid: 98c8163f25223b54ea62235f45a3b87a, type: 3}
   towerCatapultGreen: {fileID: 919132149155446097, guid: 0b93b1f28714e8a48a6cb77f4ad7e660, type: 3}
   towerCatapultBlue: {fileID: 919132149155446097, guid: 8b30fd4c8094caa4caa0d11ce4a36ad9, type: 3}
   towerCatapultRed: {fileID: 919132149155446097, guid: 26dd536d5d68b5847892510e902cdb82, type: 3}
+  towerCatapultYellow: {fileID: 919132149155446097, guid: 1d74154a10cb84740b0bd542b156ca45, type: 3}
   watchtowerGreen: {fileID: 919132149155446097, guid: 41db728f65e676d4789f1844d203ab39, type: 3}
   watchtowerBlue: {fileID: 919132149155446097, guid: 7c0e5e1063f13b949968a6ecafbdbdce, type: 3}
   watchtowerRed: {fileID: 919132149155446097, guid: 16ec7a8a00b392a4a9776f141428cb6c, type: 3}
+  watchtowerYellow: {fileID: 919132149155446097, guid: 70312266f8831424793538384c23c6e8, type: 3}
   towerAGreen: {fileID: 919132149155446097, guid: d1fc7be228df0f34796ec649e0d0ff8a, type: 3}
+  towerABlue: {fileID: 919132149155446097, guid: 55ef547357cba354d9e60a1315d65cf1, type: 3}
+  towerARed: {fileID: 919132149155446097, guid: 6a8a3c58229ee6a419117f50f2c7a8f6, type: 3}
+  towerAYellow: {fileID: 919132149155446097, guid: c2ea78560c9ec174f82e667c7e7d4c52, type: 3}
   towerBGreen: {fileID: 919132149155446097, guid: fcaa81bca8a8e06439713f25f03998ce, type: 3}
+  towerBBlue: {fileID: 919132149155446097, guid: 2770780479130774fa7d0b8d69094874, type: 3}
+  towerBRed: {fileID: 919132149155446097, guid: 007b1aa1cf56f894cb2ac94b8c4227ab, type: 3}
+  towerBYellow: {fileID: 919132149155446097, guid: 051513c2e919a86478144e84240ed698, type: 3}
+  towerBaseGreen: {fileID: 919132149155446097, guid: 1205e81ff13bf3c428adeaca587e39cb, type: 3}
+  towerBaseBlue: {fileID: 919132149155446097, guid: c6c3f34cddafe6d43b320c96c26f0e7d, type: 3}
+  towerBaseRed: {fileID: 919132149155446097, guid: 1e8ddb6800083944d83c6f97398cca1d, type: 3}
+  towerBaseYellow: {fileID: 919132149155446097, guid: 36511b2d7deb62a49900be44f9390d6d, type: 3}
   barracksGreen: {fileID: 919132149155446097, guid: 1d2dbb7f5e4552348acd3a86967d7225, type: 3}
   barracksBlue: {fileID: 919132149155446097, guid: ab69081e2b22dec4da9c5370e0d36067, type: 3}
   barracksRed: {fileID: 919132149155446097, guid: b720ef13a5443ae46b538378ba133f2c, type: 3}
+  barracksYellow: {fileID: 919132149155446097, guid: d9f4524a234f11348af3f14b7160a0c8, type: 3}
   archeryRangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
+  archeryRangeBlue: {fileID: 0}
+  archeryRangeRed: {fileID: 0}
+  archeryRangeYellow: {fileID: 0}
   stablesGreen: {fileID: 919132149155446097, guid: b23f374b5e77ed04b9dbc9fa88c09b3f, type: 3}
+  stablesBlue: {fileID: 919132149155446097, guid: c42cc74b2b25bc34194c0279be8e0d41, type: 3}
+  stablesRed: {fileID: 919132149155446097, guid: 4d654f32c95d1344caef642e9fbef4bd, type: 3}
+  stablesYellow: {fileID: 919132149155446097, guid: a3c04dda9766118449c08ec37d54f51e, type: 3}
   townhallGreen: {fileID: 919132149155446097, guid: e451bf3da931f464f819a38d75b2c366, type: 3}
+  townhallBlue: {fileID: 919132149155446097, guid: a79d81e783ad18341b7d7f6b13ff7092, type: 3}
+  townhallRed: {fileID: 919132149155446097, guid: 926fe4ec033cc6c4182fa9a707004295, type: 3}
+  townhallYellow: {fileID: 919132149155446097, guid: a825090cd3a789f4eba1056641fef7fc, type: 3}
   marketGreen: {fileID: 919132149155446097, guid: f9068a06b8f8c6b449bcc1f2b277ab2a, type: 3}
+  marketBlue: {fileID: 919132149155446097, guid: 4112b49f228393040ba5c7d5130b9bae, type: 3}
+  marketRed: {fileID: 919132149155446097, guid: 0ce29c7817a702d4ba67816d03d308f0, type: 3}
+  marketYellow: {fileID: 919132149155446097, guid: 1366fd2f9f53d60428dbd5d31f883169, type: 3}
   blacksmithGreen: {fileID: 919132149155446097, guid: 85a3772fcbccbc2419de1113c83e58fe, type: 3}
+  blacksmithBlue: {fileID: 919132149155446097, guid: d7e0a3224483c7d4ea8ecb8ef9e05d44, type: 3}
+  blacksmithRed: {fileID: 919132149155446097, guid: 07675c7811be16a429df8993d8566a32, type: 3}
+  blacksmithYellow: {fileID: 919132149155446097, guid: 527b080ffc8e696449648f473d46a8ca, type: 3}
   workshopGreen: {fileID: 919132149155446097, guid: 4e389b504e1f2c1448af5452321450e0, type: 3}
+  workshopBlue: {fileID: 919132149155446097, guid: d5b89a3df6e281c4790839e186e8a763, type: 3}
+  workshopRed: {fileID: 919132149155446097, guid: 59aac4226455a374c8a47d5c546ff7b6, type: 3}
+  workshopYellow: {fileID: 919132149155446097, guid: 6f4f050d014b6d140a72928944fa38be, type: 3}
   mineGreen: {fileID: 919132149155446097, guid: e04b564ee25390347bd8752b38e106d7, type: 3}
+  mineBlue: {fileID: 919132149155446097, guid: 0a32d8e360b262142b6a771208eb0d90, type: 3}
+  mineRed: {fileID: 919132149155446097, guid: 91644b637a5fc35418698fbee64d2dbc, type: 3}
+  mineYellow: {fileID: 919132149155446097, guid: 9255ca6de7f8c644d82bb9710618f47b, type: 3}
   lumbermillGreen: {fileID: 919132149155446097, guid: ba59b48317ea3904ba5338767c27f520, type: 3}
+  lumbermillBlue: {fileID: 919132149155446097, guid: 599922879d166d94688759cbe5290b7e, type: 3}
+  lumbermillRed: {fileID: 919132149155446097, guid: fabfe982f252c694db228e5429740043, type: 3}
+  lumbermillYellow: {fileID: 919132149155446097, guid: ebdd8cc589c50a944880653393f5ddf0, type: 3}
   windmillGreen: {fileID: 919132149155446097, guid: 1a9ed5e032df555429d9167b2d14e5ac, type: 3}
+  windmillBlue: {fileID: 919132149155446097, guid: 651e56da52d21234494839ff4385f169, type: 3}
+  windmillRed: {fileID: 919132149155446097, guid: fdeaa3fa1abd3ad4d909457a1a096535, type: 3}
+  windmillYellow: {fileID: 919132149155446097, guid: 38991638453b4004998f887d72b7aad4, type: 3}
   watermillGreen: {fileID: 919132149155446097, guid: 6c7548fd752779f47b85d50372a6f662, type: 3}
+  watermillBlue: {fileID: 919132149155446097, guid: 4f2c28b44a65fc94387cb0e00159681b, type: 3}
+  watermillRed: {fileID: 919132149155446097, guid: dc80f131885e03b4c94a8aa30115f41a, type: 3}
+  watermillYellow: {fileID: 919132149155446097, guid: b5c7c53c6ed3b134a8bf95502df1fe17, type: 3}
   homeAGreen: {fileID: 919132149155446097, guid: e05c673b18ec1904a8c046b8d1a70668, type: 3}
+  homeABlue: {fileID: 919132149155446097, guid: aafb56885ca0b5b40933f48dda03d09e, type: 3}
+  homeARed: {fileID: 919132149155446097, guid: 2bea15e8ee6b2784ca3047647c4abc2b, type: 3}
+  homeAYellow: {fileID: 919132149155446097, guid: 1ea11ded2240c6a49929c9e7944bb9bc, type: 3}
   homeBGreen: {fileID: 919132149155446097, guid: c09dfe5fe15d77a40ac56182d0b7b5da, type: 3}
+  homeBBlue: {fileID: 919132149155446097, guid: 267db8107340d694198945dadb3cbdbb, type: 3}
+  homeBRed: {fileID: 919132149155446097, guid: 11fc1279f0cee814198097fe0a95591a, type: 3}
+  homeBYellow: {fileID: 919132149155446097, guid: 936dab163aa0b3c45a9b04db132bfc9d, type: 3}
   tavernGreen: {fileID: 919132149155446097, guid: 3c3ad61709e0a6248b48ea956d3a6113, type: 3}
+  tavernBlue: {fileID: 919132149155446097, guid: 0ab3557a93cdacc469eace19856dd6f1, type: 3}
+  tavernRed: {fileID: 919132149155446097, guid: 822f3bb0ab471d04f8f36a6d029dedc4, type: 3}
+  tavernYellow: {fileID: 919132149155446097, guid: 342bae594c07e744ba573e009faff7d6, type: 3}
   tentGreen: {fileID: 919132149155446097, guid: 9aaa1a5df7b35e94d9ff93fef59e4b7c, type: 3}
+  tentBlue: {fileID: 919132149155446097, guid: b55cf25e52ba0604ab3d16a31a450c49, type: 3}
+  tentRed: {fileID: 919132149155446097, guid: 1694043c24ad1c94f81cc845d79bab0d, type: 3}
+  tentYellow: {fileID: 919132149155446097, guid: 76473c7e806a608408ead35a3c00318e, type: 3}
   churchGreen: {fileID: 919132149155446097, guid: 392ee3c3e2f07ba42b4a404c3dcfb52e, type: 3}
+  churchBlue: {fileID: 919132149155446097, guid: f5341f49b880c344a96e17581cd2c7ed, type: 3}
+  churchRed: {fileID: 919132149155446097, guid: d9387c237a07f90438d630873f6a3d4e, type: 3}
+  churchYellow: {fileID: 919132149155446097, guid: 79ae2f7b81377fc4c976b005f2dc4669, type: 3}
   shrineGreen: {fileID: 919132149155446097, guid: ee3cbffb5dd29e14e9d506b21e9c7e04, type: 3}
+  shrineBlue: {fileID: 919132149155446097, guid: 44b6749a476f5cd45b6f164285df3eef, type: 3}
+  shrineRed: {fileID: 919132149155446097, guid: e7eba371419b96a4f9b8a2462b3e0087, type: 3}
+  shrineYellow: {fileID: 919132149155446097, guid: 36d339bf7a3d5af43844b2fd449084ae, type: 3}
   shipyardGreen: {fileID: 919132149155446097, guid: dd38cce3df122dd4abdd410a464194ce, type: 3}
+  shipyardBlue: {fileID: 919132149155446097, guid: f9de8695c070c784987a4eaa14da65d4, type: 3}
+  shipyardRed: {fileID: 919132149155446097, guid: d684e3a0d4d19404cacb1c1fc4b402c1, type: 3}
+  shipyardYellow: {fileID: 919132149155446097, guid: a79c675c1b50d95488a76e3e1c88b503, type: 3}
   docksGreen: {fileID: 919132149155446097, guid: 73c3999097f629a418877d095b83d76c, type: 3}
+  docksBlue: {fileID: 919132149155446097, guid: 5b704eb6baa617d478c768ce2c95881f, type: 3}
+  docksRed: {fileID: 919132149155446097, guid: c815d0b42c4af3f4a99044481b24a9e7, type: 3}
+  docksYellow: {fileID: 919132149155446097, guid: 9b4eb90f13ff31046bdffacb7c62e530, type: 3}
+  wellGreen: {fileID: 919132149155446097, guid: 3234e161b2c3a054a9e57f2e5baf3bcc, type: 3}
+  wellBlue: {fileID: 919132149155446097, guid: 32aebb93df1dda94ba86d28b35f28969, type: 3}
+  wellRed: {fileID: 919132149155446097, guid: 9df4be1cf2dd6fa4ca1833e3f76725f1, type: 3}
+  wellYellow: {fileID: 919132149155446097, guid: 444cf2002f229f84595f187f5eae4af3, type: 3}
   bridgeA: {fileID: 919132149155446097, guid: 374ab942956d88b449a38fac49e99ae4, type: 3}
   bridgeB: {fileID: 919132149155446097, guid: 97412b7da4839434fa1b1e6fcc3098af, type: 3}
   buildingDestroyed: {fileID: 919132149155446097, guid: bfc9a3e48318b1346bd547fe20fd8b02, type: 3}
   scaffolding: {fileID: 919132149155446097, guid: 044688884a4b4bd44916f1e63108235c, type: 3}
+  stageA: {fileID: 0}
+  stageB: {fileID: 0}
+  stageC: {fileID: 0}
+  buildingGrain: {fileID: 919132149155446097, guid: 75d9e8f4fc6ab944db2c965cec688cbf, type: 3}
+  buildingDirt: {fileID: 919132149155446097, guid: 27f0137537837c94b964435e2ffb05bf, type: 3}
+  wallStraight: {fileID: 919132149155446097, guid: 33145909c8e292a4fbf8aa964caa690d, type: 3}
+  wallStraightGate: {fileID: 919132149155446097, guid: b9155e48e6eee1c40bff8012415806d7, type: 3}
+  wallCornerAInside: {fileID: 919132149155446097, guid: 69bd2251383c34c42a1ef9f375f206a8, type: 3}
+  wallCornerAOutside: {fileID: 919132149155446097, guid: bf53ee291e0921a4c8309be1c7065eed, type: 3}
+  wallCornerAGate: {fileID: 919132149155446097, guid: 81110f5194415d84b89b54179d16fcf4, type: 3}
+  wallCornerBInside: {fileID: 919132149155446097, guid: 72ed8db9448758343988090266c7978e, type: 3}
+  wallCornerBOutside: {fileID: 919132149155446097, guid: 27d77ec1b0edb124abfe4629d6a38d7a, type: 3}
+  fenceStoneStraight: {fileID: 919132149155446097, guid: cf7a65cfa39e154488d6101c1e080daf, type: 3}
+  fenceStoneStraightGate: {fileID: 919132149155446097, guid: 0824be9417a60464c920b4f9231daaff, type: 3}
+  fenceWoodStraight: {fileID: 919132149155446097, guid: 4469aab51deb89b41882d0cc08b80e5b, type: 3}
+  fenceWoodStraightGate: {fileID: 919132149155446097, guid: 35fb8530e2d9591468a56b0fc866d692, type: 3}
+  projectileCatapult: {fileID: 919132149155446097, guid: 477af543648217943abb8c25c2847449, type: 3}
