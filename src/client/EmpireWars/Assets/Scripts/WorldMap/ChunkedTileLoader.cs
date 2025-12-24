@@ -37,8 +37,8 @@ namespace EmpireWars.WorldMap
 
         // Yuklenmis chunk'lar ve tile'lar
         private Dictionary<Vector2Int, ChunkData> loadedChunks;
-        private Queue<Vector2Int> chunksToLoad;
-        private Queue<Vector2Int> chunksToUnload;
+        private List<Vector2Int> chunksToLoad;  // List for priority sorting
+        private List<Vector2Int> chunksToUnload;
 
         // Object pooling
         private Queue<GameObject> tilePool;
@@ -47,10 +47,19 @@ namespace EmpireWars.WorldMap
         // State
         private Vector2Int lastCameraChunk;
         private float lastUpdateTime;
+        private float lastZoom;
         private Transform tilesParent;
         private int mapWidth;
         private int mapHeight;
         private bool isInitialized = false;
+
+        // Cached bounds (performans icin)
+        private int cachedMaxChunkX;
+        private int cachedMaxChunkY;
+
+        // Dinamik chunk loading
+        private int dynamicLoadRadius;
+        private const float BUFFER_RATIO = 0.5f;  // Gorunur alanin %50'si buffer
 
         private class ChunkData
         {
@@ -71,8 +80,8 @@ namespace EmpireWars.WorldMap
             Instance = this;
 
             loadedChunks = new Dictionary<Vector2Int, ChunkData>();
-            chunksToLoad = new Queue<Vector2Int>();
-            chunksToUnload = new Queue<Vector2Int>();
+            chunksToLoad = new List<Vector2Int>();
+            chunksToUnload = new List<Vector2Int>();
             tilePool = new Queue<GameObject>();
             tileDataMap = new Dictionary<Vector2Int, KingdomMapGenerator.TileData>();
         }
@@ -99,7 +108,8 @@ namespace EmpireWars.WorldMap
             }
 
             // Her frame birkac chunk isle (stutter onleme)
-            ProcessChunkQueue(2);
+            // Buyuk haritalar icin 4 chunk/frame
+            ProcessChunkQueue(4);
         }
 
         #endregion
@@ -138,6 +148,10 @@ namespace EmpireWars.WorldMap
 
             // Tum tile verilerini pre-generate et (sadece data, GameObject yok)
             GenerateMapData();
+
+            // Chunk bounds'larini cache'le (performans)
+            cachedMaxChunkX = Mathf.CeilToInt((float)mapWidth / chunkSize);
+            cachedMaxChunkY = Mathf.CeilToInt((float)mapHeight / chunkSize);
 
             isInitialized = true;
             lastCameraChunk = GetCameraChunk();
@@ -230,18 +244,25 @@ namespace EmpireWars.WorldMap
         private void UpdateVisibleChunks()
         {
             Vector2Int currentChunk = GetCameraChunk();
+            float currentZoom = GetCurrentCameraZoom();
 
-            // Kamera ayni chunk'ta, kontrol gereksiz
-            if (currentChunk == lastCameraChunk && loadedChunks.Count > 0)
+            // Kamera ayni chunk'ta VE zoom degismedi, kontrol gereksiz
+            if (currentChunk == lastCameraChunk &&
+                Mathf.Abs(currentZoom - lastZoom) < 5f &&
+                loadedChunks.Count > 0)
                 return;
 
             lastCameraChunk = currentChunk;
+            lastZoom = currentZoom;
+
+            // Dinamik load radius hesapla (kamera zoom'una gore)
+            CalculateDynamicLoadRadius(currentZoom);
 
             // Gorunur olmasi gereken chunk'lari hesapla
             HashSet<Vector2Int> visibleChunks = new HashSet<Vector2Int>();
-            for (int dx = -loadRadius; dx <= loadRadius; dx++)
+            for (int dx = -dynamicLoadRadius; dx <= dynamicLoadRadius; dx++)
             {
-                for (int dy = -loadRadius; dy <= loadRadius; dy++)
+                for (int dy = -dynamicLoadRadius; dy <= dynamicLoadRadius; dy++)
                 {
                     Vector2Int chunkCoord = new Vector2Int(currentChunk.x + dx, currentChunk.y + dy);
 
@@ -253,49 +274,61 @@ namespace EmpireWars.WorldMap
                 }
             }
 
-            // Yuklenmesi gereken chunk'lari queue'ya ekle
+            // Yuklenmesi gereken chunk'lari listeye ekle
+            chunksToLoad.Clear();
             foreach (var chunk in visibleChunks)
             {
-                if (!loadedChunks.ContainsKey(chunk) && !chunksToLoad.Contains(chunk))
+                if (!loadedChunks.ContainsKey(chunk))
                 {
-                    chunksToLoad.Enqueue(chunk);
+                    chunksToLoad.Add(chunk);
                 }
             }
 
-            // Bosaltilmasi gereken chunk'lari queue'ya ekle
-            List<Vector2Int> toUnload = new List<Vector2Int>();
+            // Yakin chunk'lar once yuklensin (Google Maps tarzi)
+            chunksToLoad.Sort((a, b) =>
+            {
+                float distA = Vector2Int.Distance(a, currentChunk);
+                float distB = Vector2Int.Distance(b, currentChunk);
+                return distA.CompareTo(distB);
+            });
+
+            // Bosaltilmasi gereken chunk'lari listeye ekle
+            chunksToUnload.Clear();
             foreach (var kvp in loadedChunks)
             {
                 if (!visibleChunks.Contains(kvp.Key))
                 {
-                    toUnload.Add(kvp.Key);
+                    chunksToUnload.Add(kvp.Key);
                 }
             }
-            foreach (var chunk in toUnload)
+
+            // Uzak chunk'lar once bosaltilsin
+            chunksToUnload.Sort((a, b) =>
             {
-                if (!chunksToUnload.Contains(chunk))
-                {
-                    chunksToUnload.Enqueue(chunk);
-                }
-            }
+                float distA = Vector2Int.Distance(a, currentChunk);
+                float distB = Vector2Int.Distance(b, currentChunk);
+                return distB.CompareTo(distA);  // Ters siralama
+            });
         }
 
         private void ProcessChunkQueue(int maxPerFrame)
         {
             int processed = 0;
 
-            // Oncelik: unload (bellek tasarrufu)
-            while (chunksToUnload.Count > 0 && processed < maxPerFrame)
+            // Oncelik 1: Uzak chunk'lari hizla bosalt (bellek tasarrufu)
+            int unloadCount = Mathf.Min(chunksToUnload.Count, maxPerFrame * 2);
+            for (int i = 0; i < unloadCount && chunksToUnload.Count > 0; i++)
             {
-                Vector2Int chunk = chunksToUnload.Dequeue();
+                Vector2Int chunk = chunksToUnload[0];
+                chunksToUnload.RemoveAt(0);
                 UnloadChunk(chunk);
-                processed++;
             }
 
-            // Sonra load
+            // Oncelik 2: Yakin chunk'lari yukle
             while (chunksToLoad.Count > 0 && processed < maxPerFrame)
             {
-                Vector2Int chunk = chunksToLoad.Dequeue();
+                Vector2Int chunk = chunksToLoad[0];
+                chunksToLoad.RemoveAt(0);
                 LoadChunk(chunk);
                 processed++;
             }
@@ -303,11 +336,56 @@ namespace EmpireWars.WorldMap
 
         private bool IsChunkInBounds(Vector2Int chunkCoord)
         {
-            int maxChunkX = Mathf.CeilToInt((float)mapWidth / chunkSize);
-            int maxChunkY = Mathf.CeilToInt((float)mapHeight / chunkSize);
+            // Cached degerler kullan (Initialize'da hesaplandi)
+            return chunkCoord.x >= 0 && chunkCoord.x < cachedMaxChunkX &&
+                   chunkCoord.y >= 0 && chunkCoord.y < cachedMaxChunkY;
+        }
 
-            return chunkCoord.x >= 0 && chunkCoord.x < maxChunkX &&
-                   chunkCoord.y >= 0 && chunkCoord.y < maxChunkY;
+        /// <summary>
+        /// Kameranin mevcut zoom degerini al
+        /// </summary>
+        private float GetCurrentCameraZoom()
+        {
+            if (MapCameraController.Instance != null)
+            {
+                return MapCameraController.Instance.GetCurrentZoom();
+            }
+            if (Camera.main != null && Camera.main.orthographic)
+            {
+                return Camera.main.orthographicSize;
+            }
+            return GameConfig.DefaultZoom;
+        }
+
+        /// <summary>
+        /// Kamera zoom'una gore dinamik load radius hesapla
+        /// Zoom out = daha fazla chunk yukle
+        /// Zoom in = daha az chunk yukle
+        ///
+        /// Formul:
+        /// - Gorunur alan (chunk): kamera gorunum / chunk boyutu
+        /// - Buffer: gorunur alanin %50'si
+        /// - Toplam radius: gorunur + buffer
+        /// </summary>
+        private void CalculateDynamicLoadRadius(float cameraZoom)
+        {
+            // Kamera gorunum alani (world units)
+            float viewHeight = cameraZoom * 2f;  // orthographicSize * 2
+            float viewWidth = viewHeight * 1.77f;  // 16:9 aspect ratio
+
+            // Chunk boyutu (world units)
+            float chunkWorldSize = chunkSize * HexMetrics.InnerRadius * 2f;
+
+            // Gorunur chunk sayisi (tek yonde)
+            int visibleChunksX = Mathf.CeilToInt(viewWidth / chunkWorldSize / 2f);
+            int visibleChunksY = Mathf.CeilToInt(viewHeight / chunkWorldSize / 2f);
+            int visibleRadius = Mathf.Max(visibleChunksX, visibleChunksY);
+
+            // Buffer ekle (%50 daha fazla)
+            int bufferChunks = Mathf.CeilToInt(visibleRadius * BUFFER_RATIO);
+
+            // Toplam radius (minimum 2, maximum ayarlanabilir)
+            dynamicLoadRadius = Mathf.Clamp(visibleRadius + bufferChunks, 2, 20);
         }
 
         #endregion
@@ -402,6 +480,13 @@ namespace EmpireWars.WorldMap
             if (tileData.HasBuilding && buildingDatabase != null)
             {
                 PlaceBuilding(tile, tileData.BuildingType);
+            }
+
+            // Maden bilgisi
+            if (tileData.MineLevel > 0)
+            {
+                hexTile.SetMineInfo(tileData.MineLevel, tileData.MineType);
+                tile.name = $"Hex_{tileData.Q}_{tileData.R}_{tileData.MineType}_Lv{tileData.MineLevel}";
             }
 
             return tile;

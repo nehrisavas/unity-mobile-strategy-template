@@ -24,10 +24,9 @@ namespace EmpireWars.CameraSystem
 
         [Header("Zoom Ayarlari")]
         [SerializeField] private float zoomSpeed = 5f;    // Her scroll icin 5 birim zoom
-        [SerializeField] private float minZoom = 3f;      // Daha yakin zoom
-        [SerializeField] private float maxZoom = 60f;     // Daha uzak zoom
         [SerializeField] private float zoomSmoothing = 20f; // Hizli gecis
         [SerializeField] private float pinchZoomSpeed = 0.15f;
+        // minZoom ve maxZoom GameConfig'den okunuyor
 
         [Header("Sinirlar")]
         [SerializeField] private bool useBounds = true;
@@ -97,31 +96,53 @@ namespace EmpireWars.CameraSystem
                     targetCamera = Camera.main;
             }
 
-            // GameConfig'den zoom ayarlarini al
-            if (useGameConfig)
+            // GameConfig'i baslat
+            GameConfig.Initialize();
+
+            // KRITIK: Orthographic modu zorla ve zoom'u ayarla
+            if (targetCamera != null)
             {
-                GameConfig.Initialize();
-                minZoom = GameConfig.MinZoom;
-                maxZoom = GameConfig.MaxZoom;
-                targetZoom = GameConfig.DefaultZoom;
+                targetCamera.orthographic = true;
+                targetCamera.orthographicSize = GameConfig.DefaultZoom;
+                Debug.Log($"MapCamera: Orthographic mod ZORLANDI, size={GameConfig.DefaultZoom}");
             }
-            else
-            {
-                targetZoom = targetCamera != null && targetCamera.orthographic
-                    ? targetCamera.orthographicSize
-                    : transform.position.y;
-            }
+
+            targetZoom = GameConfig.DefaultZoom;
+
+            Debug.Log($"MapCamera: Zoom limitleri = {GameConfig.MinZoom} - {GameConfig.MaxZoom}, Orthographic: {targetCamera?.orthographic}");
 
             targetPosition = transform.position;
         }
 
         private void Update()
         {
+            // KRITIK: Her frame orthographic zorla
+            if (targetCamera != null && !targetCamera.orthographic)
+            {
+                targetCamera.orthographic = true;
+                Debug.LogWarning("MapCamera: Orthographic mod TEKRAR zorlandi!");
+            }
+
             HandleTouchInput();
             HandleKeyboardInput();
             HandleMouseScroll();
             ApplyMovement();
             ClampToBounds();
+
+            // KRITIK: Her frame zoom limitini zorla
+            if (targetCamera != null && targetCamera.orthographic)
+            {
+                if (targetCamera.orthographicSize > GameConfig.MaxZoom)
+                {
+                    targetCamera.orthographicSize = GameConfig.MaxZoom;
+                    targetZoom = GameConfig.MaxZoom;
+                }
+                if (targetCamera.orthographicSize < GameConfig.MinZoom)
+                {
+                    targetCamera.orthographicSize = GameConfig.MinZoom;
+                    targetZoom = GameConfig.MinZoom;
+                }
+            }
         }
 
         #endregion
@@ -268,7 +289,7 @@ namespace EmpireWars.CameraSystem
             {
                 float deltaPinch = currentDistance - lastPinchDistance;
                 targetZoom -= deltaPinch * pinchZoomSpeed;
-                targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+                targetZoom = Mathf.Clamp(targetZoom, GameConfig.MinZoom, GameConfig.MaxZoom);
                 lastPinchDistance = currentDistance;
 
                 // Pinch sirasinda pan
@@ -287,7 +308,7 @@ namespace EmpireWars.CameraSystem
             Vector2 move = moveAction.ReadValue<Vector2>();
             if (move.sqrMagnitude > 0.01f)
             {
-                float zoomFactor = targetZoom / maxZoom;
+                float zoomFactor = targetZoom / GameConfig.MaxZoom;
                 float speed = keyboardPanSpeed * (0.5f + zoomFactor);
                 targetPosition += new Vector3(move.x, 0, move.y) * speed * Time.deltaTime;
             }
@@ -301,7 +322,7 @@ namespace EmpireWars.CameraSystem
                 // Scroll degeri anlik - her notch icin zoomSpeed kadar zoom
                 // scroll > 0 = yukari = zoom in (kucult), scroll < 0 = asagi = zoom out (buyut)
                 targetZoom -= Mathf.Sign(scroll) * zoomSpeed;
-                targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+                targetZoom = Mathf.Clamp(targetZoom, GameConfig.MinZoom, GameConfig.MaxZoom);
             }
         }
 
@@ -314,21 +335,26 @@ namespace EmpireWars.CameraSystem
             // Position - smooth lerp
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * panSmoothing);
 
-            // Zoom
+            // Zoom - her zaman limitleri kontrol et
+            targetZoom = Mathf.Clamp(targetZoom, GameConfig.MinZoom, GameConfig.MaxZoom);
+
             if (targetCamera != null)
             {
                 if (targetCamera.orthographic)
                 {
-                    targetCamera.orthographicSize = Mathf.Lerp(
+                    float newSize = Mathf.Lerp(
                         targetCamera.orthographicSize,
                         targetZoom,
                         Time.deltaTime * zoomSmoothing
                     );
+                    // Ekstra guvenlik - asla limitleri asma
+                    targetCamera.orthographicSize = Mathf.Clamp(newSize, GameConfig.MinZoom, GameConfig.MaxZoom);
                 }
                 else
                 {
                     Vector3 pos = transform.position;
-                    pos.y = Mathf.Lerp(pos.y, targetZoom, Time.deltaTime * zoomSmoothing);
+                    float newY = Mathf.Lerp(pos.y, targetZoom, Time.deltaTime * zoomSmoothing);
+                    pos.y = Mathf.Clamp(newY, GameConfig.MinZoom, GameConfig.MaxZoom);
                     transform.position = pos;
                     targetPosition.y = pos.y;
                 }
@@ -340,31 +366,21 @@ namespace EmpireWars.CameraSystem
             if (!useBounds) return;
 
             // GameConfig'den harita sinirlarini al
-            float mapOffsetX = useGameConfig ? GameConfig.MapOffsetX : 0f;
-            float mapOffsetZ = useGameConfig ? GameConfig.MapOffsetZ : 0f;
             float worldWidth = useGameConfig ? GameConfig.WorldWidth : 60f;
             float worldHeight = useGameConfig ? GameConfig.WorldHeight : 60f;
 
-            // Harita sinirlari
-            float minX = mapOffsetX;
-            float maxX = mapOffsetX + worldWidth;
-            float minZ = mapOffsetZ;
-            float maxZ = mapOffsetZ + worldHeight;
+            // Harita disina +5 birim gorebilmek icin negatif margin
+            float outsideMargin = 5f;
+            float minX = -outsideMargin;
+            float maxX = worldWidth + outsideMargin;
+            float minZ = -outsideMargin;
+            float maxZ = worldHeight + outsideMargin;
 
-            // Zoom'a gore margin ekle (kamera kenarlardan uzak dursun)
-            float zoomMargin = targetZoom * 0.5f;
-            minX += zoomMargin;
-            maxX -= zoomMargin;
-            minZ += zoomMargin;
-            maxZ -= zoomMargin;
-
-            // Minimum degerlerin maximum'u gecmemesini sagla
-            if (minX > maxX) { minX = maxX = mapOffsetX + worldWidth / 2f; }
-            if (minZ > maxZ) { minZ = maxZ = mapOffsetZ + worldHeight / 2f; }
-
+            // Clamp target position
             targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
             targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
 
+            // Clamp current position
             Vector3 pos = transform.position;
             pos.x = Mathf.Clamp(pos.x, minX, maxX);
             pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
@@ -388,7 +404,7 @@ namespace EmpireWars.CameraSystem
 
         public void SetZoom(float zoom)
         {
-            targetZoom = Mathf.Clamp(zoom, minZoom, maxZoom);
+            targetZoom = Mathf.Clamp(zoom, GameConfig.MinZoom, GameConfig.MaxZoom);
         }
 
         public float GetCurrentZoom()
@@ -399,14 +415,56 @@ namespace EmpireWars.CameraSystem
         }
 
         /// <summary>
-        /// Harita sinirlarini ayarlar (GameConfig kullanilmiyorsa)
-        /// Tercih: GameConfig.SetMapSize() kullanin
+        /// Merkez (0,0) koordinat sistemine gore konuma git
+        /// X: -MapWidth/2 ile +MapWidth/2 arasi (yaklasik -1000 ile +1000)
+        /// Y: -MapHeight/2 ile +MapHeight/2 arasi (yaklasik -1000 ile +1000)
+        /// Ornek: (0,0) = harita merkezi, (500, 300) = merkezin sag-ustunde
         /// </summary>
-        public void SetMapBounds(float width, float height, float offsetX = 0f, float offsetZ = 0f)
+        public void GoToCoordinate(int x, int y)
         {
-            // GameConfig kullanimini devre disi birak ve manuel sinirlar kullan
-            useGameConfig = false;
-            Debug.LogWarning("MapCameraController: SetMapBounds kullanildi, useGameConfig devre disi");
+            Debug.Log($"GoToCoordinate CAGIRILDI: x={x}, y={y}");
+
+            // World boyutlari
+            float worldWidth = GameConfig.WorldWidth;   // ~3464 (2000 * 1.73)
+            float worldHeight = GameConfig.WorldHeight; // ~3000 (2000 * 1.5)
+
+            // Harita merkezi
+            float centerX = worldWidth / 2f;
+            float centerZ = worldHeight / 2f;
+
+            // Hex boyutlari
+            float hexWidth = HexMetrics.InnerRadius * 2f;   // ~1.73
+            float hexHeight = HexMetrics.OuterRadius * 1.5f; // ~1.5
+
+            // Koordinatlari world pozisyonuna cevir
+            float worldX = centerX + (x * hexWidth);
+            float worldZ = centerZ + (y * hexHeight);
+
+            Debug.Log($"GoToCoordinate: Center=({centerX:F0}, {centerZ:F0}), HexSize=({hexWidth:F2}, {hexHeight:F2})");
+
+            // Sinirlari kontrol et (margin ile)
+            float margin = 20f;
+            worldX = Mathf.Clamp(worldX, margin, worldWidth - margin);
+            worldZ = Mathf.Clamp(worldZ, margin, worldHeight - margin);
+
+            Debug.Log($"GoToCoordinate: ({x}, {y}) -> World ({worldX:F0}, {worldZ:F0})");
+
+            // Kamerayi tasi
+            FocusOnPosition(new Vector3(worldX, 0, worldZ));
+        }
+
+        /// <summary>
+        /// Mevcut kamera pozisyonunu merkez (0,0) koordinat sisteminde dondur
+        /// </summary>
+        public Vector2Int GetCurrentCoordinate()
+        {
+            float centerX = GameConfig.WorldWidth / 2f;
+            float centerZ = GameConfig.WorldHeight / 2f;
+
+            int x = Mathf.RoundToInt((transform.position.x - centerX) / (HexMetrics.InnerRadius * 2f));
+            int y = Mathf.RoundToInt((transform.position.z - centerZ) / (HexMetrics.OuterRadius * 1.5f));
+
+            return new Vector2Int(x, y);
         }
 
         /// <summary>

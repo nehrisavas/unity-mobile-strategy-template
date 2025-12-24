@@ -1,8 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using EmpireWars.Core;
 using EmpireWars.CameraSystem;
+using EmpireWars.Data;
+using EmpireWars.WorldMap;
+using TMPro;
+using System.Collections.Generic;
 
 namespace EmpireWars.UI
 {
@@ -10,6 +15,7 @@ namespace EmpireWars.UI
     /// Dairesel Mini Harita Kontrolcusu
     /// Rise of Kingdoms / Mafia City tarzi radar minimap
     /// Zoom in/out ve konum takibi destekli
+    /// Pre-rendered terrain texture ile tum haritayi gosterir (chunk bagimsiz)
     /// </summary>
     public class MiniMapController : MonoBehaviour, IPointerClickHandler, IDragHandler, IScrollHandler
     {
@@ -20,6 +26,11 @@ namespace EmpireWars.UI
         [SerializeField] private Camera miniMapCamera;
         [SerializeField] private RawImage miniMapImage;
         [SerializeField] private int textureSize = 256;
+
+        [Header("Terrain Texture Mode")]
+        [SerializeField] private bool useTerrainTexture = true; // Pre-rendered terrain texture kullan
+        [SerializeField] private Texture2D terrainPreviewTexture; // Tum haritanin onceden render edilmis hali
+        [SerializeField] private int terrainTextureSize = 512; // Terrain texture boyutu
 
         [Header("UI Ayarlari")]
         [SerializeField] private float minimapUISize = 180f;
@@ -38,6 +49,29 @@ namespace EmpireWars.UI
 
         [Header("Performans")]
         [SerializeField] private bool useGameConfig = true; // GameConfig'den ayarlari al
+
+        [Header("Koordinat Arama")]
+        [SerializeField] private bool showCoordinateSearch = true;
+
+        // Koordinat arama UI
+        private TMP_InputField inputX;
+        private TMP_InputField inputY;
+        private Button goButton;
+        private TMP_Text currentCoordText;
+        private GameObject coordSearchPanel;
+
+        // Harita geçiş butonları
+        private Button worldMapButton;
+        private Button cityMapButton;
+        private GameObject mapTogglePanel;
+
+        // Mevcut harita modu
+        public enum MapMode { World, City }
+        public static MapMode CurrentMapMode { get; private set; } = MapMode.World;
+        public static event System.Action<MapMode> OnMapModeChanged;
+
+        // Viewport indicator (terrain texture modunda gorunen alan cercevesi)
+        private RectTransform viewportIndicator;
 
         // Internal state
         private float targetZoom;
@@ -80,12 +114,22 @@ namespace EmpireWars.UI
             // Periyodik guncelleme (performans icin)
             if (Time.time - lastUpdateTime >= updateInterval)
             {
-                UpdateMiniMapCamera();
+                // Terrain texture modunda sadece pozisyon guncelle
+                if (useTerrainTexture)
+                {
+                    UpdateTerrainTextureMode();
+                }
+                else
+                {
+                    UpdateMiniMapCamera();
+                }
+
+                UpdateCurrentCoordinateDisplay();
                 lastUpdateTime = Time.time;
             }
 
-            // Zoom smooth gecis
-            if (miniMapCamera != null && Mathf.Abs(miniMapCamera.orthographicSize - targetZoom) > 0.1f)
+            // Zoom smooth gecis (sadece kamera modunda)
+            if (!useTerrainTexture && miniMapCamera != null && Mathf.Abs(miniMapCamera.orthographicSize - targetZoom) > 0.1f)
             {
                 miniMapCamera.orthographicSize = Mathf.Lerp(
                     miniMapCamera.orthographicSize,
@@ -136,12 +180,231 @@ namespace EmpireWars.UI
                 worldMaxZ = 60f;
             }
 
+            // KRITIK: EventSystem ve Canvas kontrolu
+            EnsureEventSystem();
+            EnsureCanvasHasRaycaster();
+
             CreateMiniMapCamera();
             SetupUI();
 
             targetZoom = (minZoom + maxZoom) / 3f;
             isInitialized = true;
-            Debug.Log($"MiniMapController: Dairesel minimap olusturuldu - World({worldMinX}-{worldMaxX}, {worldMinZ}-{worldMaxZ})");
+
+            // Terrain texture modu aktifse, pre-rendered harita olustur
+            if (useTerrainTexture)
+            {
+                GenerateTerrainPreviewTexture();
+            }
+
+            Debug.Log($"MiniMapController: Dairesel minimap olusturuldu - World({worldMinX}-{worldMaxX}, {worldMinZ}-{worldMaxZ}), TerrainTexture: {useTerrainTexture}");
+        }
+
+        /// <summary>
+        /// Tum haritanin terrain renklerini iceren bir texture olustur
+        /// Bu sayede chunk yuklenmeden bile tum harita gorunur
+        /// </summary>
+        private void GenerateTerrainPreviewTexture()
+        {
+            // Texture olustur
+            terrainPreviewTexture = new Texture2D(terrainTextureSize, terrainTextureSize, TextureFormat.RGB24, false);
+            terrainPreviewTexture.filterMode = FilterMode.Bilinear;
+            terrainPreviewTexture.wrapMode = TextureWrapMode.Clamp;
+
+            // Harita boyutlari
+            int mapWidth = GameConfig.MapWidth;
+            int mapHeight = GameConfig.MapHeight;
+
+            // Her pixel icin terrain rengi belirle
+            Color[] pixels = new Color[terrainTextureSize * terrainTextureSize];
+
+            for (int y = 0; y < terrainTextureSize; y++)
+            {
+                for (int x = 0; x < terrainTextureSize; x++)
+                {
+                    // Texture koordinatini harita koordinatina cevir
+                    int mapQ = Mathf.FloorToInt((float)x / terrainTextureSize * mapWidth);
+                    int mapR = Mathf.FloorToInt((float)y / terrainTextureSize * mapHeight);
+
+                    // Tile verisini al
+                    var tileData = KingdomMapGenerator.GetTileAt(mapQ, mapR);
+                    TerrainType terrain = tileData.Terrain;
+
+                    // Terrain rengini al
+                    Color terrainColor = TerrainProperties.GetTerrainColor(terrain);
+
+                    // Maden varsa ozel renk
+                    if (tileData.MineLevel > 0)
+                    {
+                        terrainColor = KingdomMapGenerator.GetMineTypeColor(tileData.MineType);
+                        // Seviyeye gore parlaklik
+                        float brightness = 0.7f + (tileData.MineLevel / 7f) * 0.3f;
+                        terrainColor *= brightness;
+                    }
+
+                    // Bina varsa koyu tonlama
+                    if (tileData.HasBuilding)
+                    {
+                        terrainColor = Color.Lerp(terrainColor, Color.black, 0.3f);
+                    }
+
+                    // Pixel'e ata
+                    int pixelIndex = y * terrainTextureSize + x;
+                    pixels[pixelIndex] = terrainColor;
+                }
+            }
+
+            terrainPreviewTexture.SetPixels(pixels);
+            terrainPreviewTexture.Apply();
+
+            Debug.Log($"MiniMap: Terrain preview texture olusturuldu ({terrainTextureSize}x{terrainTextureSize})");
+        }
+
+        /// <summary>
+        /// Kamera gorunum alanini gosteren cerceve olustur
+        /// </summary>
+        private void CreateViewportIndicator()
+        {
+            GameObject viewportObj = new GameObject("ViewportIndicator");
+            viewportObj.transform.SetParent(transform);
+
+            // Cerceve goruntusunu olustur (sadece border, ici seffaf)
+            Image viewportImg = viewportObj.AddComponent<Image>();
+            viewportImg.color = new Color(1f, 1f, 1f, 0.0f); // Tamamen seffaf
+
+            viewportIndicator = viewportObj.GetComponent<RectTransform>();
+            viewportIndicator.anchorMin = new Vector2(0.5f, 0.5f);
+            viewportIndicator.anchorMax = new Vector2(0.5f, 0.5f);
+            viewportIndicator.sizeDelta = new Vector2(30f, 20f);
+
+            // Outline ekle (cerceve)
+            Outline outline = viewportObj.AddComponent<Outline>();
+            outline.effectColor = new Color(1f, 1f, 1f, 0.8f);
+            outline.effectDistance = new Vector2(1.5f, 1.5f);
+
+            viewportObj.SetActive(true);
+        }
+
+        /// <summary>
+        /// Terrain texture modunda player dot ve viewport pozisyonlarini guncelle
+        /// </summary>
+        private void UpdateTerrainTextureMode()
+        {
+            if (!useTerrainTexture || playerDot == null) return;
+
+            Vector3 camPos = Vector3.zero;
+            float camZoom = GameConfig.DefaultZoom;
+
+            if (MapCameraController.Instance != null)
+            {
+                camPos = MapCameraController.Instance.transform.position;
+                camZoom = MapCameraController.Instance.GetCurrentZoom();
+            }
+            else if (Camera.main != null)
+            {
+                camPos = Camera.main.transform.position;
+                if (Camera.main.orthographic)
+                    camZoom = Camera.main.orthographicSize;
+            }
+
+            // World pozisyonunu minimap koordinatina cevir
+            float normalizedX = camPos.x / GameConfig.WorldWidth;
+            float normalizedZ = camPos.z / GameConfig.WorldHeight;
+
+            // Minimap boyutu
+            float mapUISize = minimapUISize;
+
+            // Player dot pozisyonu - merkeze gore offset
+            float dotX = (normalizedX - 0.5f) * mapUISize;
+            float dotZ = (normalizedZ - 0.5f) * mapUISize;
+
+            RectTransform dotRect = playerDot.GetComponent<RectTransform>();
+            dotRect.anchoredPosition = new Vector2(dotX, dotZ);
+
+            // Viewport indicator pozisyonu ve boyutu
+            if (viewportIndicator != null)
+            {
+                viewportIndicator.anchoredPosition = new Vector2(dotX, dotZ);
+
+                // Gorunum alaninin minimap uzerindeki boyutunu hesapla
+                float viewWidth = (camZoom * 2f * 1.77f) / GameConfig.WorldWidth * mapUISize;
+                float viewHeight = (camZoom * 2f) / GameConfig.WorldHeight * mapUISize;
+                viewportIndicator.sizeDelta = new Vector2(
+                    Mathf.Clamp(viewWidth, 10f, mapUISize * 0.8f),
+                    Mathf.Clamp(viewHeight, 8f, mapUISize * 0.6f)
+                );
+            }
+        }
+
+        /// <summary>
+        /// EventSystem yoksa olusturur - UI input icin KRITIK
+        /// Unity 6 Input System icin InputSystemUIInputModule kullanilmali
+        /// </summary>
+        private void EnsureEventSystem()
+        {
+            EventSystem eventSystem = FindFirstObjectByType<EventSystem>();
+            if (eventSystem == null)
+            {
+                Debug.Log("MiniMap: EventSystem bulunamadi, olusturuluyor...");
+                GameObject eventSystemObj = new GameObject("EventSystem");
+                eventSystem = eventSystemObj.AddComponent<EventSystem>();
+                // Unity 6 yeni Input System icin InputSystemUIInputModule kullan
+                eventSystemObj.AddComponent<InputSystemUIInputModule>();
+                Debug.Log("MiniMap: EventSystem + InputSystemUIInputModule olusturuldu");
+            }
+            else
+            {
+                Debug.Log($"MiniMap: EventSystem mevcut - {eventSystem.gameObject.name}");
+            }
+
+            // Unity 6 Input System kontrolu - InputSystemUIInputModule gerekli
+            InputSystemUIInputModule inputModule = eventSystem.GetComponent<InputSystemUIInputModule>();
+            if (inputModule == null)
+            {
+                // Eski StandaloneInputModule varsa kaldir
+                StandaloneInputModule oldModule = eventSystem.GetComponent<StandaloneInputModule>();
+                if (oldModule != null)
+                {
+                    Debug.Log("MiniMap: Eski StandaloneInputModule kaldiriliyor...");
+                    DestroyImmediate(oldModule);
+                }
+
+                inputModule = eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+                Debug.Log("MiniMap: InputSystemUIInputModule eklendi (Unity 6 Input System)");
+            }
+            else
+            {
+                Debug.Log("MiniMap: InputSystemUIInputModule mevcut");
+            }
+        }
+
+        /// <summary>
+        /// Canvas'ta GraphicRaycaster yoksa ekler - UI click icin KRITIK
+        /// </summary>
+        private void EnsureCanvasHasRaycaster()
+        {
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null)
+            {
+                canvas = FindFirstObjectByType<Canvas>();
+            }
+
+            if (canvas != null)
+            {
+                GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
+                if (raycaster == null)
+                {
+                    raycaster = canvas.gameObject.AddComponent<GraphicRaycaster>();
+                    Debug.Log("MiniMap: GraphicRaycaster Canvas'a eklendi");
+                }
+                else
+                {
+                    Debug.Log("MiniMap: GraphicRaycaster mevcut");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("MiniMap: Canvas bulunamadi!");
+            }
         }
 
         private void CreateMiniMapCamera()
@@ -158,22 +421,40 @@ namespace EmpireWars.UI
             if (miniMapCamera == null)
             {
                 GameObject camObj = new GameObject("MiniMap_Camera");
-                camObj.transform.SetParent(transform);
+                // Canvas'tan bagimsiz, world space'te
                 miniMapCamera = camObj.AddComponent<Camera>();
             }
 
             // Kamera ayarlari
             miniMapCamera.targetTexture = miniMapTexture;
             miniMapCamera.orthographic = true;
-            miniMapCamera.orthographicSize = (minZoom + maxZoom) / 3f;
+            miniMapCamera.orthographicSize = 150f; // Genis gorunum
             miniMapCamera.clearFlags = CameraClearFlags.SolidColor;
-            miniMapCamera.backgroundColor = new Color(0.08f, 0.12f, 0.18f, 1f);
-            miniMapCamera.cullingMask = ~0; // Tum layerlar
-            miniMapCamera.depth = -100;
+            miniMapCamera.backgroundColor = new Color(0.05f, 0.08f, 0.12f, 1f);
+            miniMapCamera.nearClipPlane = 0.1f;
+            miniMapCamera.farClipPlane = 500f; // Yeterli derinlik
 
-            // Yukari bak (top-down)
+            // Clouds layer'i haric tut (minimap'te bulut gorunmemeli)
+            // KRITIK: -1 = tum layer'lari render et, ~0 YANLIS cunku hicbir sey render etmez
+            int cloudsLayer = LayerMask.NameToLayer("Clouds");
+            if (cloudsLayer >= 0)
+            {
+                miniMapCamera.cullingMask = -1 & ~(1 << cloudsLayer); // Tum layer'lar EKSI clouds
+            }
+            else
+            {
+                miniMapCamera.cullingMask = -1; // Fallback: TUM layer'lari render et
+            }
+            miniMapCamera.depth = -100;
+            miniMapCamera.useOcclusionCulling = false; // Oclusion sorunlarini onle
+
+            // Yukari bak (top-down) - harita merkezinde baslat
             miniMapCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            miniMapCamera.transform.position = new Vector3(30f, 200f, 30f);
+            float centerX = GameConfig.WorldWidth / 2f;
+            float centerZ = GameConfig.WorldHeight / 2f;
+            miniMapCamera.transform.position = new Vector3(centerX, 300f, centerZ);
+
+            Debug.Log($"MiniMapCamera: Pozisyon ({centerX}, 300, {centerZ}), OrthoSize: 150");
         }
 
         private void SetupUI()
@@ -236,13 +517,24 @@ namespace EmpireWars.UI
                 }
             }
 
-            miniMapImage.texture = miniMapTexture;
+            // Terrain texture veya camera texture kullan
+            if (useTerrainTexture && terrainPreviewTexture != null)
+            {
+                miniMapImage.texture = terrainPreviewTexture;
+                Debug.Log("MiniMap: Terrain preview texture kullaniliyor");
+            }
+            else
+            {
+                miniMapImage.texture = miniMapTexture;
+                Debug.Log("MiniMap: Camera render texture kullaniliyor");
+            }
+
             if (circularMaskMaterial != null)
             {
                 miniMapImage.material = circularMaskMaterial;
             }
 
-            // Oyuncu gostergesi (sari nokta ortada)
+            // Oyuncu gostergesi (sari nokta)
             if (playerDot == null)
             {
                 GameObject dotObj = new GameObject("PlayerDot");
@@ -253,78 +545,508 @@ namespace EmpireWars.UI
                 RectTransform dotRect = playerDot.GetComponent<RectTransform>();
                 dotRect.anchorMin = new Vector2(0.5f, 0.5f);
                 dotRect.anchorMax = new Vector2(0.5f, 0.5f);
-                dotRect.sizeDelta = new Vector2(8f, 8f);
+                dotRect.sizeDelta = new Vector2(10f, 10f);
                 dotRect.anchoredPosition = Vector2.zero;
 
                 // Dairesel yapmak icin
                 playerDot.raycastTarget = false;
             }
 
+            // Görüş alanı çerçevesi (terrain texture modunda)
+            if (useTerrainTexture)
+            {
+                CreateViewportIndicator();
+            }
+
             // Zoom butonlari
             CreateZoomButtons();
+
+            // Koordinat arama
+            if (showCoordinateSearch)
+            {
+                CreateCoordinateSearch();
+            }
+
+            // Harita geçiş butonları
+            CreateMapToggleButtons(canvas.transform);
+        }
+
+        /// <summary>
+        /// Şehir/Dünya harita geçiş butonlarını oluştur
+        /// </summary>
+        private void CreateMapToggleButtons(Transform canvasTransform)
+        {
+            // Sağ üst köşede butonlar
+            mapTogglePanel = new GameObject("MapTogglePanel");
+            mapTogglePanel.transform.SetParent(canvasTransform);
+
+            RectTransform panelRect = mapTogglePanel.AddComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(1, 1); // Sağ üst
+            panelRect.anchorMax = new Vector2(1, 1);
+            panelRect.pivot = new Vector2(1, 1);
+            panelRect.anchoredPosition = new Vector2(-15f, -15f);
+            panelRect.sizeDelta = new Vector2(200f, 50f);
+
+            // Arka plan
+            Image panelBg = mapTogglePanel.AddComponent<Image>();
+            panelBg.color = new Color(0.05f, 0.05f, 0.08f, 0.9f);
+            panelBg.raycastTarget = false;
+
+            // Dünya butonu
+            worldMapButton = CreateMapButton(mapTogglePanel.transform, "Dünya", 10f, true);
+            worldMapButton.onClick.AddListener(() => SetMapMode(MapMode.World));
+
+            // Şehir butonu
+            cityMapButton = CreateMapButton(mapTogglePanel.transform, "Şehir", 105f, false);
+            cityMapButton.onClick.AddListener(() => SetMapMode(MapMode.City));
+
+            UpdateMapToggleButtons();
+        }
+
+        private Button CreateMapButton(Transform parent, string text, float xPos, bool isActive)
+        {
+            GameObject btnObj = new GameObject($"Btn_{text}");
+            btnObj.transform.SetParent(parent);
+
+            Image btnBg = btnObj.AddComponent<Image>();
+            btnBg.color = isActive ? new Color(0.3f, 0.5f, 0.3f, 1f) : new Color(0.2f, 0.2f, 0.25f, 1f);
+            btnBg.raycastTarget = true;
+
+            Button btn = btnObj.AddComponent<Button>();
+            btn.targetGraphic = btnBg;
+
+            RectTransform btnRect = btnObj.GetComponent<RectTransform>();
+            btnRect.anchorMin = new Vector2(0, 0.5f);
+            btnRect.anchorMax = new Vector2(0, 0.5f);
+            btnRect.pivot = new Vector2(0, 0.5f);
+            btnRect.anchoredPosition = new Vector2(xPos, 0);
+            btnRect.sizeDelta = new Vector2(85f, 36f);
+
+            // Text
+            GameObject textObj = new GameObject("Text");
+            textObj.transform.SetParent(btnObj.transform);
+
+            TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
+            tmp.text = text;
+            tmp.fontSize = 16;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.color = Color.white;
+            tmp.alignment = TextAlignmentOptions.Center;
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            return btn;
+        }
+
+        /// <summary>
+        /// Harita modunu değiştir
+        /// </summary>
+        public void SetMapMode(MapMode mode)
+        {
+            if (CurrentMapMode == mode) return;
+
+            CurrentMapMode = mode;
+            UpdateMapToggleButtons();
+            OnMapModeChanged?.Invoke(mode);
+
+            Debug.Log($"MiniMap: Harita modu değişti -> {mode}");
+
+            // TODO: Şehir haritası implementasyonu
+            if (mode == MapMode.City)
+            {
+                Debug.Log("Şehir haritasına geçiş yapılıyor... (Henüz implemente edilmedi)");
+            }
+            else
+            {
+                Debug.Log("Dünya haritasına geçiş yapılıyor...");
+            }
+        }
+
+        private void UpdateMapToggleButtons()
+        {
+            if (worldMapButton != null)
+            {
+                var img = worldMapButton.GetComponent<Image>();
+                img.color = CurrentMapMode == MapMode.World
+                    ? new Color(0.3f, 0.6f, 0.3f, 1f)
+                    : new Color(0.2f, 0.2f, 0.25f, 1f);
+            }
+
+            if (cityMapButton != null)
+            {
+                var img = cityMapButton.GetComponent<Image>();
+                img.color = CurrentMapMode == MapMode.City
+                    ? new Color(0.3f, 0.5f, 0.7f, 1f)
+                    : new Color(0.2f, 0.2f, 0.25f, 1f);
+            }
         }
 
         private void CreateZoomButtons()
         {
+            // Zoom butonlari - minimap'in SAG tarafinda dikey
+            float btnSize = 32f;
+            float spacing = 5f;
+            float rightOffset = -btnSize - 8f; // Minimap'in sağ dışında
+
             // Zoom In butonu (+)
-            GameObject zoomInObj = new GameObject("ZoomIn");
-            zoomInObj.transform.SetParent(transform);
-            Image zoomInBg = zoomInObj.AddComponent<Image>();
-            zoomInBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
-            Button zoomInBtn = zoomInObj.AddComponent<Button>();
-            zoomInBtn.onClick.AddListener(ZoomIn);
-
-            RectTransform zoomInRect = zoomInObj.GetComponent<RectTransform>();
-            zoomInRect.anchorMin = new Vector2(1, 1);
-            zoomInRect.anchorMax = new Vector2(1, 1);
-            zoomInRect.pivot = new Vector2(1, 1);
-            zoomInRect.sizeDelta = new Vector2(28f, 28f);
-            zoomInRect.anchoredPosition = new Vector2(-5f, -5f);
-
-            // + text
-            GameObject plusText = new GameObject("Text");
-            plusText.transform.SetParent(zoomInObj.transform);
-            Text plusTxt = plusText.AddComponent<Text>();
-            plusTxt.text = "+";
-            plusTxt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            plusTxt.fontSize = 20;
-            plusTxt.alignment = TextAnchor.MiddleCenter;
-            plusTxt.color = Color.white;
-            RectTransform plusRect = plusText.GetComponent<RectTransform>();
-            plusRect.anchorMin = Vector2.zero;
-            plusRect.anchorMax = Vector2.one;
-            plusRect.offsetMin = Vector2.zero;
-            plusRect.offsetMax = Vector2.zero;
+            GameObject zoomInObj = CreateStyledButton(
+                "ZoomIn", "+",
+                new Vector2(1, 0.5f), // Sag orta
+                new Vector2(rightOffset, btnSize / 2 + spacing / 2),
+                new Vector2(btnSize, btnSize),
+                new Color(0.15f, 0.35f, 0.15f, 0.95f)
+            );
+            zoomInObj.GetComponent<Button>().onClick.AddListener(ZoomIn);
 
             // Zoom Out butonu (-)
-            GameObject zoomOutObj = new GameObject("ZoomOut");
-            zoomOutObj.transform.SetParent(transform);
-            Image zoomOutBg = zoomOutObj.AddComponent<Image>();
-            zoomOutBg.color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
-            Button zoomOutBtn = zoomOutObj.AddComponent<Button>();
-            zoomOutBtn.onClick.AddListener(ZoomOut);
+            GameObject zoomOutObj = CreateStyledButton(
+                "ZoomOut", "−", // Unicode minus
+                new Vector2(1, 0.5f),
+                new Vector2(rightOffset, -btnSize / 2 - spacing / 2),
+                new Vector2(btnSize, btnSize),
+                new Color(0.35f, 0.15f, 0.15f, 0.95f)
+            );
+            zoomOutObj.GetComponent<Button>().onClick.AddListener(ZoomOut);
+        }
 
-            RectTransform zoomOutRect = zoomOutObj.GetComponent<RectTransform>();
-            zoomOutRect.anchorMin = new Vector2(1, 1);
-            zoomOutRect.anchorMax = new Vector2(1, 1);
-            zoomOutRect.pivot = new Vector2(1, 1);
-            zoomOutRect.sizeDelta = new Vector2(28f, 28f);
-            zoomOutRect.anchoredPosition = new Vector2(-5f, -38f);
+        private GameObject CreateStyledButton(string name, string text, Vector2 anchor, Vector2 position, Vector2 size, Color bgColor)
+        {
+            GameObject btnObj = new GameObject(name);
+            btnObj.transform.SetParent(transform);
 
-            // - text
-            GameObject minusText = new GameObject("Text");
-            minusText.transform.SetParent(zoomOutObj.transform);
-            Text minusTxt = minusText.AddComponent<Text>();
-            minusTxt.text = "-";
-            minusTxt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            minusTxt.fontSize = 24;
-            minusTxt.alignment = TextAnchor.MiddleCenter;
-            minusTxt.color = Color.white;
-            RectTransform minusRect = minusText.GetComponent<RectTransform>();
-            minusRect.anchorMin = Vector2.zero;
-            minusRect.anchorMax = Vector2.one;
-            minusRect.offsetMin = Vector2.zero;
-            minusRect.offsetMax = Vector2.zero;
+            // Arkaplan - yuvarlatilmis gorunum icin
+            Image bg = btnObj.AddComponent<Image>();
+            bg.color = bgColor;
+
+            // Outline efekti
+            Outline outline = btnObj.AddComponent<Outline>();
+            outline.effectColor = new Color(1f, 1f, 1f, 0.3f);
+            outline.effectDistance = new Vector2(1, -1);
+
+            Button btn = btnObj.AddComponent<Button>();
+            ColorBlock colors = btn.colors;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = new Color(1.2f, 1.2f, 1.2f, 1f);
+            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+            btn.colors = colors;
+
+            RectTransform rect = btnObj.GetComponent<RectTransform>();
+            rect.anchorMin = anchor;
+            rect.anchorMax = anchor;
+            rect.pivot = new Vector2(1, 0.5f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+
+            // Text
+            GameObject textObj = new GameObject("Text");
+            textObj.transform.SetParent(btnObj.transform);
+            TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
+            tmp.text = text;
+            tmp.fontSize = 22;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.color = Color.white;
+            tmp.alignment = TextAlignmentOptions.Center;
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            return btnObj;
+        }
+
+        private void CreateCoordinateSearch()
+        {
+            // Canvas'i bul - koordinat arama ekranin ALT ORTASINDA olacak
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null) return;
+
+            // ═══════════════════════════════════════════════════════════
+            // YATAY ARAMA CUBUGU - Ekranin alt ortasinda
+            // Layout: [X: [____]] [Y: [____]] [GIT]
+            // ═══════════════════════════════════════════════════════════
+            coordSearchPanel = new GameObject("CoordSearchBar");
+            coordSearchPanel.transform.SetParent(canvas.transform);
+
+            Image panelBg = coordSearchPanel.AddComponent<Image>();
+            panelBg.color = new Color(0.08f, 0.08f, 0.12f, 0.92f);
+            panelBg.raycastTarget = true;
+
+            Outline panelOutline = coordSearchPanel.AddComponent<Outline>();
+            panelOutline.effectColor = new Color(0.5f, 0.45f, 0.3f, 0.8f);
+            panelOutline.effectDistance = new Vector2(1.5f, -1.5f);
+
+            RectTransform panelRect = coordSearchPanel.GetComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(0.5f, 1); // UST orta
+            panelRect.anchorMax = new Vector2(0.5f, 1);
+            panelRect.pivot = new Vector2(0.5f, 1);
+            panelRect.sizeDelta = new Vector2(340f, 50f); // Yatay cubuk
+            panelRect.anchoredPosition = new Vector2(0, -15f); // Ekranin 15px asagisinda (ustten)
+
+            // Yatay layout icin pozisyonlar
+            float currentX = 12f;
+
+            // X Label
+            CreateInlineLabel(coordSearchPanel.transform, "X:", currentX, 24f);
+            currentX += 28f;
+
+            // X Input
+            inputX = CreateInlineInput(coordSearchPanel.transform, "InputX", currentX, 80f);
+            currentX += 88f;
+
+            // Y Label
+            CreateInlineLabel(coordSearchPanel.transform, "Y:", currentX, 24f);
+            currentX += 28f;
+
+            // Y Input
+            inputY = CreateInlineInput(coordSearchPanel.transform, "InputY", currentX, 80f);
+            currentX += 92f;
+
+            // GIT Butonu
+            GameObject goBtnObj = new GameObject("GoButton");
+            goBtnObj.transform.SetParent(coordSearchPanel.transform);
+
+            Image goBtnBg = goBtnObj.AddComponent<Image>();
+            goBtnBg.color = new Color(0.2f, 0.55f, 0.25f, 1f);
+            goBtnBg.raycastTarget = true;
+
+            goButton = goBtnObj.AddComponent<Button>();
+            goButton.targetGraphic = goBtnBg;
+            goButton.onClick.AddListener(OnGoButtonClicked);
+
+            ColorBlock btnColors = goButton.colors;
+            btnColors.normalColor = Color.white;
+            btnColors.highlightedColor = new Color(1.15f, 1.25f, 1.15f, 1f);
+            btnColors.pressedColor = new Color(0.7f, 0.9f, 0.7f, 1f);
+            goButton.colors = btnColors;
+
+            RectTransform goBtnRect = goBtnObj.GetComponent<RectTransform>();
+            goBtnRect.anchorMin = new Vector2(0, 0.5f);
+            goBtnRect.anchorMax = new Vector2(0, 0.5f);
+            goBtnRect.pivot = new Vector2(0, 0.5f);
+            goBtnRect.anchoredPosition = new Vector2(currentX, 0);
+            goBtnRect.sizeDelta = new Vector2(70f, 36f);
+
+            // GIT text
+            GameObject goTextObj = new GameObject("Text");
+            goTextObj.transform.SetParent(goBtnObj.transform);
+            TextMeshProUGUI goText = goTextObj.AddComponent<TextMeshProUGUI>();
+            goText.text = "GIT";
+            goText.fontSize = 18;
+            goText.fontStyle = FontStyles.Bold;
+            goText.color = Color.white;
+            goText.alignment = TextAlignmentOptions.Center;
+
+            RectTransform goTextRect = goTextObj.GetComponent<RectTransform>();
+            goTextRect.anchorMin = Vector2.zero;
+            goTextRect.anchorMax = Vector2.one;
+            goTextRect.offsetMin = Vector2.zero;
+            goTextRect.offsetMax = Vector2.zero;
+
+            // ═══════════════════════════════════════════════════════════
+            // MEVCUT KONUM - Sol alt kosede AYRI
+            // ═══════════════════════════════════════════════════════════
+            CreateCurrentLocationDisplay(canvas.transform);
+
+            Debug.Log("MiniMap: Yatay koordinat arama cubugu olusturuldu");
+        }
+
+        private void CreateInlineLabel(Transform parent, string text, float xPos, float width)
+        {
+            GameObject labelObj = new GameObject($"Label_{text}");
+            labelObj.transform.SetParent(parent);
+
+            TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
+            label.text = text;
+            label.fontSize = 20;
+            label.fontStyle = FontStyles.Bold;
+            label.color = new Color(0.85f, 0.85f, 0.85f, 1f);
+            label.alignment = TextAlignmentOptions.Left;
+
+            RectTransform rect = labelObj.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0, 0.5f);
+            rect.anchorMax = new Vector2(0, 0.5f);
+            rect.pivot = new Vector2(0, 0.5f);
+            rect.anchoredPosition = new Vector2(xPos, 0);
+            rect.sizeDelta = new Vector2(width, 30f);
+        }
+
+        private TMP_InputField CreateInlineInput(Transform parent, string name, float xPos, float width)
+        {
+            GameObject inputObj = new GameObject(name);
+            inputObj.transform.SetParent(parent);
+
+            Image inputBg = inputObj.AddComponent<Image>();
+            inputBg.color = new Color(0.15f, 0.15f, 0.2f, 1f);
+            inputBg.raycastTarget = true;
+
+            RectTransform inputRect = inputObj.GetComponent<RectTransform>();
+            inputRect.anchorMin = new Vector2(0, 0.5f);
+            inputRect.anchorMax = new Vector2(0, 0.5f);
+            inputRect.pivot = new Vector2(0, 0.5f);
+            inputRect.anchoredPosition = new Vector2(xPos, 0);
+            inputRect.sizeDelta = new Vector2(width, 36f);
+
+            // Text Area
+            GameObject textAreaObj = new GameObject("Text Area");
+            textAreaObj.transform.SetParent(inputObj.transform);
+            RectTransform textAreaRect = textAreaObj.AddComponent<RectTransform>();
+            textAreaRect.anchorMin = Vector2.zero;
+            textAreaRect.anchorMax = Vector2.one;
+            textAreaRect.offsetMin = new Vector2(6f, 4f);
+            textAreaRect.offsetMax = new Vector2(-6f, -4f);
+            textAreaObj.AddComponent<RectMask2D>();
+
+            // Input Text
+            GameObject textObj = new GameObject("Text");
+            textObj.transform.SetParent(textAreaObj.transform);
+            TextMeshProUGUI inputText = textObj.AddComponent<TextMeshProUGUI>();
+            inputText.fontSize = 18;
+            inputText.color = Color.white;
+            inputText.alignment = TextAlignmentOptions.Center;
+            inputText.textWrappingMode = TextWrappingModes.NoWrap;
+            inputText.overflowMode = TextOverflowModes.Overflow;
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            // Placeholder
+            GameObject placeholderObj = new GameObject("Placeholder");
+            placeholderObj.transform.SetParent(textAreaObj.transform);
+            TextMeshProUGUI placeholder = placeholderObj.AddComponent<TextMeshProUGUI>();
+            placeholder.text = "0";
+            placeholder.fontSize = 18;
+            placeholder.color = new Color(0.5f, 0.5f, 0.5f, 0.6f);
+            placeholder.alignment = TextAlignmentOptions.Center;
+            placeholder.textWrappingMode = TextWrappingModes.NoWrap;
+
+            RectTransform placeholderRect = placeholderObj.GetComponent<RectTransform>();
+            placeholderRect.anchorMin = Vector2.zero;
+            placeholderRect.anchorMax = Vector2.one;
+            placeholderRect.offsetMin = Vector2.zero;
+            placeholderRect.offsetMax = Vector2.zero;
+
+            // TMP_InputField
+            TMP_InputField inputField = inputObj.AddComponent<TMP_InputField>();
+            inputField.textViewport = textAreaRect;
+            inputField.textComponent = inputText;
+            inputField.placeholder = placeholder;
+            inputField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            inputField.characterLimit = 5;
+            inputField.text = "";
+            inputField.targetGraphic = inputBg;
+            inputField.interactable = true;
+            inputField.caretBlinkRate = 0.85f;
+            inputField.caretWidth = 2;
+            inputField.customCaretColor = true;
+            inputField.caretColor = new Color(1f, 0.9f, 0.5f, 1f);
+            inputField.selectionColor = new Color(0.3f, 0.5f, 0.8f, 0.4f);
+
+            return inputField;
+        }
+
+        private void CreateCurrentLocationDisplay(Transform canvasTransform)
+        {
+            // Sol UST kosede konum gostergesi
+            GameObject locationPanel = new GameObject("CurrentLocationPanel");
+            locationPanel.transform.SetParent(canvasTransform);
+
+            Image panelBg = locationPanel.AddComponent<Image>();
+            panelBg.color = new Color(0.05f, 0.05f, 0.08f, 0.85f);
+            panelBg.raycastTarget = false;
+
+            RectTransform panelRect = locationPanel.GetComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(0, 1); // Sol UST
+            panelRect.anchorMax = new Vector2(0, 1);
+            panelRect.pivot = new Vector2(0, 1);
+            panelRect.anchoredPosition = new Vector2(15f, -15f);
+            panelRect.sizeDelta = new Vector2(180f, 45f);
+
+            // Konum text
+            GameObject textObj = new GameObject("LocationText");
+            textObj.transform.SetParent(locationPanel.transform);
+
+            currentCoordText = textObj.AddComponent<TextMeshProUGUI>();
+            currentCoordText.text = "Konum: (0, 0)";
+            currentCoordText.fontSize = 20;
+            currentCoordText.fontStyle = FontStyles.Bold;
+            currentCoordText.color = new Color(1f, 0.92f, 0.5f, 1f); // Altin rengi
+            currentCoordText.alignment = TextAlignmentOptions.Center;
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(8f, 5f);
+            textRect.offsetMax = new Vector2(-8f, -5f);
+        }
+
+        private void OnGoButtonClicked()
+        {
+            Debug.Log("MiniMap: Git butonuna basildi");
+
+            if (MapCameraController.Instance == null)
+            {
+                Debug.LogError("MiniMap: MapCameraController.Instance bulunamadi!");
+                return;
+            }
+
+            int x = 0, y = 0;
+
+            // InputX kontrolu
+            if (inputX != null)
+            {
+                string textX = inputX.text;
+                Debug.Log($"MiniMap: inputX.text = '{textX}'");
+                if (!string.IsNullOrEmpty(textX))
+                {
+                    if (!int.TryParse(textX, out x))
+                    {
+                        Debug.LogWarning($"MiniMap: X degeri parse edilemedi: '{textX}'");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("MiniMap: inputX null!");
+            }
+
+            // InputY kontrolu
+            if (inputY != null)
+            {
+                string textY = inputY.text;
+                Debug.Log($"MiniMap: inputY.text = '{textY}'");
+                if (!string.IsNullOrEmpty(textY))
+                {
+                    if (!int.TryParse(textY, out y))
+                    {
+                        Debug.LogWarning($"MiniMap: Y degeri parse edilemedi: '{textY}'");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("MiniMap: inputY null!");
+            }
+
+            Debug.Log($"MiniMap: Koordinata gidiliyor X={x}, Y={y}");
+            MapCameraController.Instance.GoToCoordinate(x, y);
+        }
+
+        private void UpdateCurrentCoordinateDisplay()
+        {
+            if (currentCoordText == null || MapCameraController.Instance == null) return;
+
+            Vector2Int coord = MapCameraController.Instance.GetCurrentCoordinate();
+            currentCoordText.text = $"Konum: ({coord.x}, {coord.y})";
         }
 
         #endregion
@@ -344,6 +1066,21 @@ namespace EmpireWars.UI
                 Vector3 mainCamPos = MapCameraController.Instance.transform.position;
                 camPos.x = mainCamPos.x;
                 camPos.z = mainCamPos.z;
+
+                // Dinamik minimap zoom - ana kamera zoom'una bagla
+                // Ana kamera yakin zoom = minimap genis gorunum (daha fazla alan goster)
+                // Ana kamera uzak zoom = minimap dar gorunum (daha az alan goster)
+                float mainZoom = MapCameraController.Instance.GetCurrentZoom();
+                float mainMinZoom = GameConfig.MinZoom;
+                float mainMaxZoom = GameConfig.MaxZoom;
+
+                // Ana kamera zoom'unu 0-1 arasina normalize et
+                float normalizedZoom = Mathf.InverseLerp(mainMinZoom, mainMaxZoom, mainZoom);
+
+                // Minimap zoom'unu hesapla (ters orantili)
+                // Ana kamera yakin (normalizedZoom=0) -> minimap genis (maxZoom)
+                // Ana kamera uzak (normalizedZoom=1) -> minimap dar (minZoom)
+                targetZoom = Mathf.Lerp(maxZoom, minZoom, normalizedZoom);
             }
             else if (mainCam != null)
             {
@@ -411,15 +1148,29 @@ namespace EmpireWars.UI
             // Daire icinde mi kontrol et
             if (normalized.magnitude > 0.5f) return;
 
-            // Minimap kamera pozisyonuna gore world pozisyonu hesapla
-            Vector3 miniCamPos = miniMapCamera.transform.position;
-            float currentOrthoSize = miniMapCamera.orthographicSize;
+            Vector3 worldPos;
 
-            Vector3 worldPos = new Vector3(
-                miniCamPos.x + normalized.x * currentOrthoSize * 2f,
-                0f,
-                miniCamPos.z + normalized.y * currentOrthoSize * 2f
-            );
+            // Terrain texture modunda tum harita gorunur
+            if (useTerrainTexture)
+            {
+                // Normalized pozisyonu (0-1) world pozisyonuna cevir
+                float worldX = (normalized.x + 0.5f) * GameConfig.WorldWidth;
+                float worldZ = (normalized.y + 0.5f) * GameConfig.WorldHeight;
+
+                worldPos = new Vector3(worldX, 0f, worldZ);
+            }
+            else
+            {
+                // Minimap kamera pozisyonuna gore world pozisyonu hesapla
+                Vector3 miniCamPos = miniMapCamera.transform.position;
+                float currentOrthoSize = miniMapCamera.orthographicSize;
+
+                worldPos = new Vector3(
+                    miniCamPos.x + normalized.x * currentOrthoSize * 2f,
+                    0f,
+                    miniCamPos.z + normalized.y * currentOrthoSize * 2f
+                );
+            }
 
             // Ana kamerayi hareket ettir
             MapCameraController.Instance.FocusOnPosition(worldPos);

@@ -15,11 +15,7 @@ namespace EmpireWars.Core
     /// </summary>
     public class WorldMapBootstrap : MonoBehaviour
     {
-        [Header("Harita Ayarlari")]
-        [SerializeField] private int mapWidth = 200;  // GameConfig'e yazilacak
-        [SerializeField] private int mapHeight = 200;
-
-        [Header("Databases (Opsiyonel - Inspector'dan ata)")]
+        [Header("Databases (Inspector'dan ata)")]
         [SerializeField] private HexTilePrefabDatabase tilePrefabDatabase;
         [SerializeField] private TerrainDecorationDatabase decorationDatabase;
         [SerializeField] private BuildingDatabase buildingDatabase;
@@ -27,7 +23,6 @@ namespace EmpireWars.Core
         [Header("Cloud Prefabs (Opsiyonel)")]
         [SerializeField] private GameObject cloudBigPrefab;
         [SerializeField] private GameObject cloudSmallPrefab;
-        [SerializeField] private int cloudCount = 15;
 
         [Header("Ozellikler")]
         [SerializeField] private bool createMap = true;
@@ -48,9 +43,9 @@ namespace EmpireWars.Core
         {
             Debug.Log("=== WorldMap Bootstrap Baslatiliyor ===");
 
-            // GameConfig'i ilk once baslat ve harita boyutunu ayarla
-            GameConfig.SetMapSize(mapWidth, mapHeight);
-            Debug.Log($"GameConfig: {GameConfig.MapWidth}x{GameConfig.MapHeight} ({GameConfig.WorldWidth:F0}x{GameConfig.WorldHeight:F0} units)");
+            // GameConfig'i baslat - TUM AYARLAR ORADAN OKUNUR
+            GameConfig.Initialize();
+            Debug.Log($"Harita: {GameConfig.MapWidth}x{GameConfig.MapHeight} ({GameConfig.WorldWidth:F0}x{GameConfig.WorldHeight:F0} units)");
 
             // HD grafik ayarlari
             if (setupHDGraphics)
@@ -213,12 +208,12 @@ namespace EmpireWars.Core
                 return;
             }
 
-            // Harita boyutunu ayarla
-            KingdomMapGenerator.SetMapSize(Mathf.Max(mapWidth, mapHeight));
+            // Harita boyutunu ayarla - GameConfig'den oku
+            KingdomMapGenerator.SetMapSize(Mathf.Max(GameConfig.MapWidth, GameConfig.MapHeight));
 
             // Haritayi olustur
-            tileFactory.GenerateTestGrid(mapWidth, mapHeight);
-            Debug.Log($"WorldMapBootstrap: {mapWidth}x{mapHeight} harita olusturuldu");
+            tileFactory.GenerateTestGrid(GameConfig.MapWidth, GameConfig.MapHeight);
+            Debug.Log($"WorldMapBootstrap: {GameConfig.MapWidth}x{GameConfig.MapHeight} harita olusturuldu");
         }
 
         private void CreateMinimap()
@@ -278,23 +273,8 @@ namespace EmpireWars.Core
                 TryAutoAssignCloudPrefabs(cloudManager);
             }
 
-            // Cloud sayisini ayarla
-            var cloudCountField = typeof(CloudManager).GetField("cloudCount",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (cloudCountField != null)
-            {
-                cloudCountField.SetValue(cloudManager, cloudCount);
-            }
-
-            // Harita merkezine gore alan ayarla
-            var areaCenterField = typeof(CloudManager).GetField("areaCenter",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (areaCenterField != null)
-            {
-                areaCenterField.SetValue(cloudManager, new Vector3(mapWidth / 2f, 0, mapHeight / 2f));
-            }
-
-            Debug.Log($"WorldMapBootstrap: {cloudCount} bulut ile CloudManager olusturuldu");
+            // CloudManager GameConfig'den okuyor, ekstra ayar gereksiz
+            Debug.Log($"WorldMapBootstrap: CloudManager olusturuldu (GameConfig'den {GameConfig.CloudCount} bulut)");
         }
 
         private void TryAutoAssignCloudPrefabs(CloudManager cloudManager)

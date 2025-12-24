@@ -3,264 +3,199 @@ using UnityEngine;
 namespace EmpireWars.Core
 {
     /// <summary>
-    /// Oyun genelinde kullanilan merkezi konfigürasyon
-    /// Tum sistemler bu degerlerden okur
+    /// GLOBAL OYUN AYARLARI - TEK KAYNAK
+    /// Tum degerler buradan okunur, baska yerde hardcoded deger OLMAMALI
+    ///
+    /// Degistirmek icin:
+    /// 1. Bu dosyadaki VARSAYILAN DEGERLER bolumunu duzenle
+    /// 2. VEYA WorldSettings ScriptableObject olustur (Assets/Resources/WorldSettings)
     /// </summary>
     public static class GameConfig
     {
-        // ============================================
-        // HARITA AYARLARI
-        // ============================================
+        // ╔════════════════════════════════════════════════════════════╗
+        // ║                    VARSAYILAN DEGERLER                      ║
+        // ║         BURADAKI DEGERLERI DEGISTIR = HER YER GUNCELLENIR  ║
+        // ╚════════════════════════════════════════════════════════════╝
 
-        /// <summary>
-        /// Harita genisligi (hex tile sayisi)
-        /// MAP-SYSTEM.md: 2000x2000 hedef
-        /// </summary>
-        public static int MapWidth { get; private set; } = 200;
+        #region === HARITA AYARLARI ===
 
-        /// <summary>
-        /// Harita yuksekligi (hex tile sayisi)
-        /// </summary>
-        public static int MapHeight { get; private set; } = 200;
+        private const int DEFAULT_MAP_WIDTH = 2000;
+        private const int DEFAULT_MAP_HEIGHT = 2000;
 
-        /// <summary>
-        /// Harita baslangic X koordinati (world space)
-        /// </summary>
+        #endregion
+
+        #region === KAMERA AYARLARI ===
+
+        private const float DEFAULT_MIN_ZOOM = 10f;
+        private const float DEFAULT_MAX_ZOOM = 70f;  // Sinirlandi - lag onlemek icin (2000x2000 harita)
+        private const float DEFAULT_ZOOM = 35f;
+
+        #endregion
+
+        #region === CHUNK AYARLARI ===
+
+        private const int DEFAULT_CHUNK_SIZE = 32;
+        private const int DEFAULT_LOAD_RADIUS = 2;
+        private const float DEFAULT_CHUNK_UPDATE_INTERVAL = 0.5f;
+        private const int DEFAULT_CHUNK_THRESHOLD = 100;
+
+        #endregion
+
+        #region === MINIMAP AYARLARI ===
+
+        private const float DEFAULT_MINIMAP_SIZE = 220f;  // Buyutuldu: 200 -> 220
+        private const float DEFAULT_MINIMAP_MIN_ZOOM = 100f;  // Daha genis gorunum: 50 -> 100
+        private const float DEFAULT_MINIMAP_MAX_ZOOM = 500f;  // Buyutuldu: 400 -> 500
+        private const float DEFAULT_MINIMAP_UPDATE_INTERVAL = 0.1f;
+
+        #endregion
+
+        #region === BULUT AYARLARI ===
+
+        private const int DEFAULT_CLOUD_COUNT = 50;
+        private const float DEFAULT_CLOUD_UPDATE_INTERVAL = 0.1f;
+
+        #endregion
+
+        // ╔════════════════════════════════════════════════════════════╗
+        // ║                    RUNTIME PROPERTIES                       ║
+        // ║              (Yukaridaki varsayilanlardan okunur)          ║
+        // ╚════════════════════════════════════════════════════════════╝
+
+        // Harita
+        public static int MapWidth { get; private set; } = DEFAULT_MAP_WIDTH;
+        public static int MapHeight { get; private set; } = DEFAULT_MAP_HEIGHT;
         public static float MapOffsetX { get; private set; } = 0f;
-
-        /// <summary>
-        /// Harita baslangic Z koordinati (world space)
-        /// </summary>
         public static float MapOffsetZ { get; private set; } = 0f;
 
-        // ============================================
-        // HESAPLANAN DEGERLER (World Space)
-        // ============================================
-
-        /// <summary>
-        /// Harita genisligi (world units)
-        /// </summary>
+        // Hesaplanan world degerleri
         public static float WorldWidth => MapWidth * HexMetrics.InnerRadius * 2f;
-
-        /// <summary>
-        /// Harita yuksekligi (world units)
-        /// </summary>
         public static float WorldHeight => MapHeight * HexMetrics.OuterRadius * 1.5f;
+        public static Vector3 WorldCenter => new Vector3(MapOffsetX + WorldWidth / 2f, 0f, MapOffsetZ + WorldHeight / 2f);
 
-        /// <summary>
-        /// Harita merkezi (world space)
-        /// </summary>
-        public static Vector3 WorldCenter => new Vector3(
-            MapOffsetX + WorldWidth / 2f,
-            0f,
-            MapOffsetZ + WorldHeight / 2f
-        );
+        // Kamera
+        public static float MinZoom { get; private set; } = DEFAULT_MIN_ZOOM;
+        public static float MaxZoom { get; private set; } = DEFAULT_MAX_ZOOM;
+        public static float DefaultZoom { get; private set; } = DEFAULT_ZOOM;
 
-        // ============================================
-        // CHUNK AYARLARI
-        // ============================================
+        // Chunk
+        public static int ChunkSize { get; private set; } = DEFAULT_CHUNK_SIZE;
+        public static int LoadRadius { get; private set; } = DEFAULT_LOAD_RADIUS;
+        public static float ChunkUpdateInterval { get; private set; } = DEFAULT_CHUNK_UPDATE_INTERVAL;
+        public static int ChunkLoadingThreshold { get; private set; } = DEFAULT_CHUNK_THRESHOLD;
 
-        /// <summary>
-        /// Her chunk'taki tile sayisi (NxN)
-        /// </summary>
-        public static int ChunkSize { get; private set; } = 16;
+        // Minimap
+        public static float MinimapSize { get; private set; } = DEFAULT_MINIMAP_SIZE;
+        public static float MinimapMinZoom { get; private set; } = DEFAULT_MINIMAP_MIN_ZOOM;
+        public static float MinimapMaxZoom { get; private set; } = DEFAULT_MINIMAP_MAX_ZOOM;
+        public static float MinimapUpdateInterval { get; private set; } = DEFAULT_MINIMAP_UPDATE_INTERVAL;
 
-        /// <summary>
-        /// Yukleme yaricapi (chunk sayisi)
-        /// Merkez chunk + bu kadar yaricap yuklenir
-        /// </summary>
-        public static int LoadRadius { get; private set; } = 4;
+        // Bulut
+        public static int CloudCount { get; private set; } = DEFAULT_CLOUD_COUNT;
+        public static float CloudUpdateInterval { get; private set; } = DEFAULT_CLOUD_UPDATE_INTERVAL;
 
-        /// <summary>
-        /// Chunk yukleme icin minimum harita boyutu
-        /// Bu boyutun altindaki haritalar tek seferde yuklenir
-        /// </summary>
-        public static int ChunkLoadingThreshold { get; private set; } = 100;
-
-        // ============================================
-        // KAMERA AYARLARI
-        // ============================================
-
-        /// <summary>
-        /// Minimum zoom (yakin)
-        /// </summary>
-        public static float MinZoom { get; private set; } = 5f;
-
-        /// <summary>
-        /// Maksimum zoom (uzak)
-        /// </summary>
-        public static float MaxZoom { get; private set; } = 80f;
-
-        /// <summary>
-        /// Baslangic zoom degeri
-        /// </summary>
-        public static float DefaultZoom { get; private set; } = 25f;
-
-        // ============================================
-        // MINIMAP AYARLARI
-        // ============================================
-
-        /// <summary>
-        /// Minimap UI boyutu (piksel)
-        /// </summary>
-        public static float MinimapSize { get; private set; } = 180f;
-
-        /// <summary>
-        /// Minimap minimum zoom
-        /// </summary>
-        public static float MinimapMinZoom { get; private set; } = 30f;
-
-        /// <summary>
-        /// Minimap maksimum zoom
-        /// </summary>
-        public static float MinimapMaxZoom { get; private set; } = 300f;
-
-        // ============================================
-        // PERFORMANS AYARLARI
-        // ============================================
-
-        /// <summary>
-        /// Chunk guncelleme araligi (saniye)
-        /// </summary>
-        public static float ChunkUpdateInterval { get; private set; } = 0.3f;
-
-        /// <summary>
-        /// Minimap guncelleme araligi (saniye)
-        /// </summary>
-        public static float MinimapUpdateInterval { get; private set; } = 0.1f;
-
-        /// <summary>
-        /// Bulut guncelleme araligi (saniye)
-        /// </summary>
-        public static float CloudUpdateInterval { get; private set; } = 0.1f;
-
-        /// <summary>
-        /// Bulut sayisi
-        /// </summary>
-        public static int CloudCount { get; private set; } = 12;
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
+        // ╔════════════════════════════════════════════════════════════╗
+        // ║                      INITIALIZATION                         ║
+        // ╚════════════════════════════════════════════════════════════╝
 
         private static bool _initialized = false;
 
         /// <summary>
-        /// Oyun baslarken cagrilir - varsayilan degerler
+        /// Editor'da domain reload sirasinda reset
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            _initialized = false;
+            // Varsayilanlara don
+            MapWidth = DEFAULT_MAP_WIDTH;
+            MapHeight = DEFAULT_MAP_HEIGHT;
+            MinZoom = DEFAULT_MIN_ZOOM;
+            MaxZoom = DEFAULT_MAX_ZOOM;
+            DefaultZoom = DEFAULT_ZOOM;
+            ChunkSize = DEFAULT_CHUNK_SIZE;
+            LoadRadius = DEFAULT_LOAD_RADIUS;
+            ChunkUpdateInterval = DEFAULT_CHUNK_UPDATE_INTERVAL;
+            MinimapSize = DEFAULT_MINIMAP_SIZE;
+            MinimapMinZoom = DEFAULT_MINIMAP_MIN_ZOOM;
+            MinimapMaxZoom = DEFAULT_MINIMAP_MAX_ZOOM;
+            CloudCount = DEFAULT_CLOUD_COUNT;
+            CloudUpdateInterval = DEFAULT_CLOUD_UPDATE_INTERVAL;
+        }
+
+        /// <summary>
+        /// Oyun baslarken cagrilir
+        /// WorldSettings varsa ondan okur, yoksa varsayilanlari kullanir
         /// </summary>
         public static void Initialize()
         {
             if (_initialized) return;
             _initialized = true;
 
-            // Harita boyutuna gore dinamik ayarlamalar
-            AdjustSettingsForMapSize();
+            // WorldSettings varsa ondan oku
+            var settings = Resources.Load<WorldSettings>("WorldSettings");
+            if (settings != null)
+            {
+                LoadFromWorldSettings(settings);
+                Debug.Log($"GameConfig: WorldSettings'den yuklendi - {MapWidth}x{MapHeight}");
+            }
+            else
+            {
+                Debug.Log($"GameConfig: Varsayilanlar kullaniliyor - {MapWidth}x{MapHeight}");
+            }
 
-            Debug.Log($"GameConfig: Initialized - Map: {MapWidth}x{MapHeight}, " +
-                     $"World: {WorldWidth:F0}x{WorldHeight:F0}, " +
-                     $"Chunk: {ChunkSize}x{ChunkSize}, LoadRadius: {LoadRadius}");
+            Debug.Log($"GameConfig: World={WorldWidth:F0}x{WorldHeight:F0}, Zoom={MinZoom}-{MaxZoom}, Chunk={ChunkSize}");
+        }
+
+        private static void LoadFromWorldSettings(WorldSettings settings)
+        {
+            MapWidth = settings.mapWidth;
+            MapHeight = settings.mapHeight;
+            MinZoom = settings.minZoom;
+            MaxZoom = settings.maxZoom;
+            DefaultZoom = settings.defaultZoom;
+            ChunkSize = settings.chunkSize;
+            LoadRadius = settings.loadRadius;
+            ChunkUpdateInterval = settings.chunkUpdateInterval;
+            MinimapSize = settings.minimapSize;
+            MinimapMinZoom = settings.minimapMinZoom;
+            MinimapMaxZoom = settings.minimapMaxZoom;
+            CloudCount = settings.cloudCount;
+            CloudUpdateInterval = settings.cloudUpdateInterval;
         }
 
         /// <summary>
-        /// Harita boyutunu degistir (runtime'da)
+        /// Runtime'da harita boyutunu degistir (WorldSettings olmadan)
         /// </summary>
         public static void SetMapSize(int width, int height)
         {
             MapWidth = Mathf.Max(20, width);
             MapHeight = Mathf.Max(20, height);
-            AdjustSettingsForMapSize();
-
-            // Event trigger
             OnMapSizeChanged?.Invoke(MapWidth, MapHeight);
-
-            Debug.Log($"GameConfig: Map size changed to {MapWidth}x{MapHeight}");
+            Debug.Log($"GameConfig: Harita boyutu degistirildi - {MapWidth}x{MapHeight}");
         }
 
-        /// <summary>
-        /// Harita boyutuna gore diger ayarlari otomatik ayarla
-        /// </summary>
-        private static void AdjustSettingsForMapSize()
-        {
-            int maxDimension = Mathf.Max(MapWidth, MapHeight);
+        // ╔════════════════════════════════════════════════════════════╗
+        // ║                        EVENTS                               ║
+        // ╚════════════════════════════════════════════════════════════╝
 
-            // Chunk boyutu - buyuk haritalarda buyuk chunk
-            if (maxDimension >= 1000)
-            {
-                ChunkSize = 32;
-                LoadRadius = 3;
-            }
-            else if (maxDimension >= 500)
-            {
-                ChunkSize = 24;
-                LoadRadius = 3;
-            }
-            else if (maxDimension >= 200)
-            {
-                ChunkSize = 16;
-                LoadRadius = 4;
-            }
-            else
-            {
-                ChunkSize = 8;
-                LoadRadius = 5;
-            }
-
-            // Kamera zoom - harita boyutuna gore
-            MinZoom = Mathf.Max(3f, maxDimension * 0.01f);
-            MaxZoom = Mathf.Min(150f, maxDimension * 0.3f);
-            DefaultZoom = (MinZoom + MaxZoom) / 3f;
-
-            // Minimap zoom - harita boyutuna gore
-            MinimapMinZoom = Mathf.Max(20f, maxDimension * 0.03f);
-            MinimapMaxZoom = Mathf.Min(500f, maxDimension * 0.4f);
-
-            // Bulut sayisi - harita boyutuna gore
-            CloudCount = Mathf.Clamp(maxDimension / 15, 8, 30);
-        }
-
-        // ============================================
-        // EVENTS
-        // ============================================
-
-        /// <summary>
-        /// Harita boyutu degistiginde tetiklenir
-        /// </summary>
         public static event System.Action<int, int> OnMapSizeChanged;
 
-        // ============================================
-        // UTILITY METHODS
-        // ============================================
+        // ╔════════════════════════════════════════════════════════════╗
+        // ║                    UTILITY METHODS                          ║
+        // ╚════════════════════════════════════════════════════════════╝
 
-        /// <summary>
-        /// World pozisyonunun harita icinde olup olmadigini kontrol et
-        /// </summary>
         public static bool IsPositionInMap(Vector3 worldPos)
         {
             return worldPos.x >= MapOffsetX && worldPos.x <= MapOffsetX + WorldWidth &&
                    worldPos.z >= MapOffsetZ && worldPos.z <= MapOffsetZ + WorldHeight;
         }
 
-        /// <summary>
-        /// Hex koordinatinin harita icinde olup olmadigini kontrol et
-        /// </summary>
         public static bool IsCoordInMap(int q, int r)
         {
             return q >= 0 && q < MapWidth && r >= 0 && r < MapHeight;
         }
 
-        /// <summary>
-        /// Chunk koordinatinin gecerli olup olmadigini kontrol et
-        /// </summary>
-        public static bool IsChunkValid(int chunkX, int chunkY)
-        {
-            int maxChunkX = Mathf.CeilToInt((float)MapWidth / ChunkSize);
-            int maxChunkY = Mathf.CeilToInt((float)MapHeight / ChunkSize);
-            return chunkX >= 0 && chunkX < maxChunkX && chunkY >= 0 && chunkY < maxChunkY;
-        }
-
-        /// <summary>
-        /// Chunk-based loading kullanilmali mi?
-        /// </summary>
         public static bool ShouldUseChunkedLoading()
         {
             return MapWidth > ChunkLoadingThreshold || MapHeight > ChunkLoadingThreshold;

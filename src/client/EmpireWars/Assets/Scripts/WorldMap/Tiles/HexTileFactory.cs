@@ -313,14 +313,15 @@ namespace EmpireWars.WorldMap.Tiles
                     terrainCounts[tileData.Terrain] = 0;
                 terrainCounts[tileData.Terrain]++;
 
-                // Maden seviyesini kaydet
+                // Maden seviyesini ve türünü kaydet
                 if (tileData.MineLevel > 0)
                 {
                     var hexTile = tileObj.GetComponent<HexTile>();
                     if (hexTile != null)
                     {
-                        // Mine level'i HexTile'a kaydet (ileride UI'da gosterilecek)
-                        tileObj.name = $"Hex_{tileData.Q}_{tileData.R}_{tileData.Terrain}_Lv{tileData.MineLevel}";
+                        // Maden bilgisini HexTile'a aktar ve görsel oluştur
+                        hexTile.SetMineInfo(tileData.MineLevel, tileData.MineType);
+                        tileObj.name = $"Hex_{tileData.Q}_{tileData.R}_{tileData.MineType}_Lv{tileData.MineLevel}";
                     }
                     mineCount++;
                 }

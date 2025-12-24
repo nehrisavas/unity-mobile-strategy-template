@@ -103,6 +103,13 @@ namespace EmpireWars.WorldMap
                 cloud.transform.SetParent(parent);
                 cloud.transform.localScale = Vector3.one * Random.Range(2f, 4f);
 
+                // Clouds layer'a ata (minimap'te gorunmemesi icin)
+                int cloudsLayer = LayerMask.NameToLayer("Clouds");
+                if (cloudsLayer >= 0)
+                {
+                    SetLayerRecursively(cloud, cloudsLayer);
+                }
+
                 cloudPool[i] = cloud.transform;
                 cloudSpeeds[i] = Random.Range(0.5f, 1.5f) * cloudSpeed;
             }
@@ -154,6 +161,18 @@ namespace EmpireWars.WorldMap
             areaCenter = center;
             areaWidth = width;
             areaDepth = depth;
+        }
+
+        /// <summary>
+        /// Obje ve tum child'larina layer ata
+        /// </summary>
+        private void SetLayerRecursively(GameObject obj, int layer)
+        {
+            obj.layer = layer;
+            foreach (Transform child in obj.transform)
+            {
+                SetLayerRecursively(child.gameObject, layer);
+            }
         }
     }
 }

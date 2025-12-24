@@ -42,7 +42,8 @@
       "Bash(if [ -f \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\" ])",
       "Bash(then tail -200 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
       "Bash(else echo \"Log not found at SAVAS path\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(then tail -100 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")"
     ]
   }
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using EmpireWars.Core;
 using EmpireWars.Data;
+using EmpireWars.WorldMap;
+using TMPro;
 
 namespace EmpireWars.WorldMap.Tiles
 {
@@ -30,6 +32,11 @@ namespace EmpireWars.WorldMap.Tiles
         [SerializeField] private bool hasResource;
         [SerializeField] private ResourceType resourceType;
 
+        [Header("Mine Info")]
+        [SerializeField] private int mineLevel;
+        [SerializeField] private KingdomMapGenerator.MineType mineType;
+        [SerializeField] private GameObject mineLevelIndicator;
+
         [Header("Building")]
         [SerializeField] private bool hasBuilding;
         [SerializeField] private GameObject buildingObject;
@@ -49,6 +56,9 @@ namespace EmpireWars.WorldMap.Tiles
         public bool HasResource => hasResource;
         public ResourceType Resource => resourceType;
         public bool HasBuilding => hasBuilding;
+        public int MineLevel => mineLevel;
+        public KingdomMapGenerator.MineType MineType => mineType;
+        public bool IsMine => mineLevel > 0;
 
         // Fog of War icin renderer cache
         private Renderer[] renderers;
@@ -300,6 +310,65 @@ namespace EmpireWars.WorldMap.Tiles
             {
                 buildingObject.transform.SetParent(transform);
                 buildingObject.transform.localPosition = Vector3.zero;
+            }
+        }
+
+        /// <summary>
+        /// Maden bilgisini ayarla ve görsel gösterge oluştur
+        /// </summary>
+        public void SetMineInfo(int level, KingdomMapGenerator.MineType type)
+        {
+            mineLevel = level;
+            mineType = type;
+
+            if (level > 0)
+            {
+                CreateMineLevelIndicator();
+            }
+        }
+
+        /// <summary>
+        /// Maden seviyesi ve türünü gösteren 3D text oluştur
+        /// </summary>
+        private void CreateMineLevelIndicator()
+        {
+            if (mineLevelIndicator != null)
+            {
+                DestroyImmediate(mineLevelIndicator);
+            }
+
+            // 3D Text GameObject oluştur
+            mineLevelIndicator = new GameObject("MineLevelIndicator");
+            mineLevelIndicator.transform.SetParent(transform);
+            mineLevelIndicator.transform.localPosition = new Vector3(0, 1.2f, 0);
+            mineLevelIndicator.transform.localRotation = Quaternion.Euler(90f, 0, 0); // Yukarı bak
+
+            // TextMeshPro component ekle
+            TextMeshPro tmp = mineLevelIndicator.AddComponent<TextMeshPro>();
+
+            // Maden türü adı + seviye
+            string typeLabel = KingdomMapGenerator.GetMineTypeName(mineType);
+            tmp.text = $"<size=80%>{typeLabel}</size>\n<b>Lv{mineLevel}</b>";
+
+            // Maden türüne göre renk
+            tmp.color = KingdomMapGenerator.GetMineTypeColor(mineType);
+            tmp.fontSize = 2.5f;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.sortingOrder = 100;
+
+            // Arka plan için outline - daha koyu
+            tmp.outlineWidth = 0.25f;
+            tmp.outlineColor = new Color32(0, 0, 0, 255);
+
+            // Glow efekti
+            tmp.fontMaterial.EnableKeyword("GLOW_ON");
+
+            // RectTransform ayarla
+            RectTransform rect = mineLevelIndicator.GetComponent<RectTransform>();
+            if (rect != null)
+            {
+                rect.sizeDelta = new Vector2(2.5f, 2f);
             }
         }
 
