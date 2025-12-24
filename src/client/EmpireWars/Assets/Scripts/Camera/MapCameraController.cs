@@ -31,8 +31,7 @@ namespace EmpireWars.CameraSystem
 
         [Header("Sinirlar")]
         [SerializeField] private bool useBounds = true;
-        [SerializeField] private Vector2 mapSize = new Vector2(60f, 60f);
-        [SerializeField] private Vector2 mapOffset = new Vector2(0f, 0f); // Harita baslangic noktasi
+        [SerializeField] private bool useGameConfig = true; // GameConfig'den oku
 
         [Header("Drag Ayarlari")]
         [SerializeField] private float dragThreshold = 5f;
@@ -98,10 +97,22 @@ namespace EmpireWars.CameraSystem
                     targetCamera = Camera.main;
             }
 
+            // GameConfig'den zoom ayarlarini al
+            if (useGameConfig)
+            {
+                GameConfig.Initialize();
+                minZoom = GameConfig.MinZoom;
+                maxZoom = GameConfig.MaxZoom;
+                targetZoom = GameConfig.DefaultZoom;
+            }
+            else
+            {
+                targetZoom = targetCamera != null && targetCamera.orthographic
+                    ? targetCamera.orthographicSize
+                    : transform.position.y;
+            }
+
             targetPosition = transform.position;
-            targetZoom = targetCamera != null && targetCamera.orthographic
-                ? targetCamera.orthographicSize
-                : transform.position.y;
         }
 
         private void Update()
@@ -328,11 +339,17 @@ namespace EmpireWars.CameraSystem
         {
             if (!useBounds) return;
 
-            // Harita 0,0'dan baslar, mapSize'a kadar gider
-            float minX = mapOffset.x;
-            float maxX = mapOffset.x + mapSize.x;
-            float minZ = mapOffset.y;
-            float maxZ = mapOffset.y + mapSize.y;
+            // GameConfig'den harita sinirlarini al
+            float mapOffsetX = useGameConfig ? GameConfig.MapOffsetX : 0f;
+            float mapOffsetZ = useGameConfig ? GameConfig.MapOffsetZ : 0f;
+            float worldWidth = useGameConfig ? GameConfig.WorldWidth : 60f;
+            float worldHeight = useGameConfig ? GameConfig.WorldHeight : 60f;
+
+            // Harita sinirlari
+            float minX = mapOffsetX;
+            float maxX = mapOffsetX + worldWidth;
+            float minZ = mapOffsetZ;
+            float maxZ = mapOffsetZ + worldHeight;
 
             // Zoom'a gore margin ekle (kamera kenarlardan uzak dursun)
             float zoomMargin = targetZoom * 0.5f;
@@ -342,8 +359,8 @@ namespace EmpireWars.CameraSystem
             maxZ -= zoomMargin;
 
             // Minimum degerlerin maximum'u gecmemesini sagla
-            if (minX > maxX) { minX = maxX = (mapOffset.x + mapSize.x) / 2f; }
-            if (minZ > maxZ) { minZ = maxZ = (mapOffset.y + mapSize.y) / 2f; }
+            if (minX > maxX) { minX = maxX = mapOffsetX + worldWidth / 2f; }
+            if (minZ > maxZ) { minZ = maxZ = mapOffsetZ + worldHeight / 2f; }
 
             targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
             targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
@@ -382,18 +399,20 @@ namespace EmpireWars.CameraSystem
         }
 
         /// <summary>
-        /// Harita sinirlarini ayarlar
+        /// Harita sinirlarini ayarlar (GameConfig kullanilmiyorsa)
+        /// Tercih: GameConfig.SetMapSize() kullanin
         /// </summary>
         public void SetMapBounds(float width, float height, float offsetX = 0f, float offsetZ = 0f)
         {
-            mapSize = new Vector2(width, height);
-            mapOffset = new Vector2(offsetX, offsetZ);
+            // GameConfig kullanimini devre disi birak ve manuel sinirlar kullan
+            useGameConfig = false;
+            Debug.LogWarning("MapCameraController: SetMapBounds kullanildi, useGameConfig devre disi");
         }
 
         /// <summary>
-        /// Harita boyutunu dondurur
+        /// Harita boyutunu dondurur (GameConfig'den)
         /// </summary>
-        public Vector2 GetMapSize() => mapSize;
+        public Vector2 GetMapSize() => new Vector2(GameConfig.WorldWidth, GameConfig.WorldHeight);
 
         #endregion
     }

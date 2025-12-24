@@ -16,9 +16,8 @@ namespace EmpireWars.Core
     public class WorldMapBootstrap : MonoBehaviour
     {
         [Header("Harita Ayarlari")]
-        [SerializeField] private int mapWidth = 200;  // Buyuk harita icin 200
+        [SerializeField] private int mapWidth = 200;  // GameConfig'e yazilacak
         [SerializeField] private int mapHeight = 200;
-        [SerializeField] private bool useChunkedLoading = true; // Buyuk haritalar icin chunk sistemi
 
         [Header("Databases (Opsiyonel - Inspector'dan ata)")]
         [SerializeField] private HexTilePrefabDatabase tilePrefabDatabase;
@@ -48,6 +47,10 @@ namespace EmpireWars.Core
         private void Start()
         {
             Debug.Log("=== WorldMap Bootstrap Baslatiliyor ===");
+
+            // GameConfig'i ilk once baslat ve harita boyutunu ayarla
+            GameConfig.SetMapSize(mapWidth, mapHeight);
+            Debug.Log($"GameConfig: {GameConfig.MapWidth}x{GameConfig.MapHeight} ({GameConfig.WorldWidth:F0}x{GameConfig.WorldHeight:F0} units)");
 
             // HD grafik ayarlari
             if (setupHDGraphics)
@@ -108,8 +111,8 @@ namespace EmpireWars.Core
 
         private void CreateMap()
         {
-            // Buyuk haritalar icin chunk-based loading kullan
-            if (useChunkedLoading && (mapWidth > 100 || mapHeight > 100))
+            // GameConfig'e gore chunk-based loading kullanilmali mi?
+            if (GameConfig.ShouldUseChunkedLoading())
             {
                 CreateChunkedMap();
                 return;
@@ -154,16 +157,9 @@ namespace EmpireWars.Core
         {
             yield return null; // Bir frame bekle
 
-            loader.Initialize(mapWidth, mapHeight);
-            Debug.Log($"WorldMapBootstrap: {mapWidth}x{mapHeight} chunk-based harita baslatildi");
-
-            // Kamera sinirlarini ayarla
-            if (MapCameraController.Instance != null)
-            {
-                float worldWidth = mapWidth * HexMetrics.InnerRadius * 2f;
-                float worldHeight = mapHeight * HexMetrics.OuterRadius * 1.5f;
-                MapCameraController.Instance.SetMapBounds(worldWidth, worldHeight, 0, 0);
-            }
+            // GameConfig'den okuyarak baslat
+            loader.Initialize();
+            Debug.Log($"WorldMapBootstrap: {GameConfig.MapWidth}x{GameConfig.MapHeight} chunk-based harita baslatildi");
         }
 
         private void CreateFullMap()
@@ -246,13 +242,9 @@ namespace EmpireWars.Core
                 miniMap = minimapObj.AddComponent<MiniMapController>();
             }
 
-            // Harita sinirlarini ayarla
-            float worldWidth = mapWidth * HexMetrics.InnerRadius * 2f;
-            float worldHeight = mapHeight * HexMetrics.OuterRadius * 1.5f;
-            miniMap.SetWorldBounds(0, worldWidth, 0, worldHeight);
-
+            // GameConfig'den okuyor, ayri ayar gereksiz
             miniMap.Initialize();
-            Debug.Log("WorldMapBootstrap: Dairesel minimap olusturuldu (sag alt kose)");
+            Debug.Log($"WorldMapBootstrap: Dairesel minimap olusturuldu ({GameConfig.WorldWidth:F0}x{GameConfig.WorldHeight:F0})");
         }
 
         private void CreateBottomNavigation()

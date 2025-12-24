@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using EmpireWars.Core;
 
 namespace EmpireWars.WorldMap
 {
     /// <summary>
     /// Hafif bulut sistemi - sadece dekoratif amacli
     /// Object pooling ve minimal update ile optimize edilmis
+    /// GameConfig'den ayarlari otomatik alir
     /// </summary>
     public class CloudManager : MonoBehaviour
     {
@@ -16,24 +18,23 @@ namespace EmpireWars.WorldMap
         [SerializeField] private GameObject cloudSmallPrefab;
 
         [Header("Settings")]
-        [SerializeField] private int cloudCount = 8; // Az sayida bulut
-        [SerializeField] private float minHeight = 20f;
-        [SerializeField] private float maxHeight = 30f;
-        [SerializeField] private float cloudSpeed = 1f;
+        [SerializeField] private bool useGameConfig = true;
+        [SerializeField] private float minHeight = 25f;
+        [SerializeField] private float maxHeight = 40f;
+        [SerializeField] private float cloudSpeed = 1.5f;
 
-        [Header("Area")]
-        [SerializeField] private float areaWidth = 80f;
-        [SerializeField] private float areaDepth = 80f;
-        [SerializeField] private Vector3 areaCenter = new Vector3(30f, 0f, 30f);
+        // GameConfig'den alinan degerler
+        private int cloudCount;
+        private float areaWidth;
+        private float areaDepth;
+        private Vector3 areaCenter;
+        private float updateInterval;
 
         // Object pool
         private Transform[] cloudPool;
         private float[] cloudSpeeds;
         private bool initialized = false;
-
-        // Update optimization - her frame degil
         private float updateTimer = 0f;
-        private const float UPDATE_INTERVAL = 0.1f; // 10 FPS update
 
         private void Awake()
         {
@@ -43,6 +44,25 @@ namespace EmpireWars.WorldMap
 
         private void Start()
         {
+            // GameConfig'den ayarlari al
+            if (useGameConfig)
+            {
+                GameConfig.Initialize();
+                cloudCount = GameConfig.CloudCount;
+                areaWidth = GameConfig.WorldWidth;
+                areaDepth = GameConfig.WorldHeight;
+                areaCenter = GameConfig.WorldCenter;
+                updateInterval = GameConfig.CloudUpdateInterval;
+            }
+            else
+            {
+                cloudCount = 12;
+                areaWidth = 80f;
+                areaDepth = 80f;
+                areaCenter = new Vector3(40f, 0f, 40f);
+                updateInterval = 0.1f;
+            }
+
             InitializeClouds();
         }
 
@@ -51,10 +71,10 @@ namespace EmpireWars.WorldMap
             if (!initialized) return;
 
             updateTimer += Time.deltaTime;
-            if (updateTimer >= UPDATE_INTERVAL)
+            if (updateTimer >= updateInterval)
             {
                 updateTimer = 0f;
-                MoveClouds(UPDATE_INTERVAL);
+                MoveClouds(updateInterval);
             }
         }
 

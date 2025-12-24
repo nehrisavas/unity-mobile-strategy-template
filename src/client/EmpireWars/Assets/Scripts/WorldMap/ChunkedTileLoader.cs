@@ -17,9 +17,12 @@ namespace EmpireWars.WorldMap
         public static ChunkedTileLoader Instance { get; private set; }
 
         [Header("Chunk Settings")]
-        [SerializeField] private int chunkSize = 8; // Her chunk 8x8 tile
-        [SerializeField] private int loadRadius = 3; // Merkez chunk + 3 chunk yaricap
-        [SerializeField] private float updateInterval = 0.5f;
+        [SerializeField] private bool useGameConfig = true; // GameConfig'den ayarlari al
+
+        // GameConfig'den alinan degerler
+        private int chunkSize;
+        private int loadRadius;
+        private float updateInterval;
 
         [Header("References")]
         [SerializeField] private HexTilePrefabDatabase prefabDatabase;
@@ -105,20 +108,36 @@ namespace EmpireWars.WorldMap
 
         /// <summary>
         /// Harita verilerini generate et ve chunk sistemini baslat
+        /// GameConfig'den harita boyutu alinir
         /// </summary>
-        public void Initialize(int width, int height)
+        public void Initialize()
         {
-            mapWidth = width;
-            mapHeight = height;
+            // GameConfig'den ayarlari al
+            GameConfig.Initialize();
 
-            // Map size'i ayarla
-            KingdomMapGenerator.SetMapSize(Mathf.Max(width, height));
+            if (useGameConfig)
+            {
+                mapWidth = GameConfig.MapWidth;
+                mapHeight = GameConfig.MapHeight;
+                chunkSize = GameConfig.ChunkSize;
+                loadRadius = GameConfig.LoadRadius;
+                updateInterval = GameConfig.ChunkUpdateInterval;
+            }
+            else
+            {
+                // Fallback degerler
+                mapWidth = 200;
+                mapHeight = 200;
+                chunkSize = 16;
+                loadRadius = 4;
+                updateInterval = 0.3f;
+            }
+
+            // Map generator'i ayarla
+            KingdomMapGenerator.SetMapSize(Mathf.Max(mapWidth, mapHeight));
 
             // Tum tile verilerini pre-generate et (sadece data, GameObject yok)
             GenerateMapData();
-
-            // Kamera sinirlarini ayarla
-            SetupCameraBounds();
 
             isInitialized = true;
             lastCameraChunk = GetCameraChunk();
@@ -126,7 +145,29 @@ namespace EmpireWars.WorldMap
             // Ilk yuklemeleri baslat
             UpdateVisibleChunks();
 
-            Debug.Log($"ChunkedTileLoader: {width}x{height} harita icin chunk sistemi baslatildi");
+            Debug.Log($"ChunkedTileLoader: {mapWidth}x{mapHeight} harita, chunk:{chunkSize}, radius:{loadRadius}");
+        }
+
+        /// <summary>
+        /// Eski API uyumlulugu - GameConfig kullanilmaz
+        /// </summary>
+        public void Initialize(int width, int height)
+        {
+            useGameConfig = false;
+            mapWidth = width;
+            mapHeight = height;
+            chunkSize = 16;
+            loadRadius = 4;
+            updateInterval = 0.3f;
+
+            KingdomMapGenerator.SetMapSize(Mathf.Max(width, height));
+            GenerateMapData();
+
+            isInitialized = true;
+            lastCameraChunk = GetCameraChunk();
+            UpdateVisibleChunks();
+
+            Debug.Log($"ChunkedTileLoader: {width}x{height} harita icin chunk sistemi baslatildi (legacy)");
         }
 
         private void GenerateMapData()
@@ -159,16 +200,6 @@ namespace EmpireWars.WorldMap
             GameObject obj = new GameObject("PooledTile");
             obj.transform.SetParent(tilesParent);
             return obj;
-        }
-
-        private void SetupCameraBounds()
-        {
-            if (MapCameraController.Instance != null)
-            {
-                float worldWidth = mapWidth * HexMetrics.InnerRadius * 2f;
-                float worldHeight = mapHeight * HexMetrics.OuterRadius * 1.5f;
-                MapCameraController.Instance.SetMapBounds(worldWidth, worldHeight, 0, 0);
-            }
         }
 
         #endregion

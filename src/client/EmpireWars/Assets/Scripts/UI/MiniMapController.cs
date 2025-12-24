@@ -33,20 +33,11 @@ namespace EmpireWars.UI
         [SerializeField] private Color playerColor = Color.yellow;
 
         [Header("Zoom Ayarlari")]
-        [SerializeField] private float minZoom = 30f;
-        [SerializeField] private float maxZoom = 200f;
-        [SerializeField] private float currentZoom = 60f;
         [SerializeField] private float zoomSpeed = 20f;
         [SerializeField] private float zoomSmoothing = 8f;
 
-        [Header("Harita Sinirlari")]
-        [SerializeField] private float worldMinX = 0f;
-        [SerializeField] private float worldMaxX = 60f;
-        [SerializeField] private float worldMinZ = 0f;
-        [SerializeField] private float worldMaxZ = 60f;
-
         [Header("Performans")]
-        [SerializeField] private float updateInterval = 0.1f; // 10 FPS
+        [SerializeField] private bool useGameConfig = true; // GameConfig'den ayarlari al
 
         // Internal state
         private float targetZoom;
@@ -54,6 +45,15 @@ namespace EmpireWars.UI
         private RectTransform rectTransform;
         private RectTransform canvasRect;
         private bool isInitialized = false;
+
+        // GameConfig'den alinan degerler
+        private float minZoom;
+        private float maxZoom;
+        private float updateInterval;
+        private float worldMinX;
+        private float worldMaxX;
+        private float worldMinZ;
+        private float worldMaxZ;
 
         #region Unity Lifecycle
 
@@ -111,12 +111,37 @@ namespace EmpireWars.UI
         {
             if (isInitialized) return;
 
+            // GameConfig'den ayarlari al
+            if (useGameConfig)
+            {
+                GameConfig.Initialize();
+                minZoom = GameConfig.MinimapMinZoom;
+                maxZoom = GameConfig.MinimapMaxZoom;
+                updateInterval = GameConfig.MinimapUpdateInterval;
+                worldMinX = GameConfig.MapOffsetX;
+                worldMaxX = GameConfig.MapOffsetX + GameConfig.WorldWidth;
+                worldMinZ = GameConfig.MapOffsetZ;
+                worldMaxZ = GameConfig.MapOffsetZ + GameConfig.WorldHeight;
+                minimapUISize = GameConfig.MinimapSize;
+            }
+            else
+            {
+                // Fallback degerler
+                minZoom = 30f;
+                maxZoom = 200f;
+                updateInterval = 0.1f;
+                worldMinX = 0f;
+                worldMaxX = 60f;
+                worldMinZ = 0f;
+                worldMaxZ = 60f;
+            }
+
             CreateMiniMapCamera();
             SetupUI();
 
-            targetZoom = currentZoom;
+            targetZoom = (minZoom + maxZoom) / 3f;
             isInitialized = true;
-            Debug.Log("MiniMapController: Dairesel minimap olusturuldu");
+            Debug.Log($"MiniMapController: Dairesel minimap olusturuldu - World({worldMinX}-{worldMaxX}, {worldMinZ}-{worldMaxZ})");
         }
 
         private void CreateMiniMapCamera()
@@ -140,7 +165,7 @@ namespace EmpireWars.UI
             // Kamera ayarlari
             miniMapCamera.targetTexture = miniMapTexture;
             miniMapCamera.orthographic = true;
-            miniMapCamera.orthographicSize = currentZoom;
+            miniMapCamera.orthographicSize = (minZoom + maxZoom) / 3f;
             miniMapCamera.clearFlags = CameraClearFlags.SolidColor;
             miniMapCamera.backgroundColor = new Color(0.08f, 0.12f, 0.18f, 1f);
             miniMapCamera.cullingMask = ~0; // Tum layerlar
@@ -429,16 +454,22 @@ namespace EmpireWars.UI
         #region Public API
 
         /// <summary>
-        /// Harita sinirlarini ayarla (WorldMapGenerator'dan cagrilir)
+        /// [DEPRECATED] GameConfig kullanin. Eski API uyumlulugu icin tutuldu.
         /// </summary>
         public void SetWorldBounds(float minX, float maxX, float minZ, float maxZ)
         {
+            // GameConfig kullaniliyorsa bu metod etkisiz
+            if (useGameConfig)
+            {
+                Debug.LogWarning("MiniMapController: SetWorldBounds cagrildi ama useGameConfig=true, GameConfig kullaniliyor");
+                return;
+            }
+
             worldMinX = minX;
             worldMaxX = maxX;
             worldMinZ = minZ;
             worldMaxZ = maxZ;
 
-            // Zoom limitlerini harita boyutuna gore ayarla
             float mapWidth = maxX - minX;
             float mapHeight = maxZ - minZ;
             float mapSize = Mathf.Min(mapWidth, mapHeight);
@@ -446,8 +477,6 @@ namespace EmpireWars.UI
             minZoom = Mathf.Max(20f, mapSize * 0.05f);
             maxZoom = Mathf.Min(500f, mapSize * 0.5f);
             targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
-
-            Debug.Log($"MiniMapController: Sinirlar ayarlandi - Min({minX},{minZ}) Max({maxX},{maxZ})");
         }
 
         /// <summary>
