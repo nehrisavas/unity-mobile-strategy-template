@@ -595,6 +595,119 @@ namespace EmpireWars.WorldMap
                 int level = 10 + (hash % 12); // 10-21
 
                 // ════════════════════════════════════════════════════════════
+                // ASKERİYE - Koordinat (43, -36) çevresinde
+                // Ordu nizamında askeri binalar
+                // ════════════════════════════════════════════════════════════
+                int campX = 43;
+                int campY = -36;
+                int campDx = dx - campX;
+                int campDy = dy - campY;
+                int distFromCamp = Mathf.Max(Mathf.Abs(campDx), Mathf.Abs(campDy));
+
+                if (distFromCamp <= 8)
+                {
+                    // Merkez - Komuta Kulesi
+                    if (distFromCamp == 0)
+                    {
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 30);
+                    }
+
+                    // Halka 1 - Ana yol (platz)
+                    if (distFromCamp == 1)
+                    {
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                    }
+
+                    // Halka 2 - Kışlalar (4 yönde)
+                    if (distFromCamp == 2)
+                    {
+                        if (campDx == 2 && campDy == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 28);
+                        if (campDx == -2 && campDy == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 28);
+                        if (campDx == 0 && campDy == 2) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 28);
+                        if (campDx == 0 && campDy == -2) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 28);
+                        // Köşelerde gözcü kuleleri
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 25);
+                    }
+
+                    // Halka 3 - Yol
+                    if (distFromCamp == 3)
+                    {
+                        float roadRot = (campDx == 0) ? 90f : 0f;
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRot);
+                    }
+
+                    // Halka 4 - Okçu ve Süvari
+                    if (distFromCamp == 4)
+                    {
+                        // Kuzey ve Güney - Okçu menzili
+                        if (Mathf.Abs(campDy) == 4 && Mathf.Abs(campDx) <= 1)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "archeryrange_blue", 26);
+                        }
+                        // Doğu ve Batı - Ahırlar
+                        if (Mathf.Abs(campDx) == 4 && Mathf.Abs(campDy) <= 1)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "stables_blue", 26);
+                        }
+                        // Köşelerde top kuleleri
+                        if (Mathf.Abs(campDx) >= 3 && Mathf.Abs(campDy) >= 3)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 24);
+                        }
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Halka 5 - Yol (dış çevre yolu)
+                    if (distFromCamp == 5)
+                    {
+                        float roadRot = (campDx == 0) ? 90f : 0f;
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRot);
+                    }
+
+                    // Halka 6 - Mancınık kuleleri ve ek kışlalar
+                    if (distFromCamp == 6)
+                    {
+                        // 4 köşede mancınık
+                        if (Mathf.Abs(campDx) == 6 && Mathf.Abs(campDy) == 6)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_catapult_blue", 24);
+                        }
+                        // Kenarlarda ek kışlalar
+                        if ((Mathf.Abs(campDx) == 6 && Mathf.Abs(campDy) <= 2) ||
+                            (Mathf.Abs(campDy) == 6 && Mathf.Abs(campDx) <= 2))
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 22);
+                        }
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Halka 7 - Sur duvarları
+                    if (distFromCamp == 7)
+                    {
+                        // Kapılar (4 yön)
+                        if ((campDx == 0 && Mathf.Abs(campDy) == 7) || (campDy == 0 && Mathf.Abs(campDx) == 7))
+                        {
+                            return new TileData(q, r, TerrainType.Road, 0, MineType.None, true, "tower_a_blue", 22);
+                        }
+                        // Sur duvarları
+                        float wallRot = (Mathf.Abs(campDx) == 7) ? 90f : 0f;
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 20, wallRot);
+                    }
+
+                    // Halka 8 - Dış alan (çadırlar/garnizon)
+                    if (distFromCamp == 8)
+                    {
+                        if (buildingHash < 15)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15);
+                        }
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+
+                // ════════════════════════════════════════════════════════════
                 // GÖLET ALANI - Koordinat (37, 21) çevresinde
                 // UI: (37, 21), Tile: (1037, 1021)
                 // ════════════════════════════════════════════════════════════
