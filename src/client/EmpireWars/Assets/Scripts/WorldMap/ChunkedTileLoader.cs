@@ -32,8 +32,8 @@ namespace EmpireWars.WorldMap
         [Header("Debug")]
         [SerializeField] private bool showDebugGizmos = false;
 
-        // Harita verileri (static, pre-generated)
-        private Dictionary<Vector2Int, KingdomMapGenerator.TileData> tileDataMap;
+        // Harita verileri - ARTIK ON-DEMAND ÜRETILIYOR (bellek tasarrufu)
+        // tileDataMap kaldırıldı - KingdomMapGenerator.GetTileAt() kullanılıyor
 
         // Yuklenmis chunk'lar ve tile'lar
         private Dictionary<Vector2Int, ChunkData> loadedChunks;
@@ -83,7 +83,7 @@ namespace EmpireWars.WorldMap
             chunksToLoad = new Queue<Vector2Int>();
             chunksToUnload = new Queue<Vector2Int>();
             tempLoadList = new List<Vector2Int>();
-            tileDataMap = new Dictionary<Vector2Int, KingdomMapGenerator.TileData>();
+            // tileDataMap kaldırıldı - on-demand generation kullanılıyor
 
             // TilePoolManager oluştur
             if (TilePoolManager.Instance == null)
@@ -151,8 +151,9 @@ namespace EmpireWars.WorldMap
             // Map generator'i ayarla
             KingdomMapGenerator.SetMapSize(Mathf.Max(mapWidth, mapHeight));
 
-            // Tum tile verilerini pre-generate et (sadece data, GameObject yok)
-            GenerateMapData();
+            // ON-DEMAND GENERATION: Tile verileri chunk yüklenirken üretilecek
+            // Bu sayede 4 milyon tile yerine sadece görünür chunk'lar bellekte
+            // GenerateMapData() KALDIRILDI - bellek tasarrufu
 
             // Chunk bounds'larini cache'le (performans)
             cachedMaxChunkX = Mathf.CeilToInt((float)mapWidth / chunkSize);
@@ -164,9 +165,10 @@ namespace EmpireWars.WorldMap
             // Ilk yuklemeleri baslat
             UpdateVisibleChunks();
 
-            Debug.Log($"ChunkedTileLoader: {mapWidth}x{mapHeight} harita, chunk:{chunkSize}, radius:{loadRadius}");
+            Debug.Log($"ChunkedTileLoader: {mapWidth}x{mapHeight} harita, chunk:{chunkSize}, radius:{loadRadius} (ON-DEMAND)");
             Debug.Log($"ChunkedTileLoader: BuildingDatabase = {(buildingDatabase != null ? "ATANDI" : "NULL!")}");
             Debug.Log($"ChunkedTileLoader: PrefabDatabase = {(prefabDatabase != null ? "ATANDI" : "NULL!")}");
+            Debug.Log($"ChunkedTileLoader: BELLEK TASARRUFU - 4M tile yerine sadece ~{(2 * loadRadius + 1) * (2 * loadRadius + 1) * chunkSize * chunkSize} tile bellekte");
         }
 
         /// <summary>
@@ -182,28 +184,21 @@ namespace EmpireWars.WorldMap
             updateInterval = 0.3f;
 
             KingdomMapGenerator.SetMapSize(Mathf.Max(width, height));
-            GenerateMapData();
+            // ON-DEMAND: GenerateMapData() kaldırıldı
+
+            cachedMaxChunkX = Mathf.CeilToInt((float)mapWidth / chunkSize);
+            cachedMaxChunkY = Mathf.CeilToInt((float)mapHeight / chunkSize);
 
             isInitialized = true;
             lastCameraChunk = GetCameraChunk();
             UpdateVisibleChunks();
 
-            Debug.Log($"ChunkedTileLoader: {width}x{height} harita icin chunk sistemi baslatildi (legacy)");
+            Debug.Log($"ChunkedTileLoader: {width}x{height} harita icin chunk sistemi baslatildi (legacy, ON-DEMAND)");
         }
 
-        private void GenerateMapData()
-        {
-            tileDataMap.Clear();
-
-            var tiles = KingdomMapGenerator.GenerateMap();
-            foreach (var tile in tiles)
-            {
-                Vector2Int coord = new Vector2Int(tile.Q, tile.R);
-                tileDataMap[coord] = tile;
-            }
-
-            Debug.Log($"ChunkedTileLoader: {tileDataMap.Count} tile verisi olusturuldu");
-        }
+        // GenerateMapData() KALDIRILDI - On-demand generation kullanılıyor
+        // Her chunk yüklenirken KingdomMapGenerator.GetTileAt() çağrılıyor
+        // Bu sayede 4 milyon TileData struct'ı bellekte tutulmaz
 
         #endregion
 
@@ -417,14 +412,12 @@ namespace EmpireWars.WorldMap
                     // Harita sinirlari icinde mi?
                     if (q >= mapWidth || r >= mapHeight) continue;
 
-                    Vector2Int coord = new Vector2Int(q, r);
-                    if (tileDataMap.TryGetValue(coord, out var tileData))
+                    // ON-DEMAND: Tile verisini anlik olustur (bellek tasarrufu)
+                    var tileData = KingdomMapGenerator.GetTileAt(q, r);
+                    GameObject tile = CreateTileFromData(tileData);
+                    if (tile != null)
                     {
-                        GameObject tile = CreateTileFromData(tileData);
-                        if (tile != null)
-                        {
-                            chunkData.Tiles.Add(tile);
-                        }
+                        chunkData.Tiles.Add(tile);
                     }
                 }
             }
