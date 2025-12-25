@@ -464,50 +464,6 @@ namespace EmpireWars.WorldMap
                 int level = 12 + (hash % 10); // 12-21
 
                 // ════════════════════════════════════════════════════════════
-                // GÖLET ALANI (sol alt köşe: dx < -6, dy > 6)
-                // Merkez su, etrafında kıyı, rıhtım ve tekneler
-                // ════════════════════════════════════════════════════════════
-                if (dx < -6 && dy > 6 && ring >= 10 && ring <= 14)
-                {
-                    // Gölet merkezi - derin su
-                    if (dx < -9 && dy > 9 && ring >= 12)
-                    {
-                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
-                    }
-
-                    // Gölet kenarı - sığ su
-                    if (dx < -8 && dy > 8 && ring >= 11)
-                    {
-                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
-                    }
-
-                    // Kıyı şeridi
-                    if (dx < -7 && dy > 7 && ring >= 10)
-                    {
-                        // Kıyıda rıhtım ve tersane
-                        if (ring == 10 || ring == 11)
-                        {
-                            if (buildingHash < 3)
-                            {
-                                return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
-                            }
-                            if (buildingHash < 5)
-                            {
-                                return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
-                            }
-                        }
-                        return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
-                    }
-
-                    // Gölet çevresi - park alanı
-                    if (buildingHash < 4)
-                    {
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "well_blue", level - 3);
-                    }
-                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-                }
-
-                // ════════════════════════════════════════════════════════════
                 // DENİZ LİMANI BÖLGESİ (sağ taraf dx > 8, ring 11-14)
                 // Tersane ve rıhtımlar kıyıda, etrafında su
                 // ════════════════════════════════════════════════════════════
@@ -621,6 +577,49 @@ namespace EmpireWars.WorldMap
 
                 int buildingHash = hash % 30;
                 float noise = Mathf.PerlinNoise(q * 0.1f + 100f, r * 0.1f + 100f);
+                int level = 10 + (hash % 12); // 10-21
+
+                // ════════════════════════════════════════════════════════════
+                // GÖLET ALANI - Koordinat (37, 21) çevresinde
+                // UI: (37, 21), Tile: (1037, 1021)
+                // ════════════════════════════════════════════════════════════
+                int lakeX = 37;
+                int lakeY = 21;
+                int distFromLake = Mathf.Max(Mathf.Abs(dx - lakeX), Mathf.Abs(dy - lakeY));
+
+                if (distFromLake <= 6)
+                {
+                    // Gölet merkezi - derin su (yarıçap 3)
+                    if (distFromLake <= 2)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+                    // Sığ su (yarıçap 4)
+                    if (distFromLake <= 3)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+                    // Kıyı (yarıçap 5)
+                    if (distFromLake <= 4)
+                    {
+                        // Kıyıda rıhtım ve tersane
+                        if (buildingHash < 4)
+                        {
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
+                        }
+                        if (buildingHash < 6)
+                        {
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
+                        }
+                        return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
+                    }
+                    // Gölet çevresi - park ve bahçe
+                    if (buildingHash < 5)
+                    {
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "well_blue", level - 5);
+                    }
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
 
                 // İleri gözetleme kuleleri (ring 18 ve 20'de)
                 if ((ring == 18 || ring == 20) && (absDx == ring && absDy == ring))

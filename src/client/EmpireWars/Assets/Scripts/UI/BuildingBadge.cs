@@ -17,9 +17,9 @@ namespace EmpireWars.UI
 
         [Header("Settings")]
         [SerializeField] private bool billboardEnabled = true;
-        [SerializeField] private float minVisibleDistance = 5f;
-        [SerializeField] private float maxVisibleDistance = 80f;
-        [SerializeField] private float fadeStartDistance = 60f;
+        [SerializeField] private float minVisibleDistance = 3f;
+        [SerializeField] private float maxVisibleDistance = 35f;
+        [SerializeField] private float fadeStartDistance = 25f;
 
         private Transform cameraTransform;
         private CanvasGroup canvasGroup;
@@ -149,13 +149,13 @@ namespace EmpireWars.UI
 
         private void CreateBadgeElements()
         {
-            // Arka plan sprite
+            // Arka plan sprite - kompakt boyut
             if (backgroundSprite == null)
             {
                 GameObject bgObj = new GameObject("Background");
                 bgObj.transform.SetParent(transform);
                 bgObj.transform.localPosition = Vector3.zero;
-                bgObj.transform.localScale = new Vector3(1.8f, 0.8f, 1f);
+                bgObj.transform.localScale = new Vector3(1.2f, 0.5f, 1f);
 
                 backgroundSprite = bgObj.AddComponent<SpriteRenderer>();
                 backgroundSprite.sprite = CreateRoundedRectSprite();
@@ -163,38 +163,28 @@ namespace EmpireWars.UI
                 backgroundSprite.sortingOrder = 99;
             }
 
-            // Seviye text
-            if (levelText == null)
-            {
-                GameObject levelObj = new GameObject("LevelText");
-                levelObj.transform.SetParent(transform);
-                levelObj.transform.localPosition = new Vector3(0.5f, 0, -0.01f);
-
-                levelText = levelObj.AddComponent<TextMeshPro>();
-                levelText.fontSize = 3f;
-                levelText.fontStyle = FontStyles.Bold;
-                levelText.alignment = TextAlignmentOptions.MidlineRight;
-                levelText.sortingOrder = 101;
-
-                RectTransform rect = levelObj.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(1.5f, 1f);
-            }
-
-            // Label text
+            // Tek satır text - ikon + isim + seviye birlikte
             if (labelText == null)
             {
                 GameObject labelObj = new GameObject("LabelText");
                 labelObj.transform.SetParent(transform);
-                labelObj.transform.localPosition = new Vector3(-0.3f, 0, -0.01f);
+                labelObj.transform.localPosition = new Vector3(0, 0, -0.01f);
 
                 labelText = labelObj.AddComponent<TextMeshPro>();
-                labelText.fontSize = 2f;
-                labelText.alignment = TextAlignmentOptions.MidlineLeft;
+                labelText.fontSize = 2.2f;
+                labelText.alignment = TextAlignmentOptions.Center;
                 labelText.sortingOrder = 101;
                 labelText.color = Color.white;
 
                 RectTransform rect = labelObj.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(2f, 1f);
+                rect.sizeDelta = new Vector2(2.5f, 0.8f);
+            }
+
+            // LevelText artık kullanılmıyor - tek satırda birleştirildi
+            if (levelText != null)
+            {
+                DestroyImmediate(levelText.gameObject);
+                levelText = null;
             }
         }
 
@@ -202,25 +192,22 @@ namespace EmpireWars.UI
         {
             string displayName = GetBuildingDisplayName(buildingType);
             string icon = GetBuildingIcon(buildingType);
+            Color lvlColor = GetLevelColor(level);
 
+            // Tek satırda: ikon isim seviye
             if (labelText != null)
             {
-                labelText.text = $"{icon} {displayName}";
-            }
-
-            if (levelText != null)
-            {
-                levelText.text = $"<b>{level}</b>";
-                levelText.color = GetLevelColor(level);
+                string hexColor = ColorUtility.ToHtmlStringRGB(lvlColor);
+                labelText.text = $"{icon}{displayName}<color=#{hexColor}>{level}</color>";
             }
 
             // Seviyeye göre arka plan rengi
             if (backgroundSprite != null)
             {
                 if (level >= 25)
-                    backgroundSprite.color = new Color(0.3f, 0.25f, 0.1f, 0.9f); // Altın tonu
+                    backgroundSprite.color = new Color(0.3f, 0.25f, 0.1f, 0.9f);
                 else if (level >= 20)
-                    backgroundSprite.color = new Color(0.2f, 0.15f, 0.3f, 0.9f); // Mor tonu
+                    backgroundSprite.color = new Color(0.2f, 0.15f, 0.3f, 0.9f);
                 else
                     backgroundSprite.color = BackgroundDark;
             }
@@ -232,21 +219,16 @@ namespace EmpireWars.UI
             string icon = WorldMap.KingdomMapGenerator.GetMineTypeIcon(mineType);
             Color typeColor = WorldMap.KingdomMapGenerator.GetMineTypeColor(mineType);
 
+            // Tek satırda: ikon isim seviye
             if (labelText != null)
             {
-                labelText.text = $"{icon} {typeName}";
-                labelText.color = typeColor;
-            }
-
-            if (levelText != null)
-            {
-                levelText.text = $"<b>Lv{level}</b>";
-                levelText.color = typeColor;
+                string hexColor = ColorUtility.ToHtmlStringRGB(typeColor);
+                labelText.text = $"{icon}{typeName}<color=#{hexColor}>Lv{level}</color>";
+                labelText.color = Color.white;
             }
 
             if (backgroundSprite != null)
             {
-                // Maden türüne göre arka plan
                 Color bgColor = typeColor * 0.3f;
                 bgColor.a = 0.9f;
                 backgroundSprite.color = bgColor;
