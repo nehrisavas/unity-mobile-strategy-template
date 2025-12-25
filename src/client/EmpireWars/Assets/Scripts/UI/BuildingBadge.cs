@@ -191,14 +191,13 @@ namespace EmpireWars.UI
         private void UpdateDisplay()
         {
             string displayName = GetBuildingDisplayName(buildingType);
-            string icon = GetBuildingIcon(buildingType);
             Color lvlColor = GetLevelColor(level);
 
-            // Tek satırda: ikon isim seviye
+            // Tek satırda: isim + seviye
             if (labelText != null)
             {
                 string hexColor = ColorUtility.ToHtmlStringRGB(lvlColor);
-                labelText.text = $"{icon}{displayName}<color=#{hexColor}>{level}</color>";
+                labelText.text = $"{displayName} <color=#{hexColor}>{level}</color>";
             }
 
             // Seviyeye göre arka plan rengi
@@ -216,14 +215,13 @@ namespace EmpireWars.UI
         private void UpdateMineDisplay(WorldMap.KingdomMapGenerator.MineType mineType)
         {
             string typeName = WorldMap.KingdomMapGenerator.GetMineTypeName(mineType);
-            string icon = WorldMap.KingdomMapGenerator.GetMineTypeIcon(mineType);
             Color typeColor = WorldMap.KingdomMapGenerator.GetMineTypeColor(mineType);
 
-            // Tek satırda: ikon isim seviye
+            // Tek satırda: isim + seviye
             if (labelText != null)
             {
                 string hexColor = ColorUtility.ToHtmlStringRGB(typeColor);
-                labelText.text = $"{icon}{typeName}<color=#{hexColor}>Lv{level}</color>";
+                labelText.text = $"{typeName} <color=#{hexColor}>Lv{level}</color>";
                 labelText.color = Color.white;
             }
 
