@@ -150,6 +150,24 @@ namespace EmpireWars.Editor
             AssignUnit(serializedDb, "cartRed", "cart_red_full", ref assignedCount);
             AssignUnit(serializedDb, "cartYellow", "cart_yellow_full", ref assignedCount);
 
+            // Units - Weapons
+            AssignUnit(serializedDb, "swordGreen", "sword_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "swordBlue", "sword_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "swordRed", "sword_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "swordYellow", "sword_yellow_full", ref assignedCount);
+            AssignUnit(serializedDb, "shieldGreen", "shield_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "shieldBlue", "shield_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "shieldRed", "shield_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "shieldYellow", "shield_yellow_full", ref assignedCount);
+            AssignUnit(serializedDb, "bowGreen", "bow_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "bowBlue", "bow_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "bowRed", "bow_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "bowYellow", "bow_yellow_full", ref assignedCount);
+            AssignUnit(serializedDb, "spearGreen", "spear_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "spearBlue", "spear_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "spearRed", "spear_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "spearYellow", "spear_yellow_full", ref assignedCount);
+
             // Boats (decoration/props klasöründe)
             AssignDecoration(serializedDb, "boat", "boat", ref assignedCount);
             AssignDecoration(serializedDb, "boatrack", "boatrack", ref assignedCount);

@@ -286,6 +286,31 @@ namespace EmpireWars.WorldMap.Tiles
         public GameObject cartRed;
         public GameObject cartYellow;
 
+        [Header("=== UNITS - Weapons ===")]
+        [Tooltip("Kılıç - sword")]
+        public GameObject swordGreen;
+        public GameObject swordBlue;
+        public GameObject swordRed;
+        public GameObject swordYellow;
+
+        [Tooltip("Kalkan - shield")]
+        public GameObject shieldGreen;
+        public GameObject shieldBlue;
+        public GameObject shieldRed;
+        public GameObject shieldYellow;
+
+        [Tooltip("Yay - bow")]
+        public GameObject bowGreen;
+        public GameObject bowBlue;
+        public GameObject bowRed;
+        public GameObject bowYellow;
+
+        [Tooltip("Mızrak - spear")]
+        public GameObject spearGreen;
+        public GameObject spearBlue;
+        public GameObject spearRed;
+        public GameObject spearYellow;
+
         /// <summary>
         /// Bina adına göre prefab döndürür
         /// Tüm renk varyantlarını destekler
@@ -526,6 +551,24 @@ namespace EmpireWars.WorldMap.Tiles
                 "cart_blue" => cartBlue,
                 "cart_red" => cartRed,
                 "cart_yellow" => cartYellow,
+
+                // === UNITS - Weapons ===
+                "sword_green" => swordGreen,
+                "sword_blue" => swordBlue,
+                "sword_red" => swordRed,
+                "sword_yellow" => swordYellow,
+                "shield_green" => shieldGreen,
+                "shield_blue" => shieldBlue,
+                "shield_red" => shieldRed,
+                "shield_yellow" => shieldYellow,
+                "bow_green" => bowGreen,
+                "bow_blue" => bowBlue,
+                "bow_red" => bowRed,
+                "bow_yellow" => bowYellow,
+                "spear_green" => spearGreen,
+                "spear_blue" => spearBlue,
+                "spear_red" => spearRed,
+                "spear_yellow" => spearYellow,
 
                 _ => null
             };
