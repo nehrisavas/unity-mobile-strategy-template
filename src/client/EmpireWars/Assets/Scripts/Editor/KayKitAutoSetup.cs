@@ -397,7 +397,7 @@ namespace EmpireWars.Editor
             buildingDatabase.barracksRed = LoadPrefab($"{redPath}/building_barracks_red.fbx");
 
             // Archery Range
-            buildingDatabase.archeryRangeGreen = LoadPrefab($"{greenPath}/building_archeryrange_green.fbx");
+            buildingDatabase.archeryrangeGreen = LoadPrefab($"{greenPath}/building_archeryrange_green.fbx");
 
             // Stables
             buildingDatabase.stablesGreen = LoadPrefab($"{greenPath}/building_stables_green.fbx");

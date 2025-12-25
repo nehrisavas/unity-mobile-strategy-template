@@ -65,10 +65,10 @@ namespace EmpireWars.WorldMap.Tiles
         public GameObject barracksYellow;
 
         [Tooltip("Okçu menzili - archeryrange")]
-        public GameObject archeryRangeGreen;
-        public GameObject archeryRangeBlue;
-        public GameObject archeryRangeRed;
-        public GameObject archeryRangeYellow;
+        public GameObject archeryrangeGreen;
+        public GameObject archeryrangeBlue;
+        public GameObject archeryrangeRed;
+        public GameObject archeryrangeYellow;
 
         [Tooltip("Ahır - stables")]
         public GameObject stablesGreen;
@@ -305,10 +305,10 @@ namespace EmpireWars.WorldMap.Tiles
                 "barracks_yellow" => barracksYellow,
 
                 // === MILITARY - Archery Range ===
-                "archeryrange_green" => archeryRangeGreen,
-                "archeryrange_blue" => archeryRangeBlue,
-                "archeryrange_red" => archeryRangeRed,
-                "archeryrange_yellow" => archeryRangeYellow,
+                "archeryrange_green" => archeryrangeGreen,
+                "archeryrange_blue" => archeryrangeBlue,
+                "archeryrange_red" => archeryrangeRed,
+                "archeryrange_yellow" => archeryrangeYellow,
 
                 // === MILITARY - Stables ===
                 "stables_green" => stablesGreen,
