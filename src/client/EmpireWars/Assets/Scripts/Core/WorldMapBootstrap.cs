@@ -354,8 +354,30 @@ namespace EmpireWars.Core
 
         private void AutoFindDatabases()
         {
+            // Runtime: Resources.Load kullan
+            if (tilePrefabDatabase == null)
+            {
+                tilePrefabDatabase = Resources.Load<HexTilePrefabDatabase>("HexTilePrefabDatabase");
+                if (tilePrefabDatabase != null)
+                    Debug.Log("WorldMapBootstrap: TilePrefabDatabase Resources'dan yuklendi");
+            }
+
+            if (decorationDatabase == null)
+            {
+                decorationDatabase = Resources.Load<TerrainDecorationDatabase>("TerrainDecorationDatabase");
+                if (decorationDatabase != null)
+                    Debug.Log("WorldMapBootstrap: DecorationDatabase Resources'dan yuklendi");
+            }
+
+            if (buildingDatabase == null)
+            {
+                buildingDatabase = Resources.Load<BuildingDatabase>("BuildingDatabase");
+                if (buildingDatabase != null)
+                    Debug.Log("WorldMapBootstrap: BuildingDatabase Resources'dan yuklendi");
+            }
+
             #if UNITY_EDITOR
-            // TilePrefabDatabase
+            // Editor: AssetDatabase kullan (fallback)
             if (tilePrefabDatabase == null)
             {
                 string[] guids = UnityEditor.AssetDatabase.FindAssets("t:HexTilePrefabDatabase");
@@ -368,7 +390,6 @@ namespace EmpireWars.Core
                 }
             }
 
-            // DecorationDatabase
             if (decorationDatabase == null)
             {
                 string[] guids = UnityEditor.AssetDatabase.FindAssets("t:TerrainDecorationDatabase");

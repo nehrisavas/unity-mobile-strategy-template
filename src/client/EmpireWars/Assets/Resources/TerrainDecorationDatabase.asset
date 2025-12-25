@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4263b96252bcfbb49ac718f17819d3ec, type: 3}
+  m_Name: TerrainDecorationDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.WorldMap.Tiles.TerrainDecorationDatabase
+  forestTrees:
+  - {fileID: 919132149155446097, guid: 313abb06cf07bc84c82f5ab270f6c50b, type: 3}
+  - {fileID: 919132149155446097, guid: 36b4ddecf1b947643ba32b21bcd2faee, type: 3}
+  - {fileID: 919132149155446097, guid: 5a7a8787c0711ce41aefb6d14f907ef4, type: 3}
+  - {fileID: 919132149155446097, guid: 027fea9439d65a24aaec0d4761ee28a5, type: 3}
+  - {fileID: 919132149155446097, guid: 963ec88f9180436408c46c5d935b29b5, type: 3}
+  - {fileID: 919132149155446097, guid: 6b99051e3b3df6d429e74d6c7caf79d4, type: 3}
+  singleTrees:
+  - {fileID: 919132149155446097, guid: 0118e51db41740c4bad79715dafdbfa1, type: 3}
+  - {fileID: 919132149155446097, guid: c63b539f31997a645a58c68afe19dd3d, type: 3}
+  mountainModels:
+  - {fileID: 919132149155446097, guid: 010b52d08706f1b438dd26888caf0812, type: 3}
+  - {fileID: 919132149155446097, guid: ba22c56372e7b41498d504e9ef3629b6, type: 3}
+  - {fileID: 919132149155446097, guid: 0e06cd4547e7733449c0f096b9498fb6, type: 3}
+  - {fileID: 919132149155446097, guid: 221929b8d900fb5478d3a87669905ef7, type: 3}
+  - {fileID: 919132149155446097, guid: 208171e1875ebc0408867254cc0cbf38, type: 3}
+  - {fileID: 919132149155446097, guid: 446d51f5524ee5641b65d5fc471f4b96, type: 3}
+  - {fileID: 919132149155446097, guid: dace62c500cf0914e884451a53ec930a, type: 3}
+  - {fileID: 919132149155446097, guid: 3ad0f9386209e7a40aedf5ddd1d84807, type: 3}
+  - {fileID: 919132149155446097, guid: eb391f3c2fc1cca4ebb208e9bbee9ee8, type: 3}
+  hillRocks:
+  - {fileID: 919132149155446097, guid: 5a5e5fe47d601154d817d55fe5247cb2, type: 3}
+  - {fileID: 919132149155446097, guid: 0c64fb76681362d409895fa4f70bb523, type: 3}
+  - {fileID: 919132149155446097, guid: 113646bd3c0fd5649b655b5056dd7ef1, type: 3}
+  - {fileID: 919132149155446097, guid: 4b26ff4706c90a44b8f800127cc013c9, type: 3}
+  - {fileID: 919132149155446097, guid: 3b8b1992b471a294791270d743698163, type: 3}
+  - {fileID: 919132149155446097, guid: f59de286d79ac564f816ff884e27f7b3, type: 3}
+  - {fileID: 919132149155446097, guid: 998b0f49159b58d45b0b99124f426f6b, type: 3}
+  - {fileID: 919132149155446097, guid: 8a29328858e70504bac974771fb2254c, type: 3}
+  - {fileID: 919132149155446097, guid: 31d21eb89d37590429ebbca7e3fb2a94, type: 3}
+  singleRocks:
+  - {fileID: 919132149155446097, guid: a4e149d4a6bb95940bfff598fac55ad1, type: 3}
+  - {fileID: 919132149155446097, guid: 2396572d35950c7469683fbc9e516b91, type: 3}
+  - {fileID: 919132149155446097, guid: 6d38f1eecb8806f438aa84fa9f539571, type: 3}
+  - {fileID: 919132149155446097, guid: e2f799fedd800b146adb2bd7af7b21a7, type: 3}
+  - {fileID: 919132149155446097, guid: 23415b5923d60c84483a67177305fcd7, type: 3}
+  desertDecorations:
+  - {fileID: 919132149155446097, guid: a4e149d4a6bb95940bfff598fac55ad1, type: 3}
+  - {fileID: 919132149155446097, guid: 2396572d35950c7469683fbc9e516b91, type: 3}
+  - {fileID: 919132149155446097, guid: 6d38f1eecb8806f438aa84fa9f539571, type: 3}
+  - {fileID: 919132149155446097, guid: e2f799fedd800b146adb2bd7af7b21a7, type: 3}
+  - {fileID: 919132149155446097, guid: 23415b5923d60c84483a67177305fcd7, type: 3}
+  snowDecorations:
+  - {fileID: 919132149155446097, guid: ba22c56372e7b41498d504e9ef3629b6, type: 3}
+  - {fileID: 919132149155446097, guid: 0e06cd4547e7733449c0f096b9498fb6, type: 3}
+  - {fileID: 919132149155446097, guid: 208171e1875ebc0408867254cc0cbf38, type: 3}
+  - {fileID: 919132149155446097, guid: 446d51f5524ee5641b65d5fc471f4b96, type: 3}
+  - {fileID: 919132149155446097, guid: 3ad0f9386209e7a40aedf5ddd1d84807, type: 3}
+  - {fileID: 919132149155446097, guid: eb391f3c2fc1cca4ebb208e9bbee9ee8, type: 3}
+  swampDecorations:
+  - {fileID: 919132149155446097, guid: cd025622e06fc6244a8f97568a31ef17, type: 3}
+  - {fileID: 919132149155446097, guid: 9fb6979199a5a3142909c91703b680ec, type: 3}
+  - {fileID: 919132149155446097, guid: b38f3b8a7b392d8479754937a163d0cf, type: 3}
+  - {fileID: 919132149155446097, guid: a090fbf8d1e788a4ab83fc9eb5f0398d, type: 3}
+  waterDecorations:
+  - {fileID: 919132149155446097, guid: ca1768896c51bc5448337ebcae83349d, type: 3}
+  - {fileID: 919132149155446097, guid: a6f593af4ff05f743b3efb3a07f13ec2, type: 3}
+  - {fileID: 919132149155446097, guid: a42322e54261dbd42945434202cf7499, type: 3}
+  - {fileID: 919132149155446097, guid: 0f88c54b2fb1d73459bdf195b01ec75a, type: 3}
+  - {fileID: 919132149155446097, guid: c39d22c60720ec445a999e37934cef6c, type: 3}
+  cloudModels:
+  - {fileID: 919132149155446097, guid: 5fe8d9b3c7979a04099afa1d4bcbe825, type: 3}
+  - {fileID: 919132149155446097, guid: c9f59d2e2c98bc04d82ca80348982cba, type: 3}
+  farmProps:
+  - {fileID: 919132149155446097, guid: 8cce99d61f70d834fa7a170e4f438f90, type: 3}
+  - {fileID: 919132149155446097, guid: 55806caf9fb62664a926bdcbed5edeeb, type: 3}
+  - {fileID: 919132149155446097, guid: b08733c3029e8fa40a6ca6ba1af39d4b, type: 3}
+  - {fileID: 919132149155446097, guid: 99d33d3116b451d4583d87ac2efb60a7, type: 3}
+  - {fileID: 919132149155446097, guid: 73b26b622bff0c44bab5887d98b6e45d, type: 3}
+  militaryProps:
+  - {fileID: 919132149155446097, guid: 71c4d98f8f5c64f49b0f6fad68b1c7e9, type: 3}
+  - {fileID: 919132149155446097, guid: c4dd2c348b5b8dd48acf731093e288d3, type: 3}
+  - {fileID: 919132149155446097, guid: 21a609e3fa18345498eead24199ec200, type: 3}
+  - {fileID: 919132149155446097, guid: b6b0feabdec467045b9e84b580402862, type: 3}
+  - {fileID: 919132149155446097, guid: 60865db17745a224a86aae640660f600, type: 3}
+  - {fileID: 919132149155446097, guid: b3599b060b3ad07459617e4336b10816, type: 3}
+  - {fileID: 919132149155446097, guid: 85caa25bf4c3ab144bba035389525f6f, type: 3}
+  - {fileID: 919132149155446097, guid: 11c770aaf258f164ab8c16eb887b1a26, type: 3}
+  - {fileID: 919132149155446097, guid: cbb6cab9251c8b64e8f8af34967ec09d, type: 3}
+  resourceProps:
+  - {fileID: 919132149155446097, guid: c3e7deccab152594bbe9a5a53333e655, type: 3}
+  - {fileID: 919132149155446097, guid: 47c8ae9492bd20c46913928dbc6f166d, type: 3}
+  - {fileID: 919132149155446097, guid: 1c9861797b3f1fb4fb6b9839ae0ef57e, type: 3}
+  - {fileID: 919132149155446097, guid: 5d1c283d55498034d9a0c2615ce1b9ca, type: 3}
+  - {fileID: 919132149155446097, guid: 9d29c08001619004bbd1e12bacbf467d, type: 3}
+  - {fileID: 919132149155446097, guid: b360d455028caf34193eae95b7ddf367, type: 3}
+  - {fileID: 919132149155446097, guid: 5272cc85768a4844ba7ef3db3337ca0a, type: 3}
+  coastalProps:
+  - {fileID: 919132149155446097, guid: dd232df798f74224cbc16025b73550c0, type: 3}
+  - {fileID: 919132149155446097, guid: 1bf531ec8ddec1241936f612e3ba9b0d, type: 3}
+  - {fileID: 919132149155446097, guid: 6f917375c76ec914d8741ce50ce9997f, type: 3}
