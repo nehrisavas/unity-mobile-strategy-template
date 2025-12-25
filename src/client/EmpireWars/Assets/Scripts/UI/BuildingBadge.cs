@@ -149,13 +149,13 @@ namespace EmpireWars.UI
 
         private void CreateBadgeElements()
         {
-            // Arka plan sprite - kompakt boyut
+            // Arka plan sprite - küçük boyut
             if (backgroundSprite == null)
             {
                 GameObject bgObj = new GameObject("Background");
                 bgObj.transform.SetParent(transform);
                 bgObj.transform.localPosition = Vector3.zero;
-                bgObj.transform.localScale = new Vector3(1.2f, 0.5f, 1f);
+                bgObj.transform.localScale = new Vector3(0.8f, 0.35f, 1f);
 
                 backgroundSprite = bgObj.AddComponent<SpriteRenderer>();
                 backgroundSprite.sprite = CreateRoundedRectSprite();
@@ -171,13 +171,13 @@ namespace EmpireWars.UI
                 labelObj.transform.localPosition = new Vector3(0, 0, -0.01f);
 
                 labelText = labelObj.AddComponent<TextMeshPro>();
-                labelText.fontSize = 2.2f;
+                labelText.fontSize = 1.6f;
                 labelText.alignment = TextAlignmentOptions.Center;
                 labelText.sortingOrder = 101;
                 labelText.color = Color.white;
 
                 RectTransform rect = labelObj.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(2.5f, 0.8f);
+                rect.sizeDelta = new Vector2(1.8f, 0.6f);
             }
 
             // LevelText artık kullanılmıyor - tek satırda birleştirildi
