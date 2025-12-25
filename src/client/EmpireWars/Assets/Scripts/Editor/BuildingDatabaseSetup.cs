@@ -286,21 +286,28 @@ namespace EmpireWars.Editor
         private static void AssignUnit(SerializedObject db, string fieldName, string prefabName, ref int count)
         {
             var prop = db.FindProperty(fieldName);
-            if (prop != null)
+            if (prop == null)
             {
-                // Units are in units folder, organized by color
-                string[] colors = new[] { "blue", "green", "red", "yellow" };
-                foreach (string color in colors)
-                {
-                    string path = $"Assets/KayKit_Medieval_Hexagon/units/{color}/{prefabName}.fbx";
-                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                    if (prefab != null)
-                    {
-                        prop.objectReferenceValue = prefab;
-                        count++;
-                        return;
-                    }
-                }
+                Debug.LogWarning($"BuildingDatabaseSetup: Field bulunamadi: {fieldName}");
+                return;
+            }
+
+            // Prefab adından rengi çıkar (örn: unit_blue_full -> blue)
+            string[] parts = prefabName.Split('_');
+            string color = parts.Length >= 2 ? parts[1] : "blue";
+
+            string path = $"Assets/KayKit_Medieval_Hexagon/units/{color}/{prefabName}.fbx";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if (prefab != null)
+            {
+                prop.objectReferenceValue = prefab;
+                count++;
+                Debug.Log($"BuildingDatabaseSetup: {fieldName} <- {path}");
+            }
+            else
+            {
+                Debug.LogWarning($"BuildingDatabaseSetup: Prefab bulunamadi: {path}");
             }
         }
 
