@@ -469,15 +469,30 @@ namespace EmpireWars.WorldMap
                 // ════════════════════════════════════════════════════════════
                 if (dx > 8 && ring >= 11 && ring <= 14)
                 {
-                    // En dış halka (14) - Açık deniz
+                    // Deniz sağda, rıhtımlar sağa (denize) bakmalı = 90°
+                    float seaDockRotation = 90f;
+
+                    // En dış halka (14) - Açık deniz + büyük gemiler
                     if (ring == 14 && dx > 10)
                     {
+                        // Açık denizde gemi (%25 şans)
+                        if (buildingHash < 7)
+                        {
+                            // Gemi yönü - rastgele
+                            float shipRotation = (buildingHash % 4) * 90f;
+                            return new TileData(q, r, TerrainType.Water, 0, MineType.None, true, "ship_blue", level, shipRotation);
+                        }
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
 
-                    // Ring 13 - Kıyı suyu
+                    // Ring 13 - Kıyı suyu + küçük tekneler
                     if (ring == 13 && dx > 9)
                     {
+                        if (buildingHash < 5)
+                        {
+                            float boatRotation = (buildingHash % 4) * 90f;
+                            return new TileData(q, r, TerrainType.Water, 0, MineType.None, true, "boat", level, boatRotation);
+                        }
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
 
@@ -490,11 +505,11 @@ namespace EmpireWars.WorldMap
                         }
                         if (buildingHash < 4)
                         {
-                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level, seaDockRotation);
                         }
                         if (buildingHash < 8)
                         {
-                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level, seaDockRotation);
                         }
                     }
 
@@ -503,7 +518,7 @@ namespace EmpireWars.WorldMap
                     {
                         if (buildingHash < 3)
                         {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "docks_blue", level);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "docks_blue", level, seaDockRotation);
                         }
                         if (buildingHash < 6)
                         {
@@ -585,31 +600,47 @@ namespace EmpireWars.WorldMap
                 // ════════════════════════════════════════════════════════════
                 int lakeX = 37;
                 int lakeY = 21;
-                int distFromLake = Mathf.Max(Mathf.Abs(dx - lakeX), Mathf.Abs(dy - lakeY));
+                int lakeDx = dx - lakeX;  // Gölete göre pozisyon
+                int lakeDy = dy - lakeY;
+                int distFromLake = Mathf.Max(Mathf.Abs(lakeDx), Mathf.Abs(lakeDy));
 
                 if (distFromLake <= 6)
                 {
-                    // Gölet merkezi - derin su (yarıçap 3)
+                    // Gölet merkezi - derin su (yarıçap 2) + gemiler
                     if (distFromLake <= 2)
                     {
+                        // Su üzerinde tekne/gemi (%30 şans)
+                        if (buildingHash < 9)
+                        {
+                            // Tekne rotasyonu - rastgele yön
+                            float boatRotation = (buildingHash % 4) * 90f;
+                            return new TileData(q, r, TerrainType.Water, 0, MineType.None, true, "boat", level, boatRotation);
+                        }
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
-                    // Sığ su (yarıçap 4)
+                    // Sığ su (yarıçap 3) + küçük tekneler
                     if (distFromLake <= 3)
                     {
+                        if (buildingHash < 6)
+                        {
+                            float boatRotation = (buildingHash % 4) * 90f;
+                            return new TileData(q, r, TerrainType.Water, 0, MineType.None, true, "boat", level, boatRotation);
+                        }
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
-                    // Kıyı (yarıçap 5)
+                    // Kıyı (yarıçap 5) - Rıhtımlar suya dönük
                     if (distFromLake <= 4)
                     {
-                        // Kıyıda rıhtım ve tersane
+                        // Rıhtım rotasyonu - gölet merkezine baksın
+                        float dockRotation = CalculateDockRotation(lakeDx, lakeDy);
+
                         if (buildingHash < 4)
                         {
-                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level, dockRotation);
                         }
                         if (buildingHash < 6)
                         {
-                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
+                            return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level, dockRotation);
                         }
                         return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
                     }
@@ -1114,6 +1145,38 @@ namespace EmpireWars.WorldMap
             // Sabit seed ile tutarlı hash
             int hash = q * 73856093 ^ r * 19349663;
             return Mathf.Abs(hash);
+        }
+
+        /// <summary>
+        /// Rıhtım/iskele rotasyonu hesapla - su merkezine baksın
+        /// </summary>
+        private static float CalculateDockRotation(int dxFromCenter, int dyFromCenter)
+        {
+            // Gölet/su merkezine göre pozisyon -> suya dönük rotasyon
+            // dxFromCenter > 0: Sağda (suya bakması için sola dön = 270°)
+            // dxFromCenter < 0: Solda (suya bakması için sağa dön = 90°)
+            // dyFromCenter > 0: Aşağıda (suya bakması için yukarı = 0°)
+            // dyFromCenter < 0: Yukarıda (suya bakması için aşağı = 180°)
+
+            int absDx = Mathf.Abs(dxFromCenter);
+            int absDy = Mathf.Abs(dyFromCenter);
+
+            // Hangi kenar daha baskın?
+            if (absDx > absDy)
+            {
+                // Yatay kenar baskın
+                return dxFromCenter > 0 ? 270f : 90f;
+            }
+            else if (absDy > absDx)
+            {
+                // Dikey kenar baskın
+                return dyFromCenter > 0 ? 0f : 180f;
+            }
+            else
+            {
+                // Köşe - diagonal, dx'e göre karar ver
+                return dxFromCenter > 0 ? 270f : 90f;
+            }
         }
 
         /// <summary>

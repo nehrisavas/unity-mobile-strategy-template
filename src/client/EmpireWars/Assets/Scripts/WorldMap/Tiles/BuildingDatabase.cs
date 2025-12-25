@@ -177,6 +177,19 @@ namespace EmpireWars.WorldMap.Tiles
         public GameObject docksRed;
         public GameObject docksYellow;
 
+        [Header("=== SHIPS/BOATS ===")]
+        [Tooltip("Gemi - ship")]
+        public GameObject shipGreen;
+        public GameObject shipBlue;
+        public GameObject shipRed;
+        public GameObject shipYellow;
+
+        [Tooltip("Tekne - boat (decoration)")]
+        public GameObject boat;
+
+        [Tooltip("Tekne rafı - boatrack")]
+        public GameObject boatrack;
+
         [Header("=== UTILITY ===")]
         [Tooltip("Kuyu - well")]
         public GameObject wellGreen;
@@ -398,6 +411,14 @@ namespace EmpireWars.WorldMap.Tiles
                 "docks_blue" => docksBlue,
                 "docks_red" => docksRed,
                 "docks_yellow" => docksYellow,
+
+                // === SHIPS/BOATS ===
+                "ship_green" => shipGreen,
+                "ship_blue" => shipBlue,
+                "ship_red" => shipRed,
+                "ship_yellow" => shipYellow,
+                "boat" => boat,
+                "boatrack" => boatrack,
 
                 // === UTILITY - Well ===
                 "well_green" => wellGreen,

@@ -112,6 +112,16 @@ namespace EmpireWars.Editor
             // Projectiles
             AssignNeutralBuilding(serializedDb, "projectileCatapult", "projectile_catapult", ref assignedCount);
 
+            // Ships (units klasöründe)
+            AssignShip(serializedDb, "shipGreen", "ship_green_full", ref assignedCount);
+            AssignShip(serializedDb, "shipBlue", "ship_blue_full", ref assignedCount);
+            AssignShip(serializedDb, "shipRed", "ship_red_full", ref assignedCount);
+            AssignShip(serializedDb, "shipYellow", "ship_yellow_full", ref assignedCount);
+
+            // Boats (decoration/props klasöründe)
+            AssignDecoration(serializedDb, "boat", "boat", ref assignedCount);
+            AssignDecoration(serializedDb, "boatrack", "boatrack", ref assignedCount);
+
             serializedDb.ApplyModifiedProperties();
             EditorUtility.SetDirty(db);
             AssetDatabase.SaveAssets();
@@ -187,6 +197,42 @@ namespace EmpireWars.Editor
             if (prop != null)
             {
                 GameObject prefab = FindPrefab(prefabName);
+                if (prefab != null)
+                {
+                    prop.objectReferenceValue = prefab;
+                    count++;
+                }
+            }
+        }
+
+        private static void AssignShip(SerializedObject db, string fieldName, string prefabName, ref int count)
+        {
+            var prop = db.FindProperty(fieldName);
+            if (prop != null)
+            {
+                // Ships are in units folder
+                string[] colors = new[] { "blue", "green", "red", "yellow" };
+                foreach (string color in colors)
+                {
+                    string path = $"Assets/KayKit_Medieval_Hexagon/units/{color}/{prefabName}.fbx";
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    if (prefab != null)
+                    {
+                        prop.objectReferenceValue = prefab;
+                        count++;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private static void AssignDecoration(SerializedObject db, string fieldName, string prefabName, ref int count)
+        {
+            var prop = db.FindProperty(fieldName);
+            if (prop != null)
+            {
+                string path = $"Assets/KayKit_Medieval_Hexagon/decoration/props/{prefabName}.fbx";
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                 if (prefab != null)
                 {
                     prop.objectReferenceValue = prefab;
