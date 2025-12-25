@@ -604,7 +604,7 @@ namespace EmpireWars.WorldMap
                 int campDy = dy - campY;
                 int distFromCamp = Mathf.Max(Mathf.Abs(campDx), Mathf.Abs(campDy));
 
-                if (distFromCamp <= 8)
+                if (distFromCamp <= 10)
                 {
                     // Merkez - Komuta Kulesi
                     if (distFromCamp == 0)
@@ -612,10 +612,13 @@ namespace EmpireWars.WorldMap
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 30);
                     }
 
-                    // Halka 1 - Ana yol (platz)
+                    // Halka 1 - Komutan ve bayraklar
                     if (distFromCamp == 1)
                     {
-                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
+                        // Kuzey - Komutan bayrağı
+                        if (campDy == 1 && campDx == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "banner_blue", 1);
+                        // Diğer yönler - Muhafız askerleri
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                     }
 
                     // Halka 2 - Kışlalar (4 yönde)
@@ -629,14 +632,13 @@ namespace EmpireWars.WorldMap
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 25);
                     }
 
-                    // Halka 3 - Yol
+                    // Halka 3 - Asker formasyonu (piyade nizamı)
                     if (distFromCamp == 3)
                     {
-                        float roadRot = (campDx == 0) ? 90f : 0f;
-                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRot);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                     }
 
-                    // Halka 4 - Okçu ve Süvari
+                    // Halka 4 - Okçu, Süvari tesisleri ve topçu
                     if (distFromCamp == 4)
                     {
                         // Kuzey ve Güney - Okçu menzili
@@ -654,20 +656,31 @@ namespace EmpireWars.WorldMap
                         {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 24);
                         }
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                        // Ara bölgelerde piyade
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                     }
 
-                    // Halka 5 - Yol (dış çevre yolu)
+                    // Halka 5 - Süvari ve Topçu birlikleri
                     if (distFromCamp == 5)
                     {
-                        float roadRot = (campDx == 0) ? 90f : 0f;
-                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "", 0, roadRot);
+                        // Doğu-Batı yönünde atlılar (süvari birliği)
+                        if (Mathf.Abs(campDx) == 5 && Mathf.Abs(campDy) <= 2)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
+                        }
+                        // Kuzey-Güney yönünde toplar
+                        if (Mathf.Abs(campDy) == 5 && Mathf.Abs(campDx) <= 2)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cannon_blue", 1);
+                        }
+                        // Köşeler - asker
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                     }
 
                     // Halka 6 - Mancınık kuleleri ve ek kışlalar
                     if (distFromCamp == 6)
                     {
-                        // 4 köşede mancınık
+                        // 4 köşede mancınık kulesi
                         if (Mathf.Abs(campDx) == 6 && Mathf.Abs(campDy) == 6)
                         {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_catapult_blue", 24);
@@ -678,7 +691,12 @@ namespace EmpireWars.WorldMap
                         {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 22);
                         }
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                        // Mancınık birimleri köşelerin yanında
+                        if (Mathf.Abs(campDx) >= 4 && Mathf.Abs(campDy) >= 4)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "catapult_blue", 1);
+                        }
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                     }
 
                     // Halka 7 - Sur duvarları
@@ -694,12 +712,41 @@ namespace EmpireWars.WorldMap
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 20, wallRot);
                     }
 
-                    // Halka 8 - Dış alan (çadırlar/garnizon)
+                    // Halka 8 - Dış alan (çadırlar, arabalar, garnizon)
                     if (distFromCamp == 8)
                     {
-                        if (buildingHash < 15)
+                        // Çadırlar belirli noktalarda
+                        if (buildingHash < 12)
                         {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15);
+                        }
+                        // İkmal arabaları
+                        if (buildingHash < 18)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cart_blue", 1);
+                        }
+                        // Garnizon askerleri
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                    }
+
+                    // Halka 9 - Dış devriye
+                    if (distFromCamp == 9)
+                    {
+                        // Ana yönlerde atlı devriye
+                        if ((campDx == 0 || campDy == 0) && buildingHash < 50)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
+                        }
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Halka 10 - Gözcüler
+                    if (distFromCamp == 10)
+                    {
+                        // 4 köşede gözcü
+                        if (Mathf.Abs(campDx) >= 8 && Mathf.Abs(campDy) >= 8)
+                        {
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
                         }
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }

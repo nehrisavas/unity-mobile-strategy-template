@@ -43,7 +43,15 @@
       "Bash(then tail -200 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
       "Bash(else echo \"Log not found at SAVAS path\")",
       "Bash(fi)",
-      "Bash(then tail -100 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")"
+      "Bash(then tail -100 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then tail -300 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(else echo \"Log bulunamadi\")",
+      "Bash(xargs:*)",
+      "Bash(else echo \"Log dosyası bulunamadı\")",
+      "Bash(then tail -50 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(else echo \"Log bulunamadı\")",
+      "Bash(then tail -80 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then tail -30 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")"
     ]
   }
 }

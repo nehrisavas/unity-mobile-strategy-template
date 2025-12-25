@@ -82981,8 +82981,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746e347b8214e5443a452afce3bff976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EmpireWars.Core.WorldMapBootstrap
-  tilePrefabDatabase: {fileID: 0}
-  decorationDatabase: {fileID: 0}
+  tilePrefabDatabase: {fileID: 11400000, guid: 02c6fdbccbe839f4d87490959856743e, type: 2}
+  decorationDatabase: {fileID: 11400000, guid: 6317c7ea82ef02b43bdaffce2346e882, type: 2}
   buildingDatabase: {fileID: 11400000, guid: 175bc79cfa6fc9d4983a5d9b17fe821a, type: 2}
   cloudBigPrefab: {fileID: 0}
   cloudSmallPrefab: {fileID: 0}

@@ -65,10 +65,10 @@ namespace EmpireWars.WorldMap.Tiles
         public GameObject barracksYellow;
 
         [Tooltip("Okçu menzili - archeryrange")]
-        public GameObject archeryrangeGreen;
-        public GameObject archeryrangeBlue;
-        public GameObject archeryrangeRed;
-        public GameObject archeryrangeYellow;
+        public GameObject archeryRangeGreen;
+        public GameObject archeryRangeBlue;
+        public GameObject archeryRangeRed;
+        public GameObject archeryRangeYellow;
 
         [Tooltip("Ahır - stables")]
         public GameObject stablesGreen;
@@ -246,6 +246,46 @@ namespace EmpireWars.WorldMap.Tiles
         [Tooltip("Mancınık mermisi")]
         public GameObject projectileCatapult;
 
+        [Header("=== UNITS - Soldiers ===")]
+        [Tooltip("Asker birimi - unit")]
+        public GameObject unitGreen;
+        public GameObject unitBlue;
+        public GameObject unitRed;
+        public GameObject unitYellow;
+
+        [Header("=== UNITS - Cavalry ===")]
+        [Tooltip("Atlı birimi - horse")]
+        public GameObject horseGreen;
+        public GameObject horseBlue;
+        public GameObject horseRed;
+        public GameObject horseYellow;
+
+        [Header("=== UNITS - Artillery ===")]
+        [Tooltip("Top - cannon")]
+        public GameObject cannonGreen;
+        public GameObject cannonBlue;
+        public GameObject cannonRed;
+        public GameObject cannonYellow;
+
+        [Tooltip("Mancınık - catapult")]
+        public GameObject catapultGreen;
+        public GameObject catapultBlue;
+        public GameObject catapultRed;
+        public GameObject catapultYellow;
+
+        [Header("=== UNITS - Support ===")]
+        [Tooltip("Bayrak - banner")]
+        public GameObject bannerGreen;
+        public GameObject bannerBlue;
+        public GameObject bannerRed;
+        public GameObject bannerYellow;
+
+        [Tooltip("Araba - cart")]
+        public GameObject cartGreen;
+        public GameObject cartBlue;
+        public GameObject cartRed;
+        public GameObject cartYellow;
+
         /// <summary>
         /// Bina adına göre prefab döndürür
         /// Tüm renk varyantlarını destekler
@@ -305,10 +345,10 @@ namespace EmpireWars.WorldMap.Tiles
                 "barracks_yellow" => barracksYellow,
 
                 // === MILITARY - Archery Range ===
-                "archeryrange_green" => archeryrangeGreen,
-                "archeryrange_blue" => archeryrangeBlue,
-                "archeryrange_red" => archeryrangeRed,
-                "archeryrange_yellow" => archeryrangeYellow,
+                "archeryrange_green" => archeryRangeGreen,
+                "archeryrange_blue" => archeryRangeBlue,
+                "archeryrange_red" => archeryRangeRed,
+                "archeryrange_yellow" => archeryRangeYellow,
 
                 // === MILITARY - Stables ===
                 "stables_green" => stablesGreen,
@@ -454,6 +494,38 @@ namespace EmpireWars.WorldMap.Tiles
 
                 // === PROJECTILES ===
                 "projectile_catapult" => projectileCatapult,
+
+                // === UNITS - Soldiers ===
+                "unit_green" => unitGreen,
+                "unit_blue" => unitBlue,
+                "unit_red" => unitRed,
+                "unit_yellow" => unitYellow,
+
+                // === UNITS - Cavalry ===
+                "horse_green" => horseGreen,
+                "horse_blue" => horseBlue,
+                "horse_red" => horseRed,
+                "horse_yellow" => horseYellow,
+
+                // === UNITS - Artillery ===
+                "cannon_green" => cannonGreen,
+                "cannon_blue" => cannonBlue,
+                "cannon_red" => cannonRed,
+                "cannon_yellow" => cannonYellow,
+                "catapult_green" => catapultGreen,
+                "catapult_blue" => catapultBlue,
+                "catapult_red" => catapultRed,
+                "catapult_yellow" => catapultYellow,
+
+                // === UNITS - Support ===
+                "banner_green" => bannerGreen,
+                "banner_blue" => bannerBlue,
+                "banner_red" => bannerRed,
+                "banner_yellow" => bannerYellow,
+                "cart_green" => cartGreen,
+                "cart_blue" => cartBlue,
+                "cart_red" => cartRed,
+                "cart_yellow" => cartYellow,
 
                 _ => null
             };

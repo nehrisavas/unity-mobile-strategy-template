@@ -44,10 +44,10 @@ MonoBehaviour:
   barracksBlue: {fileID: 919132149155446097, guid: ab69081e2b22dec4da9c5370e0d36067, type: 3}
   barracksRed: {fileID: 919132149155446097, guid: b720ef13a5443ae46b538378ba133f2c, type: 3}
   barracksYellow: {fileID: 919132149155446097, guid: d9f4524a234f11348af3f14b7160a0c8, type: 3}
-  archeryRangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
-  archeryRangeBlue: {fileID: 0}
-  archeryRangeRed: {fileID: 0}
-  archeryRangeYellow: {fileID: 0}
+  archeryrangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
+  archeryrangeBlue: {fileID: 919132149155446097, guid: f55938e59bf10a3458ee3b2996ba7e0c, type: 3}
+  archeryrangeRed: {fileID: 919132149155446097, guid: fb8519a5e459ecc40bbc3d8f73e98559, type: 3}
+  archeryrangeYellow: {fileID: 919132149155446097, guid: 51e2578c341c8654c8fdec86dd5f3659, type: 3}
   stablesGreen: {fileID: 919132149155446097, guid: b23f374b5e77ed04b9dbc9fa88c09b3f, type: 3}
   stablesBlue: {fileID: 919132149155446097, guid: c42cc74b2b25bc34194c0279be8e0d41, type: 3}
   stablesRed: {fileID: 919132149155446097, guid: 4d654f32c95d1344caef642e9fbef4bd, type: 3}
@@ -116,6 +116,12 @@ MonoBehaviour:
   docksBlue: {fileID: 919132149155446097, guid: 5b704eb6baa617d478c768ce2c95881f, type: 3}
   docksRed: {fileID: 919132149155446097, guid: c815d0b42c4af3f4a99044481b24a9e7, type: 3}
   docksYellow: {fileID: 919132149155446097, guid: 9b4eb90f13ff31046bdffacb7c62e530, type: 3}
+  shipGreen: {fileID: 919132149155446097, guid: 9c6f438610dd86e45b7921387c044f97, type: 3}
+  shipBlue: {fileID: 919132149155446097, guid: b94ca7ea4b822b444b51c21b1a10136c, type: 3}
+  shipRed: {fileID: 919132149155446097, guid: 8933db222337e2f418a3ae94dd8fb940, type: 3}
+  shipYellow: {fileID: 919132149155446097, guid: b85dcbc798da88e4fa513974e2684e0a, type: 3}
+  boat: {fileID: 919132149155446097, guid: 1bf531ec8ddec1241936f612e3ba9b0d, type: 3}
+  boatrack: {fileID: 919132149155446097, guid: 6f917375c76ec914d8741ce50ce9997f, type: 3}
   wellGreen: {fileID: 919132149155446097, guid: 3234e161b2c3a054a9e57f2e5baf3bcc, type: 3}
   wellBlue: {fileID: 919132149155446097, guid: 32aebb93df1dda94ba86d28b35f28969, type: 3}
   wellRed: {fileID: 919132149155446097, guid: 9df4be1cf2dd6fa4ca1833e3f76725f1, type: 3}

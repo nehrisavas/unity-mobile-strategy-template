@@ -118,6 +118,38 @@ namespace EmpireWars.Editor
             AssignShip(serializedDb, "shipRed", "ship_red_full", ref assignedCount);
             AssignShip(serializedDb, "shipYellow", "ship_yellow_full", ref assignedCount);
 
+            // Units - Soldiers
+            AssignUnit(serializedDb, "unitGreen", "unit_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "unitBlue", "unit_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "unitRed", "unit_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "unitYellow", "unit_yellow_full", ref assignedCount);
+
+            // Units - Cavalry
+            AssignUnit(serializedDb, "horseGreen", "horse_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "horseBlue", "horse_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "horseRed", "horse_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "horseYellow", "horse_yellow_full", ref assignedCount);
+
+            // Units - Artillery
+            AssignUnit(serializedDb, "cannonGreen", "cannon_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "cannonBlue", "cannon_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "cannonRed", "cannon_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "cannonYellow", "cannon_yellow_full", ref assignedCount);
+            AssignUnit(serializedDb, "catapultGreen", "catapult_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "catapultBlue", "catapult_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "catapultRed", "catapult_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "catapultYellow", "catapult_yellow_full", ref assignedCount);
+
+            // Units - Support
+            AssignUnit(serializedDb, "bannerGreen", "banner_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "bannerBlue", "banner_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "bannerRed", "banner_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "bannerYellow", "banner_yellow_full", ref assignedCount);
+            AssignUnit(serializedDb, "cartGreen", "cart_green_full", ref assignedCount);
+            AssignUnit(serializedDb, "cartBlue", "cart_blue_full", ref assignedCount);
+            AssignUnit(serializedDb, "cartRed", "cart_red_full", ref assignedCount);
+            AssignUnit(serializedDb, "cartYellow", "cart_yellow_full", ref assignedCount);
+
             // Boats (decoration/props klasöründe)
             AssignDecoration(serializedDb, "boat", "boat", ref assignedCount);
             AssignDecoration(serializedDb, "boatrack", "boatrack", ref assignedCount);
@@ -135,8 +167,15 @@ namespace EmpireWars.Editor
         private static string GetFieldName(string buildingType, string color)
         {
             // tower_cannon + green -> towerCannonGreen
+            // Special case: archeryrange -> archeryRange (camelCase in field name)
             string[] parts = buildingType.Split('_');
             string result = parts[0].ToLower();
+
+            // Handle special compound words that need internal camelCase
+            if (result == "archeryrange")
+            {
+                result = "archeryRange";
+            }
 
             for (int i = 1; i < parts.Length; i++)
             {
@@ -211,6 +250,27 @@ namespace EmpireWars.Editor
             if (prop != null)
             {
                 // Ships are in units folder
+                string[] colors = new[] { "blue", "green", "red", "yellow" };
+                foreach (string color in colors)
+                {
+                    string path = $"Assets/KayKit_Medieval_Hexagon/units/{color}/{prefabName}.fbx";
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    if (prefab != null)
+                    {
+                        prop.objectReferenceValue = prefab;
+                        count++;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private static void AssignUnit(SerializedObject db, string fieldName, string prefabName, ref int count)
+        {
+            var prop = db.FindProperty(fieldName);
+            if (prop != null)
+            {
+                // Units are in units folder, organized by color
                 string[] colors = new[] { "blue", "green", "red", "yellow" };
                 foreach (string color in colors)
                 {
