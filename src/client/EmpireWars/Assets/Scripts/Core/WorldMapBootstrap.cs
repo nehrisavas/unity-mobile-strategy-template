@@ -33,10 +33,12 @@ namespace EmpireWars.Core
 
         private void Awake()
         {
-            // QHD cozunurluk (2560x1440) varsayilan olarak ayarla
-            #if !UNITY_EDITOR
-            Screen.SetResolution(2560, 1440, FullScreenMode.FullScreenWindow);
-            #endif
+            // ScreenManager'ı oluştur (safe area, DPI yönetimi)
+            if (ScreenManager.Instance == null)
+            {
+                GameObject screenManagerObj = new GameObject("ScreenManager");
+                screenManagerObj.AddComponent<ScreenManager>();
+            }
         }
 
         private void Start()
@@ -255,8 +257,27 @@ namespace EmpireWars.Core
                 GameObject canvasObj = new GameObject("UI Canvas");
                 canvas = canvasObj.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+
+                // CanvasScaler - mobil uyumlu ayarlar
+                var scaler = canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+                scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = ScreenManager.Instance != null
+                    ? ScreenManager.Instance.ReferenceResolution
+                    : new Vector2(1920, 1080);
+                scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+                scaler.matchWidthOrHeight = 0.5f; // Ortada dengeli
+
                 canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+
+                // SafeAreaPanel ekle - tüm UI safe area içinde
+                GameObject safeAreaObj = new GameObject("SafeArea");
+                safeAreaObj.transform.SetParent(canvasObj.transform);
+                RectTransform safeRect = safeAreaObj.AddComponent<RectTransform>();
+                safeRect.anchorMin = Vector2.zero;
+                safeRect.anchorMax = Vector2.one;
+                safeRect.offsetMin = Vector2.zero;
+                safeRect.offsetMax = Vector2.zero;
+                safeAreaObj.AddComponent<UI.SafeAreaPanel>();
             }
 
             MiniMapController miniMap = FindFirstObjectByType<MiniMapController>();

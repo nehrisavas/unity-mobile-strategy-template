@@ -37,12 +37,12 @@ namespace EmpireWars.WorldMap
 
         // Yuklenmis chunk'lar ve tile'lar
         private Dictionary<Vector2Int, ChunkData> loadedChunks;
-        private List<Vector2Int> chunksToLoad;  // List for priority sorting
-        private List<Vector2Int> chunksToUnload;
+        private Queue<Vector2Int> chunksToLoad;   // Queue for O(1) dequeue
+        private Queue<Vector2Int> chunksToUnload; // Queue for O(1) dequeue
+        private List<Vector2Int> tempLoadList;    // Sorting için geçici liste
 
-        // Object pooling
-        private Queue<GameObject> tilePool;
-        private const int POOL_INITIAL_SIZE = 256;
+        // Object pooling - TilePoolManager kullanılıyor
+        private bool usePoolManager = true;
 
         // State
         private Vector2Int lastCameraChunk;
@@ -80,10 +80,17 @@ namespace EmpireWars.WorldMap
             Instance = this;
 
             loadedChunks = new Dictionary<Vector2Int, ChunkData>();
-            chunksToLoad = new List<Vector2Int>();
-            chunksToUnload = new List<Vector2Int>();
-            tilePool = new Queue<GameObject>();
+            chunksToLoad = new Queue<Vector2Int>();
+            chunksToUnload = new Queue<Vector2Int>();
+            tempLoadList = new List<Vector2Int>();
             tileDataMap = new Dictionary<Vector2Int, KingdomMapGenerator.TileData>();
+
+            // TilePoolManager oluştur
+            if (TilePoolManager.Instance == null)
+            {
+                GameObject poolManagerObj = new GameObject("TilePoolManager");
+                poolManagerObj.AddComponent<TilePoolManager>();
+            }
         }
 
         private void Start()
@@ -92,8 +99,6 @@ namespace EmpireWars.WorldMap
             GameObject parent = new GameObject("ChunkedTiles");
             tilesParent = parent.transform;
             tilesParent.SetParent(transform);
-
-            InitializePool();
         }
 
         private void Update()
@@ -200,24 +205,6 @@ namespace EmpireWars.WorldMap
             Debug.Log($"ChunkedTileLoader: {tileDataMap.Count} tile verisi olusturuldu");
         }
 
-        private void InitializePool()
-        {
-            for (int i = 0; i < POOL_INITIAL_SIZE; i++)
-            {
-                GameObject poolObj = CreatePooledTile();
-                poolObj.SetActive(false);
-                tilePool.Enqueue(poolObj);
-            }
-        }
-
-        private GameObject CreatePooledTile()
-        {
-            // Basit placeholder object - gercek tile instantiate sirasinda degistirilecek
-            GameObject obj = new GameObject("PooledTile");
-            obj.transform.SetParent(tilesParent);
-            return obj;
-        }
-
         #endregion
 
         #region Chunk Management
@@ -276,41 +263,55 @@ namespace EmpireWars.WorldMap
                 }
             }
 
-            // Yuklenmesi gereken chunk'lari listeye ekle
-            chunksToLoad.Clear();
+            // Yuklenmesi gereken chunk'lari temp listeye ekle (sorting icin)
+            tempLoadList.Clear();
             foreach (var chunk in visibleChunks)
             {
                 if (!loadedChunks.ContainsKey(chunk))
                 {
-                    chunksToLoad.Add(chunk);
+                    tempLoadList.Add(chunk);
                 }
             }
 
             // Yakin chunk'lar once yuklensin (Google Maps tarzi)
-            chunksToLoad.Sort((a, b) =>
+            tempLoadList.Sort((a, b) =>
             {
                 float distA = Vector2Int.Distance(a, currentChunk);
                 float distB = Vector2Int.Distance(b, currentChunk);
                 return distA.CompareTo(distB);
             });
 
-            // Bosaltilmasi gereken chunk'lari listeye ekle
-            chunksToUnload.Clear();
+            // Sorted listeyi Queue'ya aktar (O(1) dequeue icin)
+            chunksToLoad.Clear();
+            foreach (var chunk in tempLoadList)
+            {
+                chunksToLoad.Enqueue(chunk);
+            }
+
+            // Bosaltilmasi gereken chunk'lari temp listeye ekle
+            tempLoadList.Clear();
             foreach (var kvp in loadedChunks)
             {
                 if (!visibleChunks.Contains(kvp.Key))
                 {
-                    chunksToUnload.Add(kvp.Key);
+                    tempLoadList.Add(kvp.Key);
                 }
             }
 
             // Uzak chunk'lar once bosaltilsin
-            chunksToUnload.Sort((a, b) =>
+            tempLoadList.Sort((a, b) =>
             {
                 float distA = Vector2Int.Distance(a, currentChunk);
                 float distB = Vector2Int.Distance(b, currentChunk);
                 return distB.CompareTo(distA);  // Ters siralama
             });
+
+            // Sorted listeyi Queue'ya aktar
+            chunksToUnload.Clear();
+            foreach (var chunk in tempLoadList)
+            {
+                chunksToUnload.Enqueue(chunk);
+            }
         }
 
         private void ProcessChunkQueue(int maxPerFrame)
@@ -318,19 +319,18 @@ namespace EmpireWars.WorldMap
             int processed = 0;
 
             // Oncelik 1: Uzak chunk'lari hizla bosalt (bellek tasarrufu)
+            // Queue.Dequeue() O(1) - List.RemoveAt(0) O(n) idi
             int unloadCount = Mathf.Min(chunksToUnload.Count, maxPerFrame * 2);
             for (int i = 0; i < unloadCount && chunksToUnload.Count > 0; i++)
             {
-                Vector2Int chunk = chunksToUnload[0];
-                chunksToUnload.RemoveAt(0);
+                Vector2Int chunk = chunksToUnload.Dequeue();
                 UnloadChunk(chunk);
             }
 
             // Oncelik 2: Yakin chunk'lari yukle
             while (chunksToLoad.Count > 0 && processed < maxPerFrame)
             {
-                Vector2Int chunk = chunksToLoad[0];
-                chunksToLoad.RemoveAt(0);
+                Vector2Int chunk = chunksToLoad.Dequeue();
                 LoadChunk(chunk);
                 processed++;
             }
@@ -441,8 +441,15 @@ namespace EmpireWars.WorldMap
             {
                 if (tile != null)
                 {
-                    // Pool'a geri koy yerine destroy (memory management)
-                    Destroy(tile);
+                    // TilePoolManager varsa pool'a geri ver, yoksa destroy
+                    if (usePoolManager && TilePoolManager.Instance != null)
+                    {
+                        TilePoolManager.Instance.ReleaseTile(tile);
+                    }
+                    else
+                    {
+                        Destroy(tile);
+                    }
                 }
             }
 
