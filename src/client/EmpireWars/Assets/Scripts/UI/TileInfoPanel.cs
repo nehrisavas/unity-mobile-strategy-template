@@ -106,7 +106,7 @@ namespace EmpireWars.UI
             }
 
             // ESC ile kapat
-            if (isShowing && Input.GetKeyDown(KeyCode.Escape))
+            if (isShowing && UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 Hide();
             }

@@ -412,7 +412,7 @@ namespace EmpireWars.Map
         private void HandleInput()
         {
             // Mouse tiklamasi
-            if (Input.GetMouseButtonDown(0))
+            if (UnityEngine.Input.GetMouseButtonDown(0))
             {
                 HandleClick();
             }
@@ -423,7 +423,7 @@ namespace EmpireWars.Map
 
         private void HandleClick()
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 HexCell cell = hit.collider.GetComponentInParent<HexCell>();

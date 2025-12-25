@@ -182,7 +182,7 @@ namespace EmpireWars.Map
         {
             if (mainCamera == null) return;
 
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000f, hexLayerMask))
             {
                 HexCell cell = hit.collider.GetComponentInParent<HexCell>();
@@ -207,7 +207,7 @@ namespace EmpireWars.Map
         private void HandleInput()
         {
             // Sol tik - secim
-            if (Input.GetMouseButtonDown(0) && !IsPointerOverUI())
+            if (UnityEngine.Input.GetMouseButtonDown(0) && !IsPointerOverUI())
             {
                 if (hoveredCell != null)
                 {
@@ -220,7 +220,7 @@ namespace EmpireWars.Map
             }
 
             // ESC - secimi temizle
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 ClearSelection();
             }
