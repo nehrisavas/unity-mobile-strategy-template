@@ -352,6 +352,9 @@ namespace EmpireWars.WorldMap.Tiles
                 mineBadge = null;
             }
 
+            // Badge gösterilecek mi kontrol et
+            if (!GameConfig.ShowBadges) return;
+
             // Yeni modern badge oluştur
             mineBadge = BuildingBadge.CreateForMine(transform, mineType, mineLevel, 1.5f);
         }
@@ -372,6 +375,17 @@ namespace EmpireWars.WorldMap.Tiles
         }
 
         /// <summary>
+        /// Bina/birim rengini ayarla (ittifak rengi için)
+        /// </summary>
+        public void SetBuildingColor(Color color, float tintStrength = 0.6f)
+        {
+            if (buildingObject == null) return;
+
+            // UnitColorSystem kullan
+            Units.UnitColorSystem.ApplyAllianceColor(buildingObject, color, tintStrength);
+        }
+
+        /// <summary>
         /// Modern bina badge'i oluştur
         /// </summary>
         private void CreateBuildingBadge()
@@ -388,8 +402,44 @@ namespace EmpireWars.WorldMap.Tiles
                 buildingBadge = null;
             }
 
+            // Badge gösterilecek mi kontrol et
+            if (!GameConfig.ShowBadges) return;
+
             // Yeni modern badge oluştur
             buildingBadge = BuildingBadge.CreateForBuilding(transform, buildingType, buildingLevel, 2.0f);
+        }
+
+        /// <summary>
+        /// Badge görünürlük ayarı değiştiğinde çağrılır
+        /// </summary>
+        public void UpdateBadgeVisibility(bool show)
+        {
+            if (show)
+            {
+                // Badge'leri yeniden oluştur
+                if (mineLevel > 0 && mineBadge == null)
+                {
+                    mineBadge = BuildingBadge.CreateForMine(transform, mineType, mineLevel, 1.5f);
+                }
+                if (buildingLevel > 0 && hasBuilding && buildingBadge == null)
+                {
+                    buildingBadge = BuildingBadge.CreateForBuilding(transform, buildingType, buildingLevel, 2.0f);
+                }
+            }
+            else
+            {
+                // Badge'leri sil
+                if (mineBadge != null)
+                {
+                    Destroy(mineBadge.gameObject);
+                    mineBadge = null;
+                }
+                if (buildingBadge != null)
+                {
+                    Destroy(buildingBadge.gameObject);
+                    buildingBadge = null;
+                }
+            }
         }
 
         #endregion

@@ -84,7 +84,26 @@ namespace EmpireWars.Core
                 CreateClouds();
             }
 
+            // Badge görünürlük ayarı değişikliklerini dinle
+            GameConfig.OnBadgeVisibilityChanged += OnBadgeVisibilityChanged;
+
             Debug.Log("=== WorldMap Bootstrap Tamamlandi ===");
+        }
+
+        private void OnDestroy()
+        {
+            GameConfig.OnBadgeVisibilityChanged -= OnBadgeVisibilityChanged;
+        }
+
+        private void OnBadgeVisibilityChanged(bool show)
+        {
+            // Tüm HexTile'ların badge görünürlüğünü güncelle
+            HexTile[] allTiles = FindObjectsByType<HexTile>(FindObjectsSortMode.None);
+            foreach (var tile in allTiles)
+            {
+                tile.UpdateBadgeVisibility(show);
+            }
+            Debug.Log($"WorldMapBootstrap: {allTiles.Length} tile'ın badge görünürlüğü güncellendi - {(show ? "Açık" : "Kapalı")}");
         }
 
         private void SetupHDGraphics()

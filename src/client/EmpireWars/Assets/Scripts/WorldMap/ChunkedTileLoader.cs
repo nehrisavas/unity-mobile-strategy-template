@@ -509,6 +509,12 @@ namespace EmpireWars.WorldMap
                         hexTile.SetBuildingInfo(tileData.BuildingType, tileData.BuildingLevel);
                         tile.name = $"Hex_{tileData.Q}_{tileData.R}_{tileData.BuildingType}_Lv{tileData.BuildingLevel}";
                     }
+
+                    // İttifak/özel renk uygula
+                    if (tileData.HasCustomColor)
+                    {
+                        hexTile.SetBuildingColor(tileData.BuildingColor);
+                    }
                 }
             }
 

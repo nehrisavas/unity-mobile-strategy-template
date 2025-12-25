@@ -171,3 +171,25 @@ MonoBehaviour:
   cartBlue: {fileID: 919132149155446097, guid: 649eee09b662d1e4f98fb2dbf5733d3e, type: 3}
   cartRed: {fileID: 919132149155446097, guid: c83f98a3338f8bd4f965a4c0d7e5bd2e, type: 3}
   cartYellow: {fileID: 919132149155446097, guid: 8ff16472edb88e745b710c2075b16878, type: 3}
+  swordGreen: {fileID: 919132149155446097, guid: 97e32a70572c3b44f926ef564bd3719f, type: 3}
+  swordBlue: {fileID: 919132149155446097, guid: 2f2350e0719f07d4984b6fc412bf5c94, type: 3}
+  swordRed: {fileID: 919132149155446097, guid: a6cfdfe22d019f147b3bb5ab7b336e9b, type: 3}
+  swordYellow: {fileID: 919132149155446097, guid: 1efeff8e63b03434fb702a4379f75dca, type: 3}
+  shieldGreen: {fileID: 919132149155446097, guid: 243144330285fe7409a7f236b6b14f11, type: 3}
+  shieldBlue: {fileID: 919132149155446097, guid: 770baf11cd33125428a577a07c4945b5, type: 3}
+  shieldRed: {fileID: 919132149155446097, guid: 5f96217b34943514cb266d1e432da4dd, type: 3}
+  shieldYellow: {fileID: 919132149155446097, guid: fdfa400332a273249ba6ea3b6b071a22, type: 3}
+  bowGreen: {fileID: 919132149155446097, guid: 098ce959b52b67b49af61f52be149688, type: 3}
+  bowBlue: {fileID: 919132149155446097, guid: 880b034c06ccf7f44968d479fd299157, type: 3}
+  bowRed: {fileID: 919132149155446097, guid: 28ab53a9d09f5be478de8fb1765f0f9d, type: 3}
+  bowYellow: {fileID: 919132149155446097, guid: e26b3cac64230fc4c8d437f3005a2d88, type: 3}
+  spearGreen: {fileID: 919132149155446097, guid: f26d7b6405604d8478d83dac2d2fba24, type: 3}
+  spearBlue: {fileID: 919132149155446097, guid: 074f4d3edc479d24190c07760f5292c1, type: 3}
+  spearRed: {fileID: 919132149155446097, guid: 7e96b7034d5af084eabe5123a30bdae0, type: 3}
+  spearYellow: {fileID: 919132149155446097, guid: d7e259593c97dbd43bf6cf2b1cf77be6, type: 3}
+  soldierKnightMale: {fileID: 1846530523549185644, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
+  soldierLightMale: {fileID: 1846530523549185644, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
+  soldierKnightFemale: {fileID: 1530541142161044500, guid: 435d261c1fe73ba46883b819e578219d, type: 3}
+  soldierLightFemale: {fileID: 1530541142161044500, guid: 435d261c1fe73ba46883b819e578219d, type: 3}
+  soldierModularMale: {fileID: 1846530523549185644, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
+  soldierModularFemale: {fileID: 1530541142161044500, guid: 435d261c1fe73ba46883b819e578219d, type: 3}

@@ -311,6 +311,25 @@ namespace EmpireWars.WorldMap.Tiles
         public GameObject spearRed;
         public GameObject spearYellow;
 
+        [Header("=== POLYTOPE SOLDIERS ===")]
+        [Tooltip("Erkek Şövalye - Tam Zırhlı (Armor_01_A)")]
+        public GameObject soldierKnightMale;
+
+        [Tooltip("Erkek Hafif Zırhlı (Armor_05_C)")]
+        public GameObject soldierLightMale;
+
+        [Tooltip("Kadın Şövalye - Tam Zırhlı (Armor_01_A)")]
+        public GameObject soldierKnightFemale;
+
+        [Tooltip("Kadın Hafif Zırhlı (Armor_05_C)")]
+        public GameObject soldierLightFemale;
+
+        [Tooltip("Erkek Modüler Karakter (Full)")]
+        public GameObject soldierModularMale;
+
+        [Tooltip("Kadın Modüler Karakter (Full)")]
+        public GameObject soldierModularFemale;
+
         /// <summary>
         /// Bina adına göre prefab döndürür
         /// Tüm renk varyantlarını destekler
@@ -569,6 +588,14 @@ namespace EmpireWars.WorldMap.Tiles
                 "spear_blue" => spearBlue,
                 "spear_red" => spearRed,
                 "spear_yellow" => spearYellow,
+
+                // === POLYTOPE SOLDIERS ===
+                "soldier_knight_male" => soldierKnightMale,
+                "soldier_light_male" => soldierLightMale,
+                "soldier_knight_female" => soldierKnightFemale,
+                "soldier_light_female" => soldierLightFemale,
+                "soldier_modular_male" => soldierModularMale,
+                "soldier_modular_female" => soldierModularFemale,
 
                 _ => null
             };

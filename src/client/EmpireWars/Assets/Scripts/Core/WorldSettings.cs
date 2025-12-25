@@ -99,6 +99,13 @@ namespace EmpireWars.Core
         public float cloudUpdateInterval = 0.1f;
 
         // ============================================
+        // UI AYARLARI
+        // ============================================
+        [Header("UI AYARLARI")]
+        [Tooltip("Bina ve maden badge'lerini göster")]
+        public bool showBadges = true;
+
+        // ============================================
         // HESAPLANAN DEGERLER (Sadece okunur)
         // ============================================
         [Header("HESAPLANAN DEGERLER (Salt Okunur)")]

@@ -92,6 +92,8 @@ namespace EmpireWars.WorldMap
             public string BuildingType;
             public int BuildingLevel;   // 0-30 bina seviyesi
             public float BuildingRotation; // Bina rotasyonu (Y ekseni derece)
+            public Color BuildingColor; // İttifak/birim rengi
+            public bool HasCustomColor; // Özel renk var mı
 
             public TileData(int q, int r, TerrainType terrain, int mineLevel = 0, MineType mineType = MineType.None, bool hasBuilding = false, string buildingType = "", int buildingLevel = 0, float buildingRotation = 0f)
             {
@@ -104,6 +106,24 @@ namespace EmpireWars.WorldMap
                 BuildingType = buildingType;
                 BuildingLevel = buildingLevel;
                 BuildingRotation = buildingRotation;
+                BuildingColor = Color.white;
+                HasCustomColor = false;
+            }
+
+            // Renkli constructor
+            public TileData(int q, int r, TerrainType terrain, int mineLevel, MineType mineType, bool hasBuilding, string buildingType, int buildingLevel, Color color)
+            {
+                Q = q;
+                R = r;
+                Terrain = terrain;
+                MineLevel = mineLevel;
+                MineType = mineType;
+                HasBuilding = hasBuilding;
+                BuildingType = buildingType;
+                BuildingLevel = buildingLevel;
+                BuildingRotation = 0f;
+                BuildingColor = color;
+                HasCustomColor = true;
             }
         }
 
@@ -681,96 +701,92 @@ namespace EmpireWars.WorldMap
                 // ═══════════════════════════════════════════════════════════════
                 // ORDU NİZAMI - Kışlanın güneyinde (Y negatif yönde)
                 // Komutan en önde, arkasında farklı birim tipleri
+                // Her sıra farklı ittifak rengi ile gösterilecek (demo)
                 // ═══════════════════════════════════════════════════════════════
                 int armyY = campY - 12; // Kışlanın 12 birim güneyinde
                 int armyDx = dx - campX;
                 int armyDy = dy - armyY;
 
+                // İttifak renkleri paleti
+                Color goldColor = new Color(1f, 0.85f, 0.2f);      // Altın - Komutan
+                Color redColor = new Color(0.9f, 0.2f, 0.2f);       // Kırmızı - Ağır piyade
+                Color blueColor = new Color(0.2f, 0.4f, 0.9f);      // Mavi - Hafif piyade
+                Color greenColor = new Color(0.2f, 0.8f, 0.3f);     // Yeşil - Mancınık/Top
+                Color purpleColor = new Color(0.6f, 0.2f, 0.8f);    // Mor - Süvariler
+                Color orangeColor = new Color(0.95f, 0.5f, 0.1f);   // Turuncu - İkmal
+                Color cyanColor = new Color(0.2f, 0.85f, 0.9f);     // Camgöbeği - Çadırlar
+
                 // Ordu alanı: X=-7 ile +7, Y=0 ile -9 (10 sıra derinlik)
                 if (armyDx >= -7 && armyDx <= 7 && armyDy >= -9 && armyDy <= 0)
                 {
-                    // Sıra 0 (en ön): Komutan ortada, kılıçlı muhafızlar yanlarda
+                    // Sıra 0 (en ön): Komutan bayrağı ortada, elit muhafızlar yanlarda - ALTIN
                     if (armyDy == 0)
                     {
-                        if (armyDx == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "banner_blue", 1); // Komutan bayrağı
-                        if (Mathf.Abs(armyDx) <= 2) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "sword_blue", 1); // Kılıçlı muhafız
-                        if (Mathf.Abs(armyDx) <= 4) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "shield_blue", 1); // Kalkanlı koruma
+                        if (armyDx == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "banner_blue", 1, goldColor);
+                        if (Mathf.Abs(armyDx) <= 3) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "soldier_knight_male", 1, goldColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 1: Kılıçlı piyade
-                    if (armyDy == -1)
+                    // Sıra 1-2: Ağır piyade - KIRMIZI
+                    if (armyDy == -1 || armyDy == -2)
                     {
                         if (Mathf.Abs(armyDx) <= 6)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "sword_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "soldier_modular_male", 1, redColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 2: Kalkanlı piyade
-                    if (armyDy == -2)
+                    // Sıra 3-4: Hafif piyade - MAVİ
+                    if (armyDy == -3 || armyDy == -4)
                     {
                         if (Mathf.Abs(armyDx) <= 6)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "shield_blue", 1);
+                        {
+                            string soldierType = (armyDx % 2 == 0) ? "soldier_light_male" : "soldier_modular_female";
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, soldierType, 1, blueColor);
+                        }
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 3: Mızraklı piyade
-                    if (armyDy == -3)
-                    {
-                        if (Mathf.Abs(armyDx) <= 6)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "spear_blue", 1);
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-                    }
-
-                    // Sıra 4: Okçular (yay)
-                    if (armyDy == -4)
-                    {
-                        if (Mathf.Abs(armyDx) <= 6)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "bow_blue", 1);
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-                    }
-
-                    // Sıra 5: Mancınıklar (yanlarda) + Okçular (ortada)
+                    // Sıra 5: Mancınıklar (yanlarda) + Kadın şövalyeler (ortada) - YEŞİL
                     if (armyDy == -5)
                     {
                         if (Mathf.Abs(armyDx) >= 5 && Mathf.Abs(armyDx) <= 7)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "catapult_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "catapult_blue", 1, greenColor);
                         if (Mathf.Abs(armyDx) <= 4)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "bow_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "soldier_knight_female", 1, greenColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 6: Topçular (yanlarda) + Askerler (ortada)
+                    // Sıra 6: Topçular (yanlarda) + Askerler (ortada) - YEŞİL
                     if (armyDy == -6)
                     {
                         if (Mathf.Abs(armyDx) >= 4 && Mathf.Abs(armyDx) <= 7)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cannon_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cannon_blue", 1, greenColor);
                         if (Mathf.Abs(armyDx) <= 3)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "soldier_light_female", 1, greenColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 7: Süvariler (atlılar)
+                    // Sıra 7: Süvariler (atlılar) - MOR
                     if (armyDy == -7)
                     {
                         if (Mathf.Abs(armyDx) <= 7)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1, purpleColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 8: İkmal arabaları
+                    // Sıra 8: İkmal arabaları - TURUNCU
                     if (armyDy == -8)
                     {
                         if (Mathf.Abs(armyDx) <= 5)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cart_blue", 1);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cart_blue", 1, orangeColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Sıra 9: Çadırlar (arka)
+                    // Sıra 9: Çadırlar (arka) - CAMGÖBEĞİ
                     if (armyDy == -9)
                     {
                         if (Mathf.Abs(armyDx) <= 6)
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15);
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15, cyanColor);
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
                 }

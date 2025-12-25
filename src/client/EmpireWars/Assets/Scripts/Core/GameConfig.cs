@@ -57,6 +57,12 @@ namespace EmpireWars.Core
 
         #endregion
 
+        #region === UI AYARLARI ===
+
+        private const bool DEFAULT_SHOW_BADGES = true;
+
+        #endregion
+
         // ╔════════════════════════════════════════════════════════════╗
         // ║                    RUNTIME PROPERTIES                       ║
         // ║              (Yukaridaki varsayilanlardan okunur)          ║
@@ -94,6 +100,9 @@ namespace EmpireWars.Core
         public static int CloudCount { get; private set; } = DEFAULT_CLOUD_COUNT;
         public static float CloudUpdateInterval { get; private set; } = DEFAULT_CLOUD_UPDATE_INTERVAL;
 
+        // UI
+        public static bool ShowBadges { get; private set; } = DEFAULT_SHOW_BADGES;
+
         // ╔════════════════════════════════════════════════════════════╗
         // ║                      INITIALIZATION                         ║
         // ╚════════════════════════════════════════════════════════════╝
@@ -121,6 +130,7 @@ namespace EmpireWars.Core
             MinimapMaxZoom = DEFAULT_MINIMAP_MAX_ZOOM;
             CloudCount = DEFAULT_CLOUD_COUNT;
             CloudUpdateInterval = DEFAULT_CLOUD_UPDATE_INTERVAL;
+            ShowBadges = DEFAULT_SHOW_BADGES;
         }
 
         /// <summary>
@@ -162,6 +172,7 @@ namespace EmpireWars.Core
             MinimapMaxZoom = settings.minimapMaxZoom;
             CloudCount = settings.cloudCount;
             CloudUpdateInterval = settings.cloudUpdateInterval;
+            ShowBadges = settings.showBadges;
         }
 
         /// <summary>
@@ -175,11 +186,23 @@ namespace EmpireWars.Core
             Debug.Log($"GameConfig: Harita boyutu degistirildi - {MapWidth}x{MapHeight}");
         }
 
+        /// <summary>
+        /// Runtime'da badge görünürlüğünü değiştir
+        /// </summary>
+        public static void SetShowBadges(bool show)
+        {
+            if (ShowBadges == show) return;
+            ShowBadges = show;
+            OnBadgeVisibilityChanged?.Invoke(show);
+            Debug.Log($"GameConfig: Badge görünürlüğü değiştirildi - {(show ? "Açık" : "Kapalı")}");
+        }
+
         // ╔════════════════════════════════════════════════════════════╗
         // ║                        EVENTS                               ║
         // ╚════════════════════════════════════════════════════════════╝
 
         public static event System.Action<int, int> OnMapSizeChanged;
+        public static event System.Action<bool> OnBadgeVisibilityChanged;
 
         // ╔════════════════════════════════════════════════════════════╗
         // ║                    UTILITY METHODS                          ║

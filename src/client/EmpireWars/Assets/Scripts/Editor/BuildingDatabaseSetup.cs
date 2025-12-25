@@ -172,6 +172,16 @@ namespace EmpireWars.Editor
             AssignDecoration(serializedDb, "boat", "boat", ref assignedCount);
             AssignDecoration(serializedDb, "boatrack", "boatrack", ref assignedCount);
 
+            // Polytope Studio Soldiers - TAM KARAKTER PREFAB'LARI
+            // Tüm asker tipleri için aynı full prefab kullanılıyor (tam vücut + kafa + zırh)
+            AssignPolytopeSoldier(serializedDb, "soldierModularMale", "PT_Lowpoly_Armors_Male_Moduar_Free", ref assignedCount);
+            AssignPolytopeSoldier(serializedDb, "soldierModularFemale", "PT_Lowpoly_Armors_Female_Moduar_Free", ref assignedCount);
+            // Şövalye ve hafif zırhlı tipler de aynı full prefab'ı kullanıyor
+            AssignPolytopeSoldier(serializedDb, "soldierKnightMale", "PT_Lowpoly_Armors_Male_Moduar_Free", ref assignedCount);
+            AssignPolytopeSoldier(serializedDb, "soldierLightMale", "PT_Lowpoly_Armors_Male_Moduar_Free", ref assignedCount);
+            AssignPolytopeSoldier(serializedDb, "soldierKnightFemale", "PT_Lowpoly_Armors_Female_Moduar_Free", ref assignedCount);
+            AssignPolytopeSoldier(serializedDb, "soldierLightFemale", "PT_Lowpoly_Armors_Female_Moduar_Free", ref assignedCount);
+
             serializedDb.ApplyModifiedProperties();
             EditorUtility.SetDirty(db);
             AssetDatabase.SaveAssets();
@@ -323,6 +333,56 @@ namespace EmpireWars.Editor
                     prop.objectReferenceValue = prefab;
                     count++;
                 }
+            }
+        }
+
+        private static void AssignPolytopeSoldier(SerializedObject db, string fieldName, string prefabName, ref int count)
+        {
+            var prop = db.FindProperty(fieldName);
+            if (prop == null)
+            {
+                Debug.LogWarning($"BuildingDatabaseSetup: Field bulunamadi: {fieldName}");
+                return;
+            }
+
+            // Polytope prefab yolu
+            string path = $"Assets/Polytope Studio/Lowpoly_Characters/Prefabs/Modular_Armors/{prefabName}.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if (prefab != null)
+            {
+                prop.objectReferenceValue = prefab;
+                count++;
+                Debug.Log($"BuildingDatabaseSetup: {fieldName} <- {path}");
+            }
+            else
+            {
+                Debug.LogWarning($"BuildingDatabaseSetup: Polytope prefab bulunamadi: {path}");
+            }
+        }
+
+        private static void AssignPolytopePart(SerializedObject db, string fieldName, string prefabName, ref int count)
+        {
+            var prop = db.FindProperty(fieldName);
+            if (prop == null)
+            {
+                Debug.LogWarning($"BuildingDatabaseSetup: Field bulunamadi: {fieldName}");
+                return;
+            }
+
+            // Polytope parça prefab yolu
+            string path = $"Assets/Polytope Studio/Lowpoly_Characters/Prefabs/Modular_Armors/Separate_Parts/{prefabName}.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+            if (prefab != null)
+            {
+                prop.objectReferenceValue = prefab;
+                count++;
+                Debug.Log($"BuildingDatabaseSetup: {fieldName} <- {path}");
+            }
+            else
+            {
+                Debug.LogWarning($"BuildingDatabaseSetup: Polytope part prefab bulunamadi: {path}");
             }
         }
 
