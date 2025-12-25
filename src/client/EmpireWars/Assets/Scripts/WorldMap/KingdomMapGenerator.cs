@@ -448,7 +448,7 @@ namespace EmpireWars.WorldMap
             }
 
             // ════════════════════════════════════════════════════════════════
-            // HALKA 10-14: Dış şehir - çiftlik ve liman
+            // HALKA 10-14: Dış şehir - gölet, liman ve çiftlik
             // ════════════════════════════════════════════════════════════════
             if (ring >= 10 && ring <= 14)
             {
@@ -464,7 +464,51 @@ namespace EmpireWars.WorldMap
                 int level = 12 + (hash % 10); // 12-21
 
                 // ════════════════════════════════════════════════════════════
-                // LİMAN BÖLGESİ (sağ taraf dx > 8, ring 11-14)
+                // GÖLET ALANI (sol alt köşe: dx < -6, dy > 6)
+                // Merkez su, etrafında kıyı, rıhtım ve tekneler
+                // ════════════════════════════════════════════════════════════
+                if (dx < -6 && dy > 6 && ring >= 10 && ring <= 14)
+                {
+                    // Gölet merkezi - derin su
+                    if (dx < -9 && dy > 9 && ring >= 12)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+
+                    // Gölet kenarı - sığ su
+                    if (dx < -8 && dy > 8 && ring >= 11)
+                    {
+                        return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
+                    }
+
+                    // Kıyı şeridi
+                    if (dx < -7 && dy > 7 && ring >= 10)
+                    {
+                        // Kıyıda rıhtım ve tersane
+                        if (ring == 10 || ring == 11)
+                        {
+                            if (buildingHash < 3)
+                            {
+                                return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
+                            }
+                            if (buildingHash < 5)
+                            {
+                                return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
+                            }
+                        }
+                        return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
+                    }
+
+                    // Gölet çevresi - park alanı
+                    if (buildingHash < 4)
+                    {
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "well_blue", level - 3);
+                    }
+                    return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+
+                // ════════════════════════════════════════════════════════════
+                // DENİZ LİMANI BÖLGESİ (sağ taraf dx > 8, ring 11-14)
                 // Tersane ve rıhtımlar kıyıda, etrafında su
                 // ════════════════════════════════════════════════════════════
                 if (dx > 8 && ring >= 11 && ring <= 14)
@@ -475,27 +519,23 @@ namespace EmpireWars.WorldMap
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
 
-                    // Ring 13 - Kıyı suyu + gemiler
+                    // Ring 13 - Kıyı suyu
                     if (ring == 13 && dx > 9)
                     {
-                        // Su alanı
                         return new TileData(q, r, TerrainType.Water, 0, MineType.None, false, "");
                     }
 
                     // Ring 12 - Rıhtım ve tersane
                     if (ring == 12)
                     {
-                        // Kıyı tile'ları (geçiş)
                         if (dx >= 11)
                         {
                             return new TileData(q, r, TerrainType.Coast, 0, MineType.None, false, "");
                         }
-                        // Tersane
                         if (buildingHash < 4)
                         {
                             return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "shipyard_blue", level);
                         }
-                        // Rıhtım
                         if (buildingHash < 8)
                         {
                             return new TileData(q, r, TerrainType.Coast, 0, MineType.None, true, "docks_blue", level);
@@ -518,12 +558,12 @@ namespace EmpireWars.WorldMap
                     return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                 }
 
-                // Çiftlik bölgesi (azaltıldı)
+                // Çiftlik bölgesi
                 if (buildingHash < 5)
                 {
                     return new TileData(q, r, TerrainType.Farm, 0, MineType.None, false, "");
                 }
-                // Ormanlık alan - AZALTILDI (sadece %12 -> %8)
+                // Ormanlık alan
                 if (buildingHash < 7)
                 {
                     return new TileData(q, r, TerrainType.Forest, 0, MineType.None, false, "");

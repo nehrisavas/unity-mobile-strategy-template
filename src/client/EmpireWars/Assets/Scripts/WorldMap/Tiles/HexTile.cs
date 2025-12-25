@@ -2,6 +2,7 @@ using UnityEngine;
 using EmpireWars.Core;
 using EmpireWars.Data;
 using EmpireWars.WorldMap;
+using EmpireWars.UI;
 using TMPro;
 
 namespace EmpireWars.WorldMap.Tiles
@@ -36,6 +37,7 @@ namespace EmpireWars.WorldMap.Tiles
         [SerializeField] private int mineLevel;
         [SerializeField] private KingdomMapGenerator.MineType mineType;
         [SerializeField] private GameObject mineLevelIndicator;
+        private BuildingBadge mineBadge;
 
         [Header("Building")]
         [SerializeField] private bool hasBuilding;
@@ -43,6 +45,7 @@ namespace EmpireWars.WorldMap.Tiles
         [SerializeField] private int buildingLevel;
         [SerializeField] private string buildingType;
         [SerializeField] private GameObject buildingLevelIndicator;
+        private BuildingBadge buildingBadge;
 
         [Header("Highlight Overlay")]
         [SerializeField] private GameObject highlightOverlay;
@@ -328,53 +331,29 @@ namespace EmpireWars.WorldMap.Tiles
 
             if (level > 0)
             {
-                CreateMineLevelIndicator();
+                CreateMineBadge();
             }
         }
 
         /// <summary>
-        /// Maden seviyesi ve türünü gösteren 3D text oluştur
+        /// Modern maden badge'i oluştur
         /// </summary>
-        private void CreateMineLevelIndicator()
+        private void CreateMineBadge()
         {
+            // Eski göstergeyi temizle
             if (mineLevelIndicator != null)
             {
                 DestroyImmediate(mineLevelIndicator);
+                mineLevelIndicator = null;
             }
-
-            // 3D Text GameObject oluştur
-            mineLevelIndicator = new GameObject("MineLevelIndicator");
-            mineLevelIndicator.transform.SetParent(transform);
-            mineLevelIndicator.transform.localPosition = new Vector3(0, 1.2f, 0);
-            mineLevelIndicator.transform.localRotation = Quaternion.Euler(90f, 0, 0); // Yukarı bak
-
-            // TextMeshPro component ekle
-            TextMeshPro tmp = mineLevelIndicator.AddComponent<TextMeshPro>();
-
-            // Maden türü adı + seviye
-            string typeLabel = KingdomMapGenerator.GetMineTypeName(mineType);
-            tmp.text = $"<size=80%>{typeLabel}</size>\n<b>Lv{mineLevel}</b>";
-
-            // Maden türüne göre renk
-            tmp.color = KingdomMapGenerator.GetMineTypeColor(mineType);
-            tmp.fontSize = 2.5f;
-            tmp.fontStyle = FontStyles.Bold;
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.sortingOrder = 100;
-
-            // Arka plan için outline - daha koyu
-            tmp.outlineWidth = 0.25f;
-            tmp.outlineColor = new Color32(0, 0, 0, 255);
-
-            // Glow efekti
-            tmp.fontMaterial.EnableKeyword("GLOW_ON");
-
-            // RectTransform ayarla
-            RectTransform rect = mineLevelIndicator.GetComponent<RectTransform>();
-            if (rect != null)
+            if (mineBadge != null)
             {
-                rect.sizeDelta = new Vector2(2.5f, 2f);
+                DestroyImmediate(mineBadge.gameObject);
+                mineBadge = null;
             }
+
+            // Yeni modern badge oluştur
+            mineBadge = BuildingBadge.CreateForMine(transform, mineType, mineLevel, 1.5f);
         }
 
         /// <summary>
@@ -388,101 +367,29 @@ namespace EmpireWars.WorldMap.Tiles
 
             if (level > 0 && hasBuilding)
             {
-                CreateBuildingLevelIndicator();
+                CreateBuildingBadge();
             }
         }
 
         /// <summary>
-        /// Bina seviyesini gösteren 3D text oluştur
+        /// Modern bina badge'i oluştur
         /// </summary>
-        private void CreateBuildingLevelIndicator()
+        private void CreateBuildingBadge()
         {
+            // Eski göstergeyi temizle
             if (buildingLevelIndicator != null)
             {
                 DestroyImmediate(buildingLevelIndicator);
+                buildingLevelIndicator = null;
+            }
+            if (buildingBadge != null)
+            {
+                DestroyImmediate(buildingBadge.gameObject);
+                buildingBadge = null;
             }
 
-            // 3D Text GameObject oluştur
-            buildingLevelIndicator = new GameObject("BuildingLevelIndicator");
-            buildingLevelIndicator.transform.SetParent(transform);
-            buildingLevelIndicator.transform.localPosition = new Vector3(0, 2.0f, 0); // Binanın üstünde
-            buildingLevelIndicator.transform.localRotation = Quaternion.Euler(90f, 0, 0);
-
-            // TextMeshPro component ekle
-            TextMeshPro tmp = buildingLevelIndicator.AddComponent<TextMeshPro>();
-
-            // Bina adı + seviye
-            string displayName = GetBuildingDisplayName(buildingType);
-            tmp.text = $"<size=70%>{displayName}</size>\n<b>Lv.{buildingLevel}</b>";
-
-            // Seviyeye göre renk (düşük=gri, yüksek=altın)
-            tmp.color = GetBuildingLevelColor(buildingLevel);
-            tmp.fontSize = 2.2f;
-            tmp.fontStyle = FontStyles.Bold;
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.sortingOrder = 100;
-
-            // Outline
-            tmp.outlineWidth = 0.2f;
-            tmp.outlineColor = new Color32(0, 0, 0, 200);
-
-            // RectTransform
-            RectTransform rect = buildingLevelIndicator.GetComponent<RectTransform>();
-            if (rect != null)
-            {
-                rect.sizeDelta = new Vector2(3f, 2f);
-            }
-        }
-
-        /// <summary>
-        /// Bina türüne göre Türkçe ad döndür
-        /// </summary>
-        private static string GetBuildingDisplayName(string buildingType)
-        {
-            if (string.IsNullOrEmpty(buildingType)) return "";
-
-            string baseName = buildingType.Replace("_green", "").Replace("_blue", "").Replace("_red", "").Replace("_yellow", "");
-
-            return baseName switch
-            {
-                "castle" => "Kale",
-                "townhall" => "Belediye",
-                "market" => "Pazar",
-                "blacksmith" => "Demirci",
-                "workshop" => "Atölye",
-                "barracks" => "Kışla",
-                "archeryrange" => "Okçu",
-                "stables" => "Ahır",
-                "mine" => "Maden",
-                "lumbermill" => "Kereste",
-                "windmill" => "Değirmen",
-                "watermill" => "Su Değ.",
-                "home_a" or "home_b" => "Ev",
-                "tavern" => "Taverna",
-                "tent" => "Çadır",
-                "church" => "Kilise",
-                "shrine" => "Tapınak",
-                "shipyard" => "Tersane",
-                "docks" => "Rıhtım",
-                "tower_cannon" => "Top Kulesi",
-                "tower_catapult" => "Mancınık",
-                "watchtower" => "Gözcü",
-                "tower_a" or "tower_b" => "Kule",
-                _ => baseName
-            };
-        }
-
-        /// <summary>
-        /// Seviyeye göre renk döndür (1-30)
-        /// </summary>
-        private static Color GetBuildingLevelColor(int level)
-        {
-            if (level >= 25) return new Color(1f, 0.84f, 0f);      // Altın (25-30)
-            if (level >= 20) return new Color(0.8f, 0.5f, 1f);     // Mor (20-24)
-            if (level >= 15) return new Color(0.2f, 0.6f, 1f);     // Mavi (15-19)
-            if (level >= 10) return new Color(0.3f, 0.9f, 0.3f);   // Yeşil (10-14)
-            if (level >= 5) return new Color(1f, 1f, 1f);          // Beyaz (5-9)
-            return new Color(0.7f, 0.7f, 0.7f);                     // Gri (1-4)
+            // Yeni modern badge oluştur
+            buildingBadge = BuildingBadge.CreateForBuilding(transform, buildingType, buildingLevel, 2.0f);
         }
 
         #endregion
