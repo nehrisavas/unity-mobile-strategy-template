@@ -36,7 +36,9 @@ namespace EmpireWars.Core
 
         private const int DEFAULT_CHUNK_SIZE = 32;
         private const int DEFAULT_LOAD_RADIUS = 2;
+        private const int MOBILE_LOAD_RADIUS = 1; // Mobil için azaltılmış
         private const float DEFAULT_CHUNK_UPDATE_INTERVAL = 0.5f;
+        private const float MOBILE_CHUNK_UPDATE_INTERVAL = 0.3f; // Mobil için daha sık
         private const int DEFAULT_CHUNK_THRESHOLD = 100;
 
         #endregion
@@ -154,7 +156,34 @@ namespace EmpireWars.Core
                 Debug.Log($"GameConfig: Varsayilanlar kullaniliyor - {MapWidth}x{MapHeight}");
             }
 
-            Debug.Log($"GameConfig: World={WorldWidth:F0}x{WorldHeight:F0}, Zoom={MinZoom}-{MaxZoom}, Chunk={ChunkSize}");
+            // Mobil optimizasyonlar
+            ApplyMobileOptimizations();
+
+            Debug.Log($"GameConfig: World={WorldWidth:F0}x{WorldHeight:F0}, Zoom={MinZoom}-{MaxZoom}, Chunk={ChunkSize}, LoadRadius={LoadRadius}");
+        }
+
+        /// <summary>
+        /// Mobil cihazlar icin performans optimizasyonlari
+        /// </summary>
+        private static void ApplyMobileOptimizations()
+        {
+            bool isMobile = Application.platform == RuntimePlatform.Android ||
+                           Application.platform == RuntimePlatform.IPhonePlayer;
+
+            if (isMobile)
+            {
+                // Chunk yükleme yarıçapını azalt (25 chunk -> 9 chunk)
+                LoadRadius = MOBILE_LOAD_RADIUS;
+                ChunkUpdateInterval = MOBILE_CHUNK_UPDATE_INTERVAL;
+
+                // Bulut sayısını azalt
+                CloudCount = Mathf.Min(CloudCount, 20);
+
+                // Badge'leri kapat (performans için)
+                ShowBadges = false;
+
+                Debug.Log($"GameConfig: MOBİL OPTİMİZASYON - LoadRadius={LoadRadius}, CloudCount={CloudCount}");
+            }
         }
 
         private static void LoadFromWorldSettings(WorldSettings settings)

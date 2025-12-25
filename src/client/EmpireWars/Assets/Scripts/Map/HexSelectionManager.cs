@@ -1,6 +1,7 @@
 using UnityEngine;
 using EmpireWars.Core;
 using EmpireWars.UI;
+using EmpireWars.CameraSystem;
 
 namespace EmpireWars.Map
 {
@@ -206,6 +207,12 @@ namespace EmpireWars.Map
 
         private void HandleInput()
         {
+            // Kamera surukleniyorsa secim yapma
+            if (MapCameraController.Instance != null && MapCameraController.Instance.IsDragging)
+            {
+                return;
+            }
+
             // Sol tik - secim
             if (UnityEngine.Input.GetMouseButtonDown(0) && !IsPointerOverUI())
             {

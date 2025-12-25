@@ -50,6 +50,11 @@ namespace EmpireWars.CameraSystem
         // Pinch state
         private float lastPinchDistance;
 
+        // Single touch drag state (mobile)
+        private bool isTouchDragging = false;
+        private Vector2 lastTouchPosition;
+        private int activeTouchId = -1;
+
         // Input actions
         private InputAction pointerPositionAction;
         private InputAction rightClickAction;
@@ -251,10 +256,68 @@ namespace EmpireWars.CameraSystem
             {
                 HandlePinchZoom();
                 isDragging = true;
+                isTouchDragging = false;
+                activeTouchId = -1;
                 return;
             }
 
-            // Sag tik surukleme - World plane raycasting
+            // Single touch drag (MOBILE PANNING)
+            if (Touch.activeTouches.Count == 1)
+            {
+                var touch = Touch.activeTouches[0];
+
+                if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
+                {
+                    // Yeni touch basladi
+                    activeTouchId = touch.touchId;
+                    lastTouchPosition = touch.screenPosition;
+                    dragStartWorldPos = GetWorldPositionOnPlane(touch.screenPosition);
+                    totalDragDistance = 0f;
+                    isTouchDragging = false;
+                }
+                else if (touch.touchId == activeTouchId)
+                {
+                    // Ayni parmakla devam
+                    Vector2 currentPos = touch.screenPosition;
+                    float delta = Vector2.Distance(currentPos, lastTouchPosition);
+                    totalDragDistance += delta;
+
+                    if (totalDragDistance > dragThreshold)
+                    {
+                        isTouchDragging = true;
+                        isDragging = true;
+
+                        // World plane raycasting ile pan
+                        Vector3 currentWorldPos = GetWorldPositionOnPlane(currentPos);
+                        Vector3 diff = dragStartWorldPos - currentWorldPos;
+                        targetPosition += diff;
+
+                        // Guncelle
+                        dragStartWorldPos = GetWorldPositionOnPlane(currentPos);
+                    }
+
+                    lastTouchPosition = currentPos;
+                }
+
+                if (touch.phase == UnityEngine.InputSystem.TouchPhase.Ended ||
+                    touch.phase == UnityEngine.InputSystem.TouchPhase.Canceled)
+                {
+                    isTouchDragging = false;
+                    activeTouchId = -1;
+                    isDragging = false;
+                }
+
+                return;
+            }
+
+            // Touch yok, reset
+            if (Touch.activeTouches.Count == 0)
+            {
+                isTouchDragging = false;
+                activeTouchId = -1;
+            }
+
+            // Sag tik surukleme - World plane raycasting (PC icin)
             if (rightButtonDown)
             {
                 Vector2 currentScreenPos = pointerPositionAction.ReadValue<Vector2>();
@@ -275,7 +338,7 @@ namespace EmpireWars.CameraSystem
                     dragStartWorldPos = GetWorldPositionOnPlane(currentScreenPos);
                 }
             }
-            else
+            else if (Touch.activeTouches.Count == 0)
             {
                 isDragging = false;
             }
