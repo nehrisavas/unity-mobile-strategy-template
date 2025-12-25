@@ -44,10 +44,10 @@ MonoBehaviour:
   barracksBlue: {fileID: 919132149155446097, guid: ab69081e2b22dec4da9c5370e0d36067, type: 3}
   barracksRed: {fileID: 919132149155446097, guid: b720ef13a5443ae46b538378ba133f2c, type: 3}
   barracksYellow: {fileID: 919132149155446097, guid: d9f4524a234f11348af3f14b7160a0c8, type: 3}
-  archeryrangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
-  archeryrangeBlue: {fileID: 919132149155446097, guid: f55938e59bf10a3458ee3b2996ba7e0c, type: 3}
-  archeryrangeRed: {fileID: 919132149155446097, guid: fb8519a5e459ecc40bbc3d8f73e98559, type: 3}
-  archeryrangeYellow: {fileID: 919132149155446097, guid: 51e2578c341c8654c8fdec86dd5f3659, type: 3}
+  archeryRangeGreen: {fileID: 919132149155446097, guid: 6b8f4409f95be3e4fb0d11ec029f3d33, type: 3}
+  archeryRangeBlue: {fileID: 919132149155446097, guid: f55938e59bf10a3458ee3b2996ba7e0c, type: 3}
+  archeryRangeRed: {fileID: 919132149155446097, guid: fb8519a5e459ecc40bbc3d8f73e98559, type: 3}
+  archeryRangeYellow: {fileID: 919132149155446097, guid: 51e2578c341c8654c8fdec86dd5f3659, type: 3}
   stablesGreen: {fileID: 919132149155446097, guid: b23f374b5e77ed04b9dbc9fa88c09b3f, type: 3}
   stablesBlue: {fileID: 919132149155446097, guid: c42cc74b2b25bc34194c0279be8e0d41, type: 3}
   stablesRed: {fileID: 919132149155446097, guid: 4d654f32c95d1344caef642e9fbef4bd, type: 3}
@@ -147,3 +147,27 @@ MonoBehaviour:
   fenceWoodStraight: {fileID: 919132149155446097, guid: 4469aab51deb89b41882d0cc08b80e5b, type: 3}
   fenceWoodStraightGate: {fileID: 919132149155446097, guid: 35fb8530e2d9591468a56b0fc866d692, type: 3}
   projectileCatapult: {fileID: 919132149155446097, guid: 477af543648217943abb8c25c2847449, type: 3}
+  unitGreen: {fileID: 919132149155446097, guid: 89db17eaa5c164c4cbe07a27775d1e66, type: 3}
+  unitBlue: {fileID: 919132149155446097, guid: 7bd1884d263476a4ab8da96fe85c9077, type: 3}
+  unitRed: {fileID: 919132149155446097, guid: 6f3b847268fc2df4fbef54b563c00b34, type: 3}
+  unitYellow: {fileID: 919132149155446097, guid: 8685460407c5e5a4b9f04b1b48fdd7f2, type: 3}
+  horseGreen: {fileID: 919132149155446097, guid: 265152ed64ebc0045988a5e2cabdbedc, type: 3}
+  horseBlue: {fileID: 919132149155446097, guid: bbd1029baeada1a40acae22ab4fe7638, type: 3}
+  horseRed: {fileID: 919132149155446097, guid: 66a86a0e3c9343248943c6de2c76715b, type: 3}
+  horseYellow: {fileID: 919132149155446097, guid: 62cd49c39db034a40a42bed184fe8dd0, type: 3}
+  cannonGreen: {fileID: 919132149155446097, guid: 078ad12844586c447bb7c72a51d061d4, type: 3}
+  cannonBlue: {fileID: 919132149155446097, guid: 81a53e141df0baa41b62b3850e6e35c6, type: 3}
+  cannonRed: {fileID: 919132149155446097, guid: beb840aa1f45fdd418daf586420e8d5a, type: 3}
+  cannonYellow: {fileID: 919132149155446097, guid: dbd30d9cd99df1148bc80f8f7a49b702, type: 3}
+  catapultGreen: {fileID: 919132149155446097, guid: 70a1707c960914d4397b26de460df0ac, type: 3}
+  catapultBlue: {fileID: 919132149155446097, guid: 24b07a2c168e51842b350914c3249729, type: 3}
+  catapultRed: {fileID: 919132149155446097, guid: 83693c63155b54943b299ace2e97b536, type: 3}
+  catapultYellow: {fileID: 919132149155446097, guid: 3dd5dbca9d087364696a2ee30a1b78aa, type: 3}
+  bannerGreen: {fileID: 919132149155446097, guid: febeaa8e69ecb4a42b9016e069bd2c3e, type: 3}
+  bannerBlue: {fileID: 919132149155446097, guid: 60ee7d72ff350e14ab2e483e9fad2ff4, type: 3}
+  bannerRed: {fileID: 919132149155446097, guid: 7e03e9bddc7cf60409f8e452f831cd4c, type: 3}
+  bannerYellow: {fileID: 919132149155446097, guid: 699ce6b8083ec234e8a8871c2825da1e, type: 3}
+  cartGreen: {fileID: 919132149155446097, guid: 8323474bbddb50f4290f0639a09ca587, type: 3}
+  cartBlue: {fileID: 919132149155446097, guid: 649eee09b662d1e4f98fb2dbf5733d3e, type: 3}
+  cartRed: {fileID: 919132149155446097, guid: c83f98a3338f8bd4f965a4c0d7e5bd2e, type: 3}
+  cartYellow: {fileID: 919132149155446097, guid: 8ff16472edb88e745b710c2075b16878, type: 3}

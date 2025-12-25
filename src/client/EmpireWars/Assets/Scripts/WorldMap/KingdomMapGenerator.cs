@@ -604,21 +604,20 @@ namespace EmpireWars.WorldMap
                 int campDy = dy - campY;
                 int distFromCamp = Mathf.Max(Mathf.Abs(campDx), Mathf.Abs(campDy));
 
-                if (distFromCamp <= 10)
+                if (distFromCamp <= 7)
                 {
+                    // ═══ KIŞLA İÇİ - Sadece binalar ═══
+
                     // Merkez - Komuta Kulesi
                     if (distFromCamp == 0)
                     {
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 30);
                     }
 
-                    // Halka 1 - Komutan ve bayraklar
+                    // Halka 1 - Yol
                     if (distFromCamp == 1)
                     {
-                        // Kuzey - Komutan bayrağı
-                        if (campDy == 1 && campDx == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "banner_blue", 1);
-                        // Diğer yönler - Muhafız askerleri
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
                     }
 
                     // Halka 2 - Kışlalar (4 yönde)
@@ -632,126 +631,123 @@ namespace EmpireWars.WorldMap
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "watchtower_blue", 25);
                     }
 
-                    // Halka 3 - Asker formasyonu (piyade nizamı)
+                    // Halka 3 - Yol
                     if (distFromCamp == 3)
                     {
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
                     }
 
-                    // Halka 4 - Okçu, Süvari tesisleri ve topçu
+                    // Halka 4 - Okçu menzili, Ahırlar, Top kuleleri
                     if (distFromCamp == 4)
                     {
-                        // Kuzey ve Güney - Okçu menzili
                         if (Mathf.Abs(campDy) == 4 && Mathf.Abs(campDx) <= 1)
-                        {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "archeryrange_blue", 26);
-                        }
-                        // Doğu ve Batı - Ahırlar
                         if (Mathf.Abs(campDx) == 4 && Mathf.Abs(campDy) <= 1)
-                        {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "stables_blue", 26);
-                        }
-                        // Köşelerde top kuleleri
                         if (Mathf.Abs(campDx) >= 3 && Mathf.Abs(campDy) >= 3)
-                        {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_cannon_blue", 24);
-                        }
-                        // Ara bölgelerde piyade
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
-                    // Halka 5 - Süvari ve Topçu birlikleri
+                    // Halka 5 - Yol
                     if (distFromCamp == 5)
                     {
-                        // Doğu-Batı yönünde atlılar (süvari birliği)
-                        if (Mathf.Abs(campDx) == 5 && Mathf.Abs(campDy) <= 2)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
-                        }
-                        // Kuzey-Güney yönünde toplar
-                        if (Mathf.Abs(campDy) == 5 && Mathf.Abs(campDx) <= 2)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cannon_blue", 1);
-                        }
-                        // Köşeler - asker
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Road, 0, MineType.None, false, "");
                     }
 
                     // Halka 6 - Mancınık kuleleri ve ek kışlalar
                     if (distFromCamp == 6)
                     {
-                        // 4 köşede mancınık kulesi
                         if (Mathf.Abs(campDx) == 6 && Mathf.Abs(campDy) == 6)
-                        {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tower_catapult_blue", 24);
-                        }
-                        // Kenarlarda ek kışlalar
                         if ((Mathf.Abs(campDx) == 6 && Mathf.Abs(campDy) <= 2) ||
                             (Mathf.Abs(campDy) == 6 && Mathf.Abs(campDx) <= 2))
-                        {
                             return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "barracks_blue", 22);
-                        }
-                        // Mancınık birimleri köşelerin yanında
-                        if (Mathf.Abs(campDx) >= 4 && Mathf.Abs(campDy) >= 4)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "catapult_blue", 1);
-                        }
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
                     }
 
                     // Halka 7 - Sur duvarları
                     if (distFromCamp == 7)
                     {
-                        // Kapılar (4 yön)
                         if ((campDx == 0 && Mathf.Abs(campDy) == 7) || (campDy == 0 && Mathf.Abs(campDx) == 7))
-                        {
                             return new TileData(q, r, TerrainType.Road, 0, MineType.None, true, "tower_a_blue", 22);
-                        }
-                        // Sur duvarları
                         float wallRot = (Mathf.Abs(campDx) == 7) ? 90f : 0f;
                         return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "wall_straight", 20, wallRot);
                     }
 
-                    // Halka 8 - Dış alan (çadırlar, arabalar, garnizon)
-                    if (distFromCamp == 8)
-                    {
-                        // Çadırlar belirli noktalarda
-                        if (buildingHash < 12)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15);
-                        }
-                        // İkmal arabaları
-                        if (buildingHash < 18)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cart_blue", 1);
-                        }
-                        // Garnizon askerleri
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
-                    }
-
-                    // Halka 9 - Dış devriye
-                    if (distFromCamp == 9)
-                    {
-                        // Ana yönlerde atlı devriye
-                        if ((campDx == 0 || campDy == 0) && buildingHash < 50)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
-                        }
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-                    }
-
-                    // Halka 10 - Gözcüler
-                    if (distFromCamp == 10)
-                    {
-                        // 4 köşede gözcü
-                        if (Mathf.Abs(campDx) >= 8 && Mathf.Abs(campDy) >= 8)
-                        {
-                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
-                        }
-                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
-                    }
-
                     return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                }
+
+                // ═══════════════════════════════════════════════════════════════
+                // ORDU NİZAMI - Kışlanın güneyinde (Y negatif yönde)
+                // Komutan en önde, arkasında askerler, yanlarda ağır silahlar
+                // ═══════════════════════════════════════════════════════════════
+                int armyY = campY - 12; // Kışlanın 12 birim güneyinde
+                int armyDx = dx - campX;
+                int armyDy = dy - armyY;
+
+                // Ordu alanı: X=-6 ile +6, Y=0 ile -8 (8 sıra derinlik)
+                if (armyDx >= -6 && armyDx <= 6 && armyDy >= -8 && armyDy <= 0)
+                {
+                    // Sıra 0 (en ön): Komutan ortada, bayraklar yanlarda
+                    if (armyDy == 0)
+                    {
+                        if (armyDx == 0) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "banner_blue", 1); // Komutan
+                        if (Mathf.Abs(armyDx) <= 2) return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1); // Muhafızlar
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 1-2: Piyade (askerler)
+                    if (armyDy == -1 || armyDy == -2)
+                    {
+                        if (Mathf.Abs(armyDx) <= 5)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 3: Mancınıklar (yanlarda)
+                    if (armyDy == -3)
+                    {
+                        if (Mathf.Abs(armyDx) >= 4 && Mathf.Abs(armyDx) <= 6)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "catapult_blue", 1);
+                        if (Mathf.Abs(armyDx) <= 3)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 4: Topçular (mancınıkların yanında)
+                    if (armyDy == -4)
+                    {
+                        if (Mathf.Abs(armyDx) >= 3 && Mathf.Abs(armyDx) <= 6)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cannon_blue", 1);
+                        if (Mathf.Abs(armyDx) <= 2)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "unit_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 5: Süvariler (atlılar)
+                    if (armyDy == -5)
+                    {
+                        if (Mathf.Abs(armyDx) <= 6)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "horse_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 6-7: İkmal ve destek
+                    if (armyDy == -6)
+                    {
+                        if (Mathf.Abs(armyDx) <= 4)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "cart_blue", 1);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
+
+                    // Sıra 7-8: Çadırlar (arka)
+                    if (armyDy == -7 || armyDy == -8)
+                    {
+                        if (Mathf.Abs(armyDx) <= 5)
+                            return new TileData(q, r, TerrainType.Grass, 0, MineType.None, true, "tent_blue", 15);
+                        return new TileData(q, r, TerrainType.Grass, 0, MineType.None, false, "");
+                    }
                 }
 
                 // ════════════════════════════════════════════════════════════
