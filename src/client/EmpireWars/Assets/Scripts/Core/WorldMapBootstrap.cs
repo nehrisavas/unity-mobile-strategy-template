@@ -66,6 +66,9 @@ namespace EmpireWars.Core
                 SetupHDGraphics();
             }
 
+            // Kamera kontrolleri olustur (minimap için gerekli)
+            EnsureMapCameraController();
+
             // Harita olustur
             if (createMap && tilePrefabDatabase != null)
             {
@@ -134,6 +137,41 @@ namespace EmpireWars.Core
 
             hdSetup.SetupHDScene();
             Debug.Log("WorldMapBootstrap: HD grafik ayarlari yapildi");
+        }
+
+        /// <summary>
+        /// MapCameraController'in main camera'da var oldugundan emin ol
+        /// Minimap'in kamerayi takip edebilmesi icin gerekli
+        /// </summary>
+        private void EnsureMapCameraController()
+        {
+            // Önce mevcut olanı ara
+            if (MapCameraController.Instance != null)
+            {
+                Debug.Log("WorldMapBootstrap: MapCameraController zaten mevcut");
+                return;
+            }
+
+            // Main camera'yı bul
+            Camera mainCam = Camera.main;
+            if (mainCam == null)
+            {
+                mainCam = FindFirstObjectByType<Camera>();
+            }
+
+            if (mainCam == null)
+            {
+                Debug.LogError("WorldMapBootstrap: Ana kamera bulunamadı!");
+                return;
+            }
+
+            // MapCameraController ekle
+            var controller = mainCam.GetComponent<MapCameraController>();
+            if (controller == null)
+            {
+                controller = mainCam.gameObject.AddComponent<MapCameraController>();
+                Debug.Log($"WorldMapBootstrap: MapCameraController '{mainCam.name}' kamerasına eklendi");
+            }
         }
 
         private void CreateMap()

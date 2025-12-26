@@ -76,6 +76,7 @@ namespace EmpireWars.UI
         // Internal state
         private float targetZoom;
         private float lastUpdateTime;
+        private float lastDebugLogTime;
         private RectTransform rectTransform;
         private RectTransform canvasRect;
         private bool isInitialized = false;
@@ -271,24 +272,33 @@ namespace EmpireWars.UI
             GameObject viewportObj = new GameObject("ViewportIndicator");
             viewportObj.transform.SetParent(transform);
 
-            // Çerçeve görüntüsü - yarı saydam beyaz arka plan
+            // Çerçeve görüntüsü - yarı saydam beyaz arka plan (daha görünür)
             Image viewportImg = viewportObj.AddComponent<Image>();
-            viewportImg.color = new Color(1f, 1f, 1f, 0.15f); // Hafif görünür
+            viewportImg.color = new Color(1f, 1f, 1f, 0.25f); // Daha görünür
 
             viewportIndicator = viewportObj.GetComponent<RectTransform>();
             viewportIndicator.anchorMin = new Vector2(0.5f, 0.5f);
             viewportIndicator.anchorMax = new Vector2(0.5f, 0.5f);
             viewportIndicator.sizeDelta = new Vector2(40f, 30f);
 
-            // Outline ekle (parlak çerçeve)
+            // Outline ekle (parlak çerçeve) - daha kalın
             Outline outline = viewportObj.AddComponent<Outline>();
-            outline.effectColor = new Color(1f, 0.9f, 0.3f, 0.9f); // Altın sarısı
-            outline.effectDistance = new Vector2(2f, 2f);
+            outline.effectColor = new Color(1f, 0.85f, 0.2f, 1f); // Parlak altın sarısı
+            outline.effectDistance = new Vector2(3f, 3f);
+
+            // İkinci outline daha belirgin çerçeve için
+            Outline outline2 = viewportObj.AddComponent<Outline>();
+            outline2.effectColor = new Color(0.2f, 0.15f, 0f, 1f); // Koyu kenar
+            outline2.effectDistance = new Vector2(4f, 4f);
 
             // Raycast'i devre dışı bırak (tıklama engellemesin)
             viewportImg.raycastTarget = false;
 
+            // En üstte görünsün
+            viewportObj.transform.SetAsLastSibling();
             viewportObj.SetActive(true);
+
+            Debug.Log("MiniMap: Viewport indicator oluşturuldu");
         }
 
         /// <summary>
@@ -300,27 +310,32 @@ namespace EmpireWars.UI
 
             Vector3 camPos = Vector3.zero;
             float camZoom = GameConfig.DefaultZoom;
+            string source = "none";
 
-            // Kamera pozisyonunu al - öncelik sırası
-            Camera mainCam = Camera.main;
-            if (mainCam != null)
-            {
-                camPos = mainCam.transform.position;
-                if (mainCam.orthographic)
-                    camZoom = mainCam.orthographicSize;
-            }
-
-            // MapCameraController varsa ondan al (daha doğru)
+            // MapCameraController varsa ondan al (en doğru kaynak)
             if (MapCameraController.Instance != null)
             {
                 camPos = MapCameraController.Instance.transform.position;
                 camZoom = MapCameraController.Instance.GetCurrentZoom();
+                source = "MapCameraController";
             }
-
-            // Hiçbiri yoksa fallback
-            if (mainCam == null && MapCameraController.Instance == null)
+            // Yoksa Camera.main kullan
+            else
             {
-                camPos = new Vector3(GameConfig.WorldWidth / 2f, 0, GameConfig.WorldHeight / 2f);
+                Camera mainCam = Camera.main;
+                if (mainCam != null)
+                {
+                    camPos = mainCam.transform.position;
+                    if (mainCam.orthographic)
+                        camZoom = mainCam.orthographicSize;
+                    source = "Camera.main";
+                }
+                else
+                {
+                    // Hiçbiri yoksa fallback
+                    camPos = new Vector3(GameConfig.WorldWidth / 2f, 0, GameConfig.WorldHeight / 2f);
+                    source = "fallback";
+                }
             }
 
             // World pozisyonunu normalize et (0-1 arası)
@@ -361,6 +376,13 @@ namespace EmpireWars.UI
                     Mathf.Clamp(viewWidth, 8f, minimapUISize * 0.7f),
                     Mathf.Clamp(viewHeight, 6f, minimapUISize * 0.5f)
                 );
+            }
+
+            // Periyodik debug log (3 saniyede bir)
+            if (Time.time - lastDebugLogTime > 3f)
+            {
+                lastDebugLogTime = Time.time;
+                Debug.Log($"MiniMap: Tracking [{source}] camPos=({camPos.x:F0},{camPos.z:F0}) dotPos=({dotPos.x:F1},{dotPos.y:F1})");
             }
         }
 
