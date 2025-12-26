@@ -72,6 +72,9 @@ namespace EmpireWars.Core
         private const bool DEFAULT_SHOW_BUILDINGS = true;
         private const bool DEFAULT_USE_SHADOWS = true;
 
+        // DEBUG: Editor'da mobil modu test etmek için true yapın
+        public const bool FORCE_MOBILE_MODE = true; // TEST İÇİN TRUE
+
         #endregion
 
         // ╔════════════════════════════════════════════════════════════╗
@@ -186,6 +189,13 @@ namespace EmpireWars.Core
         {
             bool isMobile = Application.platform == RuntimePlatform.Android ||
                            Application.platform == RuntimePlatform.IPhonePlayer;
+
+            // Debug modu - Editor'da mobil optimizasyonları test et
+            if (FORCE_MOBILE_MODE)
+            {
+                isMobile = true;
+                Debug.Log("GameConfig: FORCE_MOBILE_MODE aktif - Editor'da mobil optimizasyonlar uygulanıyor");
+            }
 
             if (isMobile)
             {

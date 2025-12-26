@@ -74,7 +74,8 @@
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" logcat -d -s Unity)",
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" logcat -d)",
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" logcat -c)",
-      "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" shell am force-stop com.empirewars.game)"
+      "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" shell am force-stop com.empirewars.game)",
+      "Bash(taskkill:*)"
     ]
   }
 }

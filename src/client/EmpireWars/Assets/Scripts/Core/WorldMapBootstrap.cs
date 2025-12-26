@@ -39,6 +39,13 @@ namespace EmpireWars.Core
                 GameObject screenManagerObj = new GameObject("ScreenManager");
                 screenManagerObj.AddComponent<ScreenManager>();
             }
+
+            // MobilePerformanceManager'ı oluştur (GPU Instancing, Static Batching)
+            if (MobilePerformanceManager.Instance == null)
+            {
+                GameObject perfManagerObj = new GameObject("MobilePerformanceManager");
+                perfManagerObj.AddComponent<MobilePerformanceManager>();
+            }
         }
 
         private void Start()
