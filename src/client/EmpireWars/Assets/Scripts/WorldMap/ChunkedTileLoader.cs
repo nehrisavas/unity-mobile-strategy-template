@@ -54,10 +54,14 @@ namespace EmpireWars.WorldMap
         private bool isInitialized = false;
 
         // Incremental loading - donmayı önlemek için
-        private const int TILES_PER_FRAME = 16; // Frame başına max tile sayısı (denge: hız vs akıcılık)
+        private const int TILES_PER_FRAME = 24; // Frame başına max tile sayısı (artırıldı)
         private ChunkData currentlyLoadingChunk = null;
         private int currentLoadingIndex = 0;
         private List<(int q, int r)> pendingTileCoords = new List<(int q, int r)>();
+
+        // Pre-generated tile data cache (paralel üretim için)
+        private Dictionary<(int q, int r), KingdomMapGenerator.TileData> preGeneratedTileData =
+            new Dictionary<(int q, int r), KingdomMapGenerator.TileData>();
 
         // Cached bounds (performans icin)
         private int cachedMaxChunkX;
@@ -341,7 +345,7 @@ namespace EmpireWars.WorldMap
         }
 
         /// <summary>
-        /// Chunk yüklemeyi başlat - tile koordinatlarını hazırla
+        /// Chunk yüklemeyi başlat - tile verilerini önceden üret
         /// </summary>
         private void StartIncrementalChunkLoad(Vector2Int chunkCoord)
         {
@@ -354,11 +358,17 @@ namespace EmpireWars.WorldMap
             };
             currentLoadingIndex = 0;
             pendingTileCoords.Clear();
+            preGeneratedTileData.Clear();
 
             int startQ = chunkCoord.x * chunkSize;
             int startR = chunkCoord.y * chunkSize;
 
-            // Tüm tile koordinatlarını listeye ekle
+            // Merkeze yakın tile'ları önce yükle (spiral sıralama)
+            int centerQ = startQ + chunkSize / 2;
+            int centerR = startR + chunkSize / 2;
+
+            List<(int q, int r, float dist)> tilesWithDist = new List<(int, int, float)>();
+
             for (int dq = 0; dq < chunkSize; dq++)
             {
                 for (int dr = 0; dr < chunkSize; dr++)
@@ -368,14 +378,29 @@ namespace EmpireWars.WorldMap
 
                     if (q < mapWidth && r < mapHeight)
                     {
-                        pendingTileCoords.Add((q, r));
+                        // Merkeze uzaklık
+                        float dist = Mathf.Sqrt((q - centerQ) * (q - centerQ) + (r - centerR) * (r - centerR));
+                        tilesWithDist.Add((q, r, dist));
+
+                        // Tile verisini önceden üret (CPU işlemi)
+                        var tileData = KingdomMapGenerator.GetTileAt(q, r);
+                        preGeneratedTileData[(q, r)] = tileData;
                     }
                 }
+            }
+
+            // Merkeze yakın olanlar önce
+            tilesWithDist.Sort((a, b) => a.dist.CompareTo(b.dist));
+
+            foreach (var tile in tilesWithDist)
+            {
+                pendingTileCoords.Add((tile.q, tile.r));
             }
         }
 
         /// <summary>
         /// Her frame birkaç tile oluştur - donmayı önler
+        /// Önceden üretilmiş tile verilerini kullanır (daha hızlı)
         /// </summary>
         private void ProcessIncrementalLoading()
         {
@@ -385,12 +410,17 @@ namespace EmpireWars.WorldMap
             while (currentLoadingIndex < pendingTileCoords.Count && tilesThisFrame < TILES_PER_FRAME)
             {
                 var (q, r) = pendingTileCoords[currentLoadingIndex];
-                var tileData = KingdomMapGenerator.GetTileAt(q, r);
-                GameObject tile = CreateTileFromData(tileData);
-                if (tile != null)
+
+                // Önceden üretilmiş veriyi kullan (GetTileAt tekrar çağrılmaz)
+                if (preGeneratedTileData.TryGetValue((q, r), out var tileData))
                 {
-                    currentlyLoadingChunk.Tiles.Add(tile);
+                    GameObject tile = CreateTileFromData(tileData);
+                    if (tile != null)
+                    {
+                        currentlyLoadingChunk.Tiles.Add(tile);
+                    }
                 }
+
                 currentLoadingIndex++;
                 tilesThisFrame++;
             }
@@ -402,6 +432,7 @@ namespace EmpireWars.WorldMap
                 loadedChunks[currentlyLoadingChunk.ChunkCoord] = currentlyLoadingChunk;
                 currentlyLoadingChunk = null;
                 pendingTileCoords.Clear();
+                preGeneratedTileData.Clear(); // Bellek temizle
             }
         }
 

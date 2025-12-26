@@ -188,17 +188,17 @@ namespace EmpireWars.UI
             EnsureEventSystem();
             EnsureCanvasHasRaycaster();
 
+            // Terrain texture modu aktifse, ÖNCE pre-rendered harita olustur
+            if (useTerrainTexture)
+            {
+                GenerateTerrainPreviewTexture();
+            }
+
             CreateMiniMapCamera();
             SetupUI();
 
             targetZoom = (minZoom + maxZoom) / 3f;
             isInitialized = true;
-
-            // Terrain texture modu aktifse, pre-rendered harita olustur
-            if (useTerrainTexture)
-            {
-                GenerateTerrainPreviewTexture();
-            }
 
             Debug.Log($"MiniMapController: Dairesel minimap olusturuldu - World({worldMinX}-{worldMaxX}, {worldMinZ}-{worldMaxZ}), TerrainTexture: {useTerrainTexture}");
         }
@@ -301,21 +301,25 @@ namespace EmpireWars.UI
             Vector3 camPos = Vector3.zero;
             float camZoom = GameConfig.DefaultZoom;
 
-            // Kamera pozisyonunu al
+            // Kamera pozisyonunu al - öncelik sırası
+            Camera mainCam = Camera.main;
+            if (mainCam != null)
+            {
+                camPos = mainCam.transform.position;
+                if (mainCam.orthographic)
+                    camZoom = mainCam.orthographicSize;
+            }
+
+            // MapCameraController varsa ondan al (daha doğru)
             if (MapCameraController.Instance != null)
             {
                 camPos = MapCameraController.Instance.transform.position;
                 camZoom = MapCameraController.Instance.GetCurrentZoom();
             }
-            else if (Camera.main != null)
+
+            // Hiçbiri yoksa fallback
+            if (mainCam == null && MapCameraController.Instance == null)
             {
-                camPos = Camera.main.transform.position;
-                if (Camera.main.orthographic)
-                    camZoom = Camera.main.orthographicSize;
-            }
-            else
-            {
-                // Fallback - harita merkezi
                 camPos = new Vector3(GameConfig.WorldWidth / 2f, 0, GameConfig.WorldHeight / 2f);
             }
 
@@ -559,7 +563,7 @@ namespace EmpireWars.UI
                 miniMapImage.material = circularMaskMaterial;
             }
 
-            // Oyuncu gostergesi (sari nokta)
+            // Oyuncu gostergesi (sari nokta) - EN ÜSTTE olmalı
             if (playerDot == null)
             {
                 GameObject dotObj = new GameObject("PlayerDot");
@@ -570,11 +574,18 @@ namespace EmpireWars.UI
                 RectTransform dotRect = playerDot.GetComponent<RectTransform>();
                 dotRect.anchorMin = new Vector2(0.5f, 0.5f);
                 dotRect.anchorMax = new Vector2(0.5f, 0.5f);
-                dotRect.sizeDelta = new Vector2(10f, 10f);
+                dotRect.sizeDelta = new Vector2(14f, 14f); // Daha büyük
                 dotRect.anchoredPosition = Vector2.zero;
 
-                // Dairesel yapmak icin
+                // Outline ekle (görünürlük için)
+                Outline dotOutline = dotObj.AddComponent<Outline>();
+                dotOutline.effectColor = Color.black;
+                dotOutline.effectDistance = new Vector2(1.5f, -1.5f);
+
                 playerDot.raycastTarget = false;
+
+                // En üste çıkar
+                dotObj.transform.SetAsLastSibling();
             }
 
             // Görüş alanı çerçevesi (terrain texture modunda)

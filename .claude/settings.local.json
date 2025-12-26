@@ -75,7 +75,24 @@
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" logcat -d)",
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" logcat -c)",
       "Bash(\"/c/Program Files/Unity/Hub/Editor/6000.3.2f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb.exe\" shell am force-stop com.empirewars.game)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(then grep -E \"\\(GameConfig|SimpleTileRenderer|CreateMap|UseSimpleRenderer\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"error CS|ERROR|Compilation failed\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"UseSimpleRenderer|SimpleTileRenderer|CreateMap\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|WorldMapBootstrap:|SimpleTileRenderer:\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"Initialize|UseSimpleRenderer|SimpleTileRenderer|CreateMap\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then tail -40 \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|WorldMapBootstrap:|SimpleTileRenderer:|ChunkedTileLoader:\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"CompileScripts|^GameConfig:|^WorldMapBootstrap:|^SimpleTileRenderer:|Harita:|^=== World\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|WorldMapBootstrap:|SimpleTileRenderer:|UseSimpleRenderer\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(tasklist:*)",
+      "Bash(then stat --format=\"%y\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|WorldMapBootstrap:|SimpleTileRenderer:|ChunkedTileLoader:|Error|Exception\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|WorldMapBootstrap:|ChunkedTileLoader:|SimpleTileRenderer:\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(GameConfig:|ChunkedTileLoader:\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"Error|Exception|harita baslatildi\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"^\\(ChunkedTileLoader:|GameConfig:\\)\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")",
+      "Bash(then grep -E \"MapCameraController|MiniMap\" \"/c/Users/SAVAS/AppData/Local/Unity/Editor/Editor.log\")"
     ]
   }
 }
