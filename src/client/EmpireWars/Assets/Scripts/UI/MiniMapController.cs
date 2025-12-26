@@ -537,6 +537,16 @@ namespace EmpireWars.UI
             rectTransform.anchoredPosition = screenOffset;
             rectTransform.sizeDelta = new Vector2(minimapUISize, minimapUISize);
 
+            // Tıklama olayları için ana objeye Image ekle
+            // NOT: Alpha 0 raycast almaz, minimum 0.01 gerekli
+            Image clickableArea = GetComponent<Image>();
+            if (clickableArea == null)
+            {
+                clickableArea = gameObject.AddComponent<Image>();
+            }
+            clickableArea.color = new Color(0, 0, 0, 0.01f); // Neredeyse görünmez ama raycast alır
+            clickableArea.raycastTarget = true;
+
             // Circular material olustur veya bul
             if (circularMaskMaterial == null)
             {
@@ -567,6 +577,10 @@ namespace EmpireWars.UI
                     imgRect.offsetMax = Vector2.zero;
                 }
             }
+
+            // RawImage raycast ALMAMALI - parent Image alacak
+            // Aksi halde child element parent'ın click eventini bloklar
+            miniMapImage.raycastTarget = false;
 
             // Terrain texture veya camera texture kullan
             if (useTerrainTexture && terrainPreviewTexture != null)
@@ -1174,13 +1188,19 @@ namespace EmpireWars.UI
                 return;
             }
 
-            // Normalize et (-0.5 to 0.5)
+            // Pivot'a göre normalize et
+            // Pivot (1, 0) = sağ alt köşe
+            // localPoint x: [-width, 0], y: [0, height]
+            // Merkez: (-width/2, height/2)
+            float halfWidth = rectTransform.rect.width / 2f;
+            float halfHeight = rectTransform.rect.height / 2f;
+
             Vector2 normalized = new Vector2(
-                localPoint.x / rectTransform.rect.width,
-                localPoint.y / rectTransform.rect.height
+                (localPoint.x + halfWidth) / rectTransform.rect.width,
+                (localPoint.y - halfHeight) / rectTransform.rect.height
             );
 
-            // Daire icinde mi kontrol et
+            // Daire icinde mi kontrol et (0.5 = dairenin kenarı)
             if (normalized.magnitude > 0.5f) return;
 
             Vector3 worldPos;
