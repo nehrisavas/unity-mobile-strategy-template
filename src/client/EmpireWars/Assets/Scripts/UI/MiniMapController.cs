@@ -723,30 +723,7 @@ namespace EmpireWars.UI
 
         private void CreateZoomButtons()
         {
-            // Zoom butonlari - minimap'in SAG tarafinda dikey
-            float btnSize = 32f;
-            float spacing = 5f;
-            float rightOffset = -btnSize - 8f; // Minimap'in sağ dışında
-
-            // Zoom In butonu (+)
-            GameObject zoomInObj = CreateStyledButton(
-                "ZoomIn", "+",
-                new Vector2(1, 0.5f), // Sag orta
-                new Vector2(rightOffset, btnSize / 2 + spacing / 2),
-                new Vector2(btnSize, btnSize),
-                new Color(0.15f, 0.35f, 0.15f, 0.95f)
-            );
-            zoomInObj.GetComponent<Button>().onClick.AddListener(ZoomIn);
-
-            // Zoom Out butonu (-)
-            GameObject zoomOutObj = CreateStyledButton(
-                "ZoomOut", "−", // Unicode minus
-                new Vector2(1, 0.5f),
-                new Vector2(rightOffset, -btnSize / 2 - spacing / 2),
-                new Vector2(btnSize, btnSize),
-                new Color(0.35f, 0.15f, 0.15f, 0.95f)
-            );
-            zoomOutObj.GetComponent<Button>().onClick.AddListener(ZoomOut);
+            // Zoom butonları kaldırıldı - minimap artık sadece görüntüleme amaçlı
         }
 
         private GameObject CreateStyledButton(string name, string text, Vector2 anchor, Vector2 position, Vector2 size, Color bgColor)
