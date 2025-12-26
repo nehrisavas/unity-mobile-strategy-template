@@ -111,31 +111,35 @@ namespace EmpireWars.UI
         {
             if (!isInitialized) return;
 
-            // Periyodik guncelleme (performans icin)
-            if (Time.time - lastUpdateTime >= updateInterval)
+            // Terrain texture modunda her frame güncelle (akıcı takip için)
+            if (useTerrainTexture)
             {
-                // Terrain texture modunda sadece pozisyon guncelle
-                if (useTerrainTexture)
-                {
-                    UpdateTerrainTextureMode();
-                }
-                else
+                UpdateTerrainTextureMode();
+            }
+            else
+            {
+                // Kamera modunda periyodik güncelleme
+                if (Time.time - lastUpdateTime >= updateInterval)
                 {
                     UpdateMiniMapCamera();
+                    lastUpdateTime = Time.time;
                 }
 
-                UpdateCurrentCoordinateDisplay();
-                lastUpdateTime = Time.time;
+                // Zoom smooth geçiş
+                if (miniMapCamera != null && Mathf.Abs(miniMapCamera.orthographicSize - targetZoom) > 0.1f)
+                {
+                    miniMapCamera.orthographicSize = Mathf.Lerp(
+                        miniMapCamera.orthographicSize,
+                        targetZoom,
+                        Time.deltaTime * zoomSmoothing
+                    );
+                }
             }
 
-            // Zoom smooth gecis (sadece kamera modunda)
-            if (!useTerrainTexture && miniMapCamera != null && Mathf.Abs(miniMapCamera.orthographicSize - targetZoom) > 0.1f)
+            // Koordinat göstergesini güncelle
+            if (Time.time - lastUpdateTime >= 0.1f)
             {
-                miniMapCamera.orthographicSize = Mathf.Lerp(
-                    miniMapCamera.orthographicSize,
-                    targetZoom,
-                    Time.deltaTime * zoomSmoothing
-                );
+                UpdateCurrentCoordinateDisplay();
             }
         }
 
@@ -267,19 +271,22 @@ namespace EmpireWars.UI
             GameObject viewportObj = new GameObject("ViewportIndicator");
             viewportObj.transform.SetParent(transform);
 
-            // Cerceve goruntusunu olustur (sadece border, ici seffaf)
+            // Çerçeve görüntüsü - yarı saydam beyaz arka plan
             Image viewportImg = viewportObj.AddComponent<Image>();
-            viewportImg.color = new Color(1f, 1f, 1f, 0.0f); // Tamamen seffaf
+            viewportImg.color = new Color(1f, 1f, 1f, 0.15f); // Hafif görünür
 
             viewportIndicator = viewportObj.GetComponent<RectTransform>();
             viewportIndicator.anchorMin = new Vector2(0.5f, 0.5f);
             viewportIndicator.anchorMax = new Vector2(0.5f, 0.5f);
-            viewportIndicator.sizeDelta = new Vector2(30f, 20f);
+            viewportIndicator.sizeDelta = new Vector2(40f, 30f);
 
-            // Outline ekle (cerceve)
+            // Outline ekle (parlak çerçeve)
             Outline outline = viewportObj.AddComponent<Outline>();
-            outline.effectColor = new Color(1f, 1f, 1f, 0.8f);
-            outline.effectDistance = new Vector2(1.5f, 1.5f);
+            outline.effectColor = new Color(1f, 0.9f, 0.3f, 0.9f); // Altın sarısı
+            outline.effectDistance = new Vector2(2f, 2f);
+
+            // Raycast'i devre dışı bırak (tıklama engellemesin)
+            viewportImg.raycastTarget = false;
 
             viewportObj.SetActive(true);
         }
@@ -294,6 +301,7 @@ namespace EmpireWars.UI
             Vector3 camPos = Vector3.zero;
             float camZoom = GameConfig.DefaultZoom;
 
+            // Kamera pozisyonunu al
             if (MapCameraController.Instance != null)
             {
                 camPos = MapCameraController.Instance.transform.position;
@@ -305,32 +313,49 @@ namespace EmpireWars.UI
                 if (Camera.main.orthographic)
                     camZoom = Camera.main.orthographicSize;
             }
+            else
+            {
+                // Fallback - harita merkezi
+                camPos = new Vector3(GameConfig.WorldWidth / 2f, 0, GameConfig.WorldHeight / 2f);
+            }
 
-            // World pozisyonunu minimap koordinatina cevir
-            float normalizedX = camPos.x / GameConfig.WorldWidth;
-            float normalizedZ = camPos.z / GameConfig.WorldHeight;
+            // World pozisyonunu normalize et (0-1 arası)
+            float normalizedX = Mathf.Clamp01(camPos.x / GameConfig.WorldWidth);
+            float normalizedZ = Mathf.Clamp01(camPos.z / GameConfig.WorldHeight);
 
-            // Minimap boyutu
-            float mapUISize = minimapUISize;
+            // Minimap boyutu (dairesel, radius = size/2)
+            float mapRadius = minimapUISize / 2f;
 
-            // Player dot pozisyonu - merkeze gore offset
-            float dotX = (normalizedX - 0.5f) * mapUISize;
-            float dotZ = (normalizedZ - 0.5f) * mapUISize;
+            // Player dot pozisyonu - merkeze göre offset (-radius to +radius)
+            float dotX = (normalizedX - 0.5f) * minimapUISize;
+            float dotZ = (normalizedZ - 0.5f) * minimapUISize;
+
+            // Daire sınırları içinde tut
+            Vector2 dotPos = new Vector2(dotX, dotZ);
+            if (dotPos.magnitude > mapRadius * 0.9f)
+            {
+                dotPos = dotPos.normalized * mapRadius * 0.9f;
+            }
 
             RectTransform dotRect = playerDot.GetComponent<RectTransform>();
-            dotRect.anchoredPosition = new Vector2(dotX, dotZ);
+            dotRect.anchoredPosition = dotPos;
 
-            // Viewport indicator pozisyonu ve boyutu
+            // Viewport indicator pozisyonu ve boyutu (zoom'a göre)
             if (viewportIndicator != null)
             {
-                viewportIndicator.anchoredPosition = new Vector2(dotX, dotZ);
+                viewportIndicator.anchoredPosition = dotPos;
 
-                // Gorunum alaninin minimap uzerindeki boyutunu hesapla
-                float viewWidth = (camZoom * 2f * 1.77f) / GameConfig.WorldWidth * mapUISize;
-                float viewHeight = (camZoom * 2f) / GameConfig.WorldHeight * mapUISize;
+                // Görünüm alanının minimap üzerindeki boyutunu hesapla
+                // camZoom = orthographicSize, görünüm yüksekliği = camZoom * 2
+                float viewWorldWidth = camZoom * 2f * 1.77f; // 16:9 aspect ratio
+                float viewWorldHeight = camZoom * 2f;
+
+                float viewWidth = (viewWorldWidth / GameConfig.WorldWidth) * minimapUISize;
+                float viewHeight = (viewWorldHeight / GameConfig.WorldHeight) * minimapUISize;
+
                 viewportIndicator.sizeDelta = new Vector2(
-                    Mathf.Clamp(viewWidth, 10f, mapUISize * 0.8f),
-                    Mathf.Clamp(viewHeight, 8f, mapUISize * 0.6f)
+                    Mathf.Clamp(viewWidth, 8f, minimapUISize * 0.7f),
+                    Mathf.Clamp(viewHeight, 6f, minimapUISize * 0.5f)
                 );
             }
         }
