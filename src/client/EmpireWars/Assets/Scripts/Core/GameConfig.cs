@@ -35,8 +35,9 @@ namespace EmpireWars.Core
         #region === CHUNK AYARLARI ===
 
         private const int DEFAULT_CHUNK_SIZE = 32;
+        private const int MOBILE_CHUNK_SIZE = 16; // Mobil için küçük chunk
         private const int DEFAULT_LOAD_RADIUS = 2;
-        private const int MOBILE_LOAD_RADIUS = 1; // Mobil için azaltılmış
+        private const int MOBILE_LOAD_RADIUS = 0; // Mobil için minimum (sadece 1 chunk)
         private const float DEFAULT_CHUNK_UPDATE_INTERVAL = 0.5f;
         private const float MOBILE_CHUNK_UPDATE_INTERVAL = 0.3f; // Mobil için daha sık
         private const int DEFAULT_CHUNK_THRESHOLD = 100;
@@ -62,6 +63,14 @@ namespace EmpireWars.Core
         #region === UI AYARLARI ===
 
         private const bool DEFAULT_SHOW_BADGES = true;
+
+        #endregion
+
+        #region === MOBİL PERFORMANS AYARLARI ===
+
+        private const bool DEFAULT_SHOW_DECORATIONS = true;
+        private const bool DEFAULT_SHOW_BUILDINGS = true;
+        private const bool DEFAULT_USE_SHADOWS = true;
 
         #endregion
 
@@ -105,6 +114,11 @@ namespace EmpireWars.Core
         // UI
         public static bool ShowBadges { get; private set; } = DEFAULT_SHOW_BADGES;
 
+        // Mobil Performans
+        public static bool ShowDecorations { get; private set; } = DEFAULT_SHOW_DECORATIONS;
+        public static bool ShowBuildings { get; private set; } = DEFAULT_SHOW_BUILDINGS;
+        public static bool UseShadows { get; private set; } = DEFAULT_USE_SHADOWS;
+
         // ╔════════════════════════════════════════════════════════════╗
         // ║                      INITIALIZATION                         ║
         // ╚════════════════════════════════════════════════════════════╝
@@ -133,6 +147,9 @@ namespace EmpireWars.Core
             CloudCount = DEFAULT_CLOUD_COUNT;
             CloudUpdateInterval = DEFAULT_CLOUD_UPDATE_INTERVAL;
             ShowBadges = DEFAULT_SHOW_BADGES;
+            ShowDecorations = DEFAULT_SHOW_DECORATIONS;
+            ShowBuildings = DEFAULT_SHOW_BUILDINGS;
+            UseShadows = DEFAULT_USE_SHADOWS;
         }
 
         /// <summary>
@@ -172,17 +189,35 @@ namespace EmpireWars.Core
 
             if (isMobile)
             {
-                // Chunk yükleme yarıçapını azalt (25 chunk -> 9 chunk)
-                LoadRadius = MOBILE_LOAD_RADIUS;
+                // Chunk boyutunu ve yarıçapını azalt
+                ChunkSize = MOBILE_CHUNK_SIZE; // 32 -> 16
+                LoadRadius = MOBILE_LOAD_RADIUS; // 1 chunk = 256 tile
                 ChunkUpdateInterval = MOBILE_CHUNK_UPDATE_INTERVAL;
 
-                // Bulut sayısını azalt
-                CloudCount = Mathf.Min(CloudCount, 20);
+                // Bulut sayısını azalt veya kapat
+                CloudCount = 0; // Bulutları tamamen kapat
 
-                // Badge'leri kapat (performans için)
+                // Badge'leri kapat
                 ShowBadges = false;
 
-                Debug.Log($"GameConfig: MOBİL OPTİMİZASYON - LoadRadius={LoadRadius}, CloudCount={CloudCount}");
+                // PERFORMANS KRİTİK: Dekorasyonları ve binaları kapat
+                ShowDecorations = false;
+                ShowBuildings = false;
+
+                // Gölgeleri kapat
+                UseShadows = false;
+                QualitySettings.shadows = ShadowQuality.Disable;
+                QualitySettings.shadowResolution = ShadowResolution.Low;
+
+                // Diğer kalite ayarları
+                QualitySettings.antiAliasing = 0;
+                QualitySettings.softParticles = false;
+                QualitySettings.realtimeReflectionProbes = false;
+                QualitySettings.billboardsFaceCameraPosition = false;
+                QualitySettings.lodBias = 0.5f; // Daha agresif LOD
+                QualitySettings.maximumLODLevel = 1;
+
+                Debug.Log($"GameConfig: MOBİL OPTİMİZASYON - ChunkSize={ChunkSize}, LoadRadius={LoadRadius}, Tiles={ChunkSize*ChunkSize}, Decorations=OFF, Buildings=OFF, Shadows=OFF");
             }
         }
 

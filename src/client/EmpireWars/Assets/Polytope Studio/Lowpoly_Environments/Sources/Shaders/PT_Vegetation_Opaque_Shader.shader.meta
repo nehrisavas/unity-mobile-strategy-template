@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 270965b004462ae41bd125bc783c0fa6
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 199890
+  packageName: Lowpoly Modular Armors - Free - MEDIEVAL FANTASY SERIES
+  packageVersion: 1.2.1
+  assetPath: Assets/Polytope Studio/Lowpoly_Environments/Sources/Shaders/PT_Vegetation_Opaque_Shader.shader
+  uploadId: 721310

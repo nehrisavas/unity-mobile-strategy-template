@@ -1,0 +1,2 @@
+D:\GitProjeler\oyun\src\client\EmpireWars\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+D:\GitProjeler\oyun\src\client\EmpireWars\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

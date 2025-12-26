@@ -1,0 +1,10 @@
+# ninja log v5
+16	1270	7883946193166981	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	30108059ae827240
+9	1286	7883946193320861	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	86a05746541ad238
+41	1290	7883946193371418	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	96c22db535d4fd83
+58	1323	7883946193670015	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	808f70af50f1945
+24	1358	7883946194092390	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	682574be9bc260b4
+50	1515	7883946195648190	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	9a09c04d8217e8d7
+1	1537	7883946195861163	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	773a4dd5caf94513
+34	1644	7883946196903977	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	1d72ad2f5f51fbe3
+1645	1822	7883946198741247	D:/GitProjeler/oyun/src/client/EmpireWars/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5b6d1s31/obj/arm64-v8a/libgame.so	4a198177daec183a

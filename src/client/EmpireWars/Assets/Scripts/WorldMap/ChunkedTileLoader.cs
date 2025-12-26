@@ -487,14 +487,14 @@ namespace EmpireWars.WorldMap
             }
             hexTile.Initialize(coords, tileData.Terrain);
 
-            // Dekorasyon
-            if (decorationDatabase != null && decorationDatabase.RequiresDecoration(tileData.Terrain))
+            // Dekorasyon - Mobilde kapalı olabilir
+            if (GameConfig.ShowDecorations && decorationDatabase != null && decorationDatabase.RequiresDecoration(tileData.Terrain))
             {
                 AddDecoration(tile, coords, tileData.Terrain);
             }
 
-            // Bina
-            if (tileData.HasBuilding)
+            // Bina - Mobilde kapalı olabilir
+            if (GameConfig.ShowBuildings && tileData.HasBuilding)
             {
                 if (buildingDatabase == null)
                 {
