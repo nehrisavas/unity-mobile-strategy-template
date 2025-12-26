@@ -8,6 +8,7 @@ using EmpireWars.CameraSystem;
 
 namespace EmpireWars.Core
 {
+    // FORCE RECOMPILE: v2 - SimpleTileRenderer aktif
     /// <summary>
     /// WorldMap sahnesini otomatik baslatir
     /// Bu scripti Main Camera'ya veya bos bir objeye ekle
@@ -137,6 +138,18 @@ namespace EmpireWars.Core
 
         private void CreateMap()
         {
+            Debug.Log($"WorldMapBootstrap.CreateMap: UseSimpleRenderer={GameConfig.UseSimpleRenderer}");
+
+            // ULTRA PERFORMANS: Basit renderer kullan (tek mesh, tek draw call)
+            if (GameConfig.UseSimpleRenderer)
+            {
+                Debug.Log("WorldMapBootstrap: SimpleTileRenderer KULLANILIYOR!");
+                CreateSimpleMap();
+                return;
+            }
+
+            Debug.Log("WorldMapBootstrap: SimpleTileRenderer KULLANILMIYOR, ChunkedTileLoader'a geçiliyor");
+
             // GameConfig'e gore chunk-based loading kullanilmali mi?
             if (GameConfig.ShouldUseChunkedLoading())
             {
@@ -146,6 +159,25 @@ namespace EmpireWars.Core
 
             // Kucuk haritalar icin eski sistem
             CreateFullMap();
+        }
+
+        private void CreateSimpleMap()
+        {
+            Debug.Log("WorldMapBootstrap: SimpleTileRenderer kullaniliyor (TEK MESH, TEK DRAW CALL)");
+
+            GameObject rendererObj = new GameObject("SimpleTileRenderer");
+            SimpleTileRenderer renderer = rendererObj.AddComponent<SimpleTileRenderer>();
+
+            // View radius - chunk size'a benzer
+            var rendererType = typeof(SimpleTileRenderer);
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            var viewRadiusField = rendererType.GetField("viewRadius", flags);
+            if (viewRadiusField != null)
+            {
+                viewRadiusField.SetValue(renderer, GameConfig.ChunkSize / 2);
+            }
+
+            Debug.Log($"SimpleTileRenderer: ViewRadius = {GameConfig.ChunkSize / 2}");
         }
 
         private void CreateChunkedMap()

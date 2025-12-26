@@ -53,13 +53,19 @@ namespace EmpireWars.WorldMap
         private int mapHeight;
         private bool isInitialized = false;
 
+        // Incremental loading - donmayı önlemek için
+        private const int TILES_PER_FRAME = 16; // Frame başına max tile sayısı (denge: hız vs akıcılık)
+        private ChunkData currentlyLoadingChunk = null;
+        private int currentLoadingIndex = 0;
+        private List<(int q, int r)> pendingTileCoords = new List<(int q, int r)>();
+
         // Cached bounds (performans icin)
         private int cachedMaxChunkX;
         private int cachedMaxChunkY;
 
         // Dinamik chunk loading
         private int dynamicLoadRadius;
-        private const float BUFFER_RATIO = 0.5f;  // Gorunur alanin %50'si buffer
+        private const float BUFFER_RATIO = 1.0f;  // Gorunur alanin %100'ü buffer (ön yükleme)
 
         private class ChunkData
         {
@@ -112,9 +118,16 @@ namespace EmpireWars.WorldMap
                 UpdateVisibleChunks();
             }
 
-            // Her frame birkac chunk isle (stutter onleme)
-            // Buyuk haritalar icin 4 chunk/frame
-            ProcessChunkQueue(4);
+            // Incremental loading - önce devam eden chunk'ı bitir
+            if (currentlyLoadingChunk != null)
+            {
+                ProcessIncrementalLoading();
+            }
+            else
+            {
+                // Yeni chunk başlat veya unload yap
+                ProcessChunkQueue(1);
+            }
         }
 
         #endregion
@@ -311,23 +324,84 @@ namespace EmpireWars.WorldMap
 
         private void ProcessChunkQueue(int maxPerFrame)
         {
-            int processed = 0;
-
             // Oncelik 1: Uzak chunk'lari hizla bosalt (bellek tasarrufu)
-            // Queue.Dequeue() O(1) - List.RemoveAt(0) O(n) idi
-            int unloadCount = Mathf.Min(chunksToUnload.Count, maxPerFrame * 2);
+            int unloadCount = Mathf.Min(chunksToUnload.Count, 4);
             for (int i = 0; i < unloadCount && chunksToUnload.Count > 0; i++)
             {
                 Vector2Int chunk = chunksToUnload.Dequeue();
                 UnloadChunk(chunk);
             }
 
-            // Oncelik 2: Yakin chunk'lari yukle
-            while (chunksToLoad.Count > 0 && processed < maxPerFrame)
+            // Oncelik 2: Yeni chunk başlat (incremental loading)
+            if (chunksToLoad.Count > 0 && currentlyLoadingChunk == null)
             {
                 Vector2Int chunk = chunksToLoad.Dequeue();
-                LoadChunk(chunk);
-                processed++;
+                StartIncrementalChunkLoad(chunk);
+            }
+        }
+
+        /// <summary>
+        /// Chunk yüklemeyi başlat - tile koordinatlarını hazırla
+        /// </summary>
+        private void StartIncrementalChunkLoad(Vector2Int chunkCoord)
+        {
+            if (loadedChunks.ContainsKey(chunkCoord)) return;
+
+            currentlyLoadingChunk = new ChunkData
+            {
+                ChunkCoord = chunkCoord,
+                IsLoaded = false
+            };
+            currentLoadingIndex = 0;
+            pendingTileCoords.Clear();
+
+            int startQ = chunkCoord.x * chunkSize;
+            int startR = chunkCoord.y * chunkSize;
+
+            // Tüm tile koordinatlarını listeye ekle
+            for (int dq = 0; dq < chunkSize; dq++)
+            {
+                for (int dr = 0; dr < chunkSize; dr++)
+                {
+                    int q = startQ + dq;
+                    int r = startR + dr;
+
+                    if (q < mapWidth && r < mapHeight)
+                    {
+                        pendingTileCoords.Add((q, r));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Her frame birkaç tile oluştur - donmayı önler
+        /// </summary>
+        private void ProcessIncrementalLoading()
+        {
+            if (currentlyLoadingChunk == null) return;
+
+            int tilesThisFrame = 0;
+            while (currentLoadingIndex < pendingTileCoords.Count && tilesThisFrame < TILES_PER_FRAME)
+            {
+                var (q, r) = pendingTileCoords[currentLoadingIndex];
+                var tileData = KingdomMapGenerator.GetTileAt(q, r);
+                GameObject tile = CreateTileFromData(tileData);
+                if (tile != null)
+                {
+                    currentlyLoadingChunk.Tiles.Add(tile);
+                }
+                currentLoadingIndex++;
+                tilesThisFrame++;
+            }
+
+            // Chunk tamamlandı mı?
+            if (currentLoadingIndex >= pendingTileCoords.Count)
+            {
+                currentlyLoadingChunk.IsLoaded = true;
+                loadedChunks[currentlyLoadingChunk.ChunkCoord] = currentlyLoadingChunk;
+                currentlyLoadingChunk = null;
+                pendingTileCoords.Clear();
             }
         }
 

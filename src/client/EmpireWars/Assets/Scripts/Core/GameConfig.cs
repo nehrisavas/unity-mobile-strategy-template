@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace EmpireWars.Core
 {
+    // FORCE RECOMPILE: v3 - SimpleTileRenderer aktif, ChunkSize=8
     /// <summary>
     /// GLOBAL OYUN AYARLARI - TEK KAYNAK
     /// Tum degerler buradan okunur, baska yerde hardcoded deger OLMAMALI
@@ -35,9 +36,9 @@ namespace EmpireWars.Core
         #region === CHUNK AYARLARI ===
 
         private const int DEFAULT_CHUNK_SIZE = 32;
-        private const int MOBILE_CHUNK_SIZE = 16; // Mobil için küçük chunk
+        private const int MOBILE_CHUNK_SIZE = 16; // Mobil için chunk (16x16=256 tile)
         private const int DEFAULT_LOAD_RADIUS = 2;
-        private const int MOBILE_LOAD_RADIUS = 0; // Mobil için minimum (sadece 1 chunk)
+        private const int MOBILE_LOAD_RADIUS = 1; // Mobil için (3x3 chunk = ~2304 tile)
         private const float DEFAULT_CHUNK_UPDATE_INTERVAL = 0.5f;
         private const float MOBILE_CHUNK_UPDATE_INTERVAL = 0.3f; // Mobil için daha sık
         private const int DEFAULT_CHUNK_THRESHOLD = 100;
@@ -74,6 +75,9 @@ namespace EmpireWars.Core
 
         // DEBUG: Editor'da mobil modu test etmek için true yapın
         public const bool FORCE_MOBILE_MODE = true; // TEST İÇİN TRUE
+
+        // Basit renderer kullan - TEK MESH, TEK DRAW CALL
+        public static bool UseSimpleRenderer { get; private set; } = false;
 
         #endregion
 
@@ -164,6 +168,8 @@ namespace EmpireWars.Core
             if (_initialized) return;
             _initialized = true;
 
+            Debug.Log("GameConfig: Initialize() başladı");
+
             // WorldSettings varsa ondan oku
             var settings = Resources.Load<WorldSettings>("WorldSettings");
             if (settings != null)
@@ -179,6 +185,7 @@ namespace EmpireWars.Core
             // Mobil optimizasyonlar
             ApplyMobileOptimizations();
 
+            Debug.Log($"GameConfig: UseSimpleRenderer={UseSimpleRenderer}, ChunkSize={ChunkSize}, LoadRadius={LoadRadius}");
             Debug.Log($"GameConfig: World={WorldWidth:F0}x{WorldHeight:F0}, Zoom={MinZoom}-{MaxZoom}, Chunk={ChunkSize}, LoadRadius={LoadRadius}");
         }
 
@@ -200,8 +207,8 @@ namespace EmpireWars.Core
             if (isMobile)
             {
                 // Chunk boyutunu ve yarıçapını azalt
-                ChunkSize = MOBILE_CHUNK_SIZE; // 32 -> 16
-                LoadRadius = MOBILE_LOAD_RADIUS; // 1 chunk = 256 tile
+                ChunkSize = MOBILE_CHUNK_SIZE; // 8 (64 tile per chunk)
+                LoadRadius = MOBILE_LOAD_RADIUS; // 0 = sadece 1 chunk
                 ChunkUpdateInterval = MOBILE_CHUNK_UPDATE_INTERVAL;
 
                 // Bulut sayısını azalt veya kapat
@@ -210,9 +217,12 @@ namespace EmpireWars.Core
                 // Badge'leri kapat
                 ShowBadges = false;
 
-                // PERFORMANS KRİTİK: Dekorasyonları ve binaları kapat
-                ShowDecorations = false;
-                ShowBuildings = false;
+                // Dekorasyonları ve binaları göster
+                ShowDecorations = true;
+                ShowBuildings = true;
+
+                // SimpleTileRenderer kapalı - 3D prefab'lar için ChunkedTileLoader kullan
+                UseSimpleRenderer = false;
 
                 // Gölgeleri kapat
                 UseShadows = false;
@@ -227,7 +237,8 @@ namespace EmpireWars.Core
                 QualitySettings.lodBias = 0.5f; // Daha agresif LOD
                 QualitySettings.maximumLODLevel = 1;
 
-                Debug.Log($"GameConfig: MOBİL OPTİMİZASYON - ChunkSize={ChunkSize}, LoadRadius={LoadRadius}, Tiles={ChunkSize*ChunkSize}, Decorations=OFF, Buildings=OFF, Shadows=OFF");
+                int totalTiles = (LoadRadius * 2 + 1) * (LoadRadius * 2 + 1) * ChunkSize * ChunkSize;
+                Debug.Log($"GameConfig: MOBİL OPTİMİZASYON - ChunkSize={ChunkSize}, LoadRadius={LoadRadius}, TotalTiles=~{totalTiles}");
             }
         }
 
